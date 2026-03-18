@@ -1,0 +1,2973 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chalet Fluh – Das Allgäudomizil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg-base: #0a0f0b;
+      --bg-surface: #111710;
+      --bg-elevated: #182019;
+      --bg-card: #1e2820;
+      --accent: #c49a3c;
+      --accent-light: #e8c06a;
+      --accent-muted: #8a6a28;
+      --text-primary: #f0ead8;
+      --text-secondary: #b8b09a;
+      --text-muted: #7a7567;
+      --border: #2a3328;
+      --border-light: #3a4438;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg-base);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 180px;
+    }
+
+    /* Typography */
+    .font-display { font-family: 'Cormorant Garamond', serif; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg-base); }
+    ::-webkit-scrollbar-thumb { background: var(--accent-muted); border-radius: 2px; }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s ease, backdrop-filter 0.4s ease, padding 0.4s ease;
+    }
+    nav.scrolled {
+      background: rgba(10, 15, 11, 0.9);
+      backdrop-filter: blur(16px);
+      padding: 1rem 3rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* Hamburger */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger span { display: block; width: 22px; height: 1.5px; background: var(--text-primary); transition: all 0.3s; }
+
+    /* Mobile nav */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 15, 11, 0.98);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      color: var(--text-primary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .mobile-nav a:hover { color: var(--accent); }
+    .mobile-close {
+      position: absolute;
+      top: 1.5rem; right: 2rem;
+      background: none; border: none;
+      color: var(--text-primary);
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      overflow: hidden;
+    }
+    .hero-slides { position: absolute; inset: 0; }
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+    }
+    .hero-slide.active { opacity: 1; }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to right, rgba(10,15,11,0.65) 0%, rgba(10,15,11,0.1) 55%, transparent 100%),
+        linear-gradient(to bottom, rgba(10,15,11,0.3) 0%, rgba(10,15,11,0.05) 40%, rgba(10,15,11,0.75) 78%, rgba(10,15,11,1) 100%);
+    }
+    .hero-overlay-top {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 30%, rgba(196,154,60,0.08) 0%, transparent 60%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 4rem 5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 8vw, 7.5rem);
+      font-weight: 300;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 1s ease 0.5s forwards;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--accent-light);
+    }
+    .hero-subtitle {
+      margin-top: 1.5rem;
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--text-secondary);
+      letter-spacing: 0.04em;
+      max-width: 400px;
+      line-height: 1.7;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease 0.8s forwards;
+    }
+    .hero-cta {
+      margin-top: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease 1s forwards;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--accent);
+      color: var(--bg-base);
+      padding: 0.9rem 2rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+    .btn-primary:hover { background: var(--accent-light); transform: translateY(-1px); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.9rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-ghost:hover { color: var(--text-primary); border-color: var(--text-secondary); }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      right: 4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: fadeIn 1s ease 1.5s forwards;
+    }
+    .hero-scroll-hint span {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      writing-mode: vertical-rl;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, var(--accent-muted), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    /* STATS BAR */
+    .stats-bar {
+      background: var(--bg-elevated);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 2rem 4rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+      text-shadow: 0 0 40px rgba(196,154,60,0.3);
+    }
+    .stat-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+
+    /* SECTIONS */
+    section { padding: 7rem 4rem; max-width: 1400px; margin: 0 auto; }
+    .section-full { max-width: none; padding-left: 0; padding-right: 0; }
+
+    .section-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-eyebrow::before {
+      content: '';
+      display: block;
+      width: 2.5rem;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+    }
+    .section-title em { font-style: italic; color: var(--accent-light); }
+
+    .section-body {
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--text-secondary);
+      max-width: 52ch;
+    }
+
+    /* INTRO / ÜBER UNS */
+    .intro-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+    .intro-image-stack {
+      position: relative;
+      height: 600px;
+    }
+    .intro-img-main {
+      position: absolute;
+      top: 0; left: 0;
+      width: 72%;
+      height: 80%;
+      object-fit: cover;
+      border: 0;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+    }
+    .intro-img-accent {
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 55%;
+      height: 50%;
+      object-fit: cover;
+      border: 3px solid var(--bg-base);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+    .intro-badge {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90px;
+      height: 90px;
+      background: var(--bg-base);
+      border: 1px solid var(--border-light);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 3;
+      box-shadow: 0 0 40px rgba(196,154,60,0.15);
+    }
+    .intro-badge-year {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .intro-badge-label {
+      font-size: 0.5rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .highlights-list {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .highlight-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--text-secondary);
+    }
+    .highlight-item::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* FEATURES */
+    .features-bg {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+    }
+    .feature-card {
+      padding: 2.5rem;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.25s ease;
+    }
+    .feature-card:hover { background: var(--bg-elevated); }
+    .feature-card:nth-child(3n) { border-right: none; }
+    .feature-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      margin-bottom: 1.25rem;
+      color: var(--accent);
+    }
+    .feature-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 0.6rem;
+      letter-spacing: 0.01em;
+    }
+    .feature-desc {
+      font-size: 0.85rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    /* GALLERY */
+    .gallery-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 5rem 4rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: 300px 300px;
+      gap: 4px;
+      padding: 0 4px;
+    }
+    .gallery-item {
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      filter: brightness(0.88) saturate(0.9);
+    }
+    .gallery-item:hover img {
+      transform: scale(1.05);
+      filter: brightness(0.95) saturate(1.05);
+    }
+    .gallery-item-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,15,11,0.7) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem;
+    }
+    .gallery-item:hover .gallery-item-overlay { opacity: 1; }
+    .gallery-item-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+    }
+    .g1 { grid-column: 1 / 6; grid-row: 1 / 2; }
+    .g2 { grid-column: 6 / 9; grid-row: 1 / 2; }
+    .g3 { grid-column: 9 / 13; grid-row: 1 / 3; }
+    .g4 { grid-column: 1 / 4; grid-row: 2 / 3; }
+    .g5 { grid-column: 4 / 6; grid-row: 2 / 3; }
+    .g6 { grid-column: 6 / 9; grid-row: 2 / 3; }
+
+    /* SLIDESHOW */
+    .slideshow-wrap {
+      margin-top: 0;
+      background: var(--bg-base);
+    }
+    .slideshow-main {
+      position: relative;
+      height: 620px;
+      overflow: hidden;
+      background: #060a07;
+    }
+    .ss-track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.65s cubic-bezier(0.77, 0, 0.175, 1);
+    }
+    .ss-slide {
+      min-width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    .ss-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.9) saturate(0.9);
+      transition: transform 8s ease;
+    }
+    .ss-slide.active img { transform: scale(1.04); }
+    .ss-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(10,15,11,0.55);
+      border: 1px solid rgba(196,154,60,0.3);
+      color: var(--text-primary);
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 5;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      backdrop-filter: blur(8px);
+    }
+    .ss-arrow:hover {
+      background: rgba(196,154,60,0.2);
+      border-color: var(--accent);
+      transform: translateY(-50%) scale(1.05);
+    }
+    .ss-prev { left: 1.5rem; }
+    .ss-next { right: 1.5rem; }
+    .ss-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 3rem 2rem 1.2rem;
+      background: linear-gradient(to top, rgba(10,15,11,0.85) 0%, transparent 100%);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+    .ss-caption-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--text-primary);
+      letter-spacing: 0.04em;
+      font-style: italic;
+    }
+    .ss-counter {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+    }
+    .ss-progress {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: rgba(255,255,255,0.08);
+    }
+    .ss-progress-bar {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+    .ss-thumbs {
+      display: flex;
+      gap: 3px;
+      overflow-x: auto;
+      padding: 3px 3px 0;
+      background: var(--bg-base);
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent-muted) transparent;
+    }
+    .ss-thumbs::-webkit-scrollbar { height: 3px; }
+    .ss-thumbs::-webkit-scrollbar-thumb { background: var(--accent-muted); }
+    .ss-thumb {
+      min-width: 110px;
+      height: 72px;
+      overflow: hidden;
+      cursor: pointer;
+      opacity: 0.45;
+      transition: opacity 0.2s, outline 0.2s;
+      flex-shrink: 0;
+      outline: 2px solid transparent;
+    }
+    .ss-thumb:hover { opacity: 0.75; }
+    .ss-thumb.ss-thumb-active {
+      opacity: 1;
+      outline: 2px solid var(--accent);
+    }
+    .ss-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+
+    /* CALENDAR */
+    .cal-section {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      background: var(--border);
+      border: 1.5px solid var(--border);
+      margin-top: 2.5rem;
+    }
+    .cal-month {
+      background: var(--bg-card);
+      padding: 1.5rem;
+    }
+    .cal-month-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .cal-month-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      letter-spacing: 0.04em;
+    }
+    .cal-month-year {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+    }
+    .cal-dow {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      margin-bottom: 4px;
+    }
+    .cal-dow span {
+      text-align: center;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 0.25rem 0;
+    }
+    .cal-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+    }
+    .cal-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 300;
+      color: var(--text-secondary);
+      border-radius: 2px;
+      transition: background 0.15s;
+      cursor: default;
+    }
+    .cal-day.empty { color: transparent; }
+    .cal-day.past { color: var(--text-muted); opacity: 0.4; }
+    .cal-day.booked {
+      background: rgba(180, 60, 60, 0.25);
+      color: #e08080;
+      font-weight: 500;
+    }
+    .cal-day.booked::after {
+      content: '';
+      position: absolute;
+    }
+    .cal-day.available {
+      background: rgba(60, 130, 70, 0.15);
+      color: #88c890;
+    }
+    .cal-day.today {
+      background: rgba(196,154,60,0.2);
+      color: var(--accent);
+      font-weight: 500;
+      outline: 1px solid rgba(196,154,60,0.4);
+    }
+    .cal-day.in-range {
+      background: rgba(196,154,60,0.12);
+      color: var(--accent-light);
+      border-radius: 0;
+    }
+    .cal-day.range-start {
+      background: var(--accent) !important;
+      color: #0a0f0b !important;
+      font-weight: 600 !important;
+      border-radius: 4px 0 0 4px;
+    }
+    .cal-day.range-end {
+      background: var(--accent) !important;
+      color: #0a0f0b !important;
+      font-weight: 600 !important;
+      border-radius: 0 4px 4px 0;
+    }
+    .cal-day.range-start.range-end {
+      border-radius: 4px;
+    }
+    .cal-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .cal-nav-btn {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-light);
+      color: var(--text-secondary);
+      padding: 0.6rem 1.5rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .cal-nav-btn:hover {
+      background: var(--bg-card);
+      color: var(--accent);
+      border-color: var(--accent-muted);
+    }
+    .cal-period-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--text-primary);
+      letter-spacing: 0.05em;
+      min-width: 200px;
+      text-align: center;
+    }
+    .cal-legend {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .cal-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .cal-legend-dot {
+      width: 10px; height: 10px; border-radius: 2px;
+    }
+    .cal-note {
+      margin-top: 1.5rem;
+      font-size: 0.8rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* AREA SLIDESHOW (Lage section) */
+    .area-ss-wrap {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      padding: 0;
+    }
+    .area-ss-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 4rem 4rem 5rem;
+    }
+    .area-ss-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+    .area-ss-stage {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 4px;
+      height: 420px;
+    }
+    .area-ss-main-img {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .area-ss-main-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+      filter: brightness(0.85) saturate(0.88);
+    }
+    .area-ss-main-img:hover img { transform: scale(1.04); }
+    .area-ss-caption-bar {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 3rem 1.5rem 1rem;
+      background: linear-gradient(to top, rgba(10,15,11,0.85), transparent);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+    .area-ss-caption-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      color: var(--text-primary);
+    }
+    .area-ss-caption-sub {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+    .area-ss-counter-badge {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      padding: 0.3rem 0.6rem;
+      background: rgba(10,15,11,0.6);
+      border: 1px solid var(--border);
+    }
+    .area-ss-thumbcol {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+    .area-ss-thumbcol::-webkit-scrollbar { display: none; }
+    .area-ss-thumb-item {
+      flex-shrink: 0;
+      height: 100px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      outline: 2px solid transparent;
+      transition: outline 0.2s;
+    }
+    .area-ss-thumb-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: brightness(0.7) saturate(0.8);
+      transition: filter 0.2s;
+    }
+    .area-ss-thumb-item:hover img { filter: brightness(0.9) saturate(1); }
+    .area-ss-thumb-item.active {
+      outline: 2px solid var(--accent);
+    }
+    .area-ss-thumb-item.active img { filter: brightness(0.95) saturate(1); }
+    .area-ss-thumb-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 0.4rem 0.6rem;
+      background: rgba(10,15,11,0.7);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .area-ss-nav {
+      display: flex;
+      gap: 4px;
+      margin-top: 4px;
+    }
+    .area-ss-nav-btn {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .area-ss-nav-btn:hover { background: var(--bg-card); color: var(--accent); border-color: var(--accent-muted); }
+
+    @media (max-width: 1024px) {
+      .area-ss-stage { grid-template-columns: 1fr; height: auto; }
+      .area-ss-thumbcol { flex-direction: row; height: 80px; overflow-x: auto; overflow-y: hidden; }
+      .area-ss-thumb-item { min-width: 140px; height: 80px; }
+      .area-ss-main-img { height: 320px; }
+    }
+    @media (max-width: 768px) {
+      .area-ss-inner { padding: 3rem 1.5rem; }
+      .area-ss-main-img { height: 220px; }
+    }
+
+    /* GOOGLE MAP */
+    .map-section {
+      background: var(--bg-base);
+    }
+    .map-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      min-height: 500px;
+      border: 1.5px solid var(--border);
+    }
+    .map-info {
+      padding: 3rem;
+      background: var(--bg-elevated);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 1px solid var(--border);
+    }
+    .map-iframe-wrap {
+      position: relative;
+      overflow: hidden;
+      filter: saturate(0.5) brightness(0.75) contrast(1.1) hue-rotate(130deg);
+    }
+    .map-iframe-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+    .map-address-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 0.9rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .map-address-row:last-child { border-bottom: none; }
+    .map-address-icon { color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+    .map-address-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.2rem;
+    }
+    .map-address-value {
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 1024px) {
+      .cal-grid { grid-template-columns: 1fr; }
+      .map-wrap { grid-template-columns: 1fr; }
+      .map-iframe-wrap { height: 350px; }
+      .slideshow-main { height: 420px; }
+    }
+    @media (max-width: 768px) {
+      .slideshow-main { height: 280px; }
+      .ss-thumb { min-width: 80px; height: 52px; }
+      .map-info { padding: 2rem 1.5rem; }
+      .cal-month { padding: 1rem; }
+    }
+
+    /* LIGHTBOX */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5,8,5,0.96);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox-close {
+      position: absolute;
+      top: 2rem; right: 2rem;
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 2rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0.5rem;
+      transition: color 0.2s;
+    }
+    .lightbox-close:hover { color: var(--text-primary); }
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+    }
+    .lightbox-caption {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* LOCATION */
+    .location-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 600px;
+    }
+    .location-text {
+      padding: 6rem 4rem 6rem 4rem;
+      max-width: 600px;
+      margin-left: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .location-images {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 4px;
+    }
+    .location-img {
+      overflow: hidden;
+    }
+    .location-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.85) saturate(0.85);
+      transition: filter 0.4s, transform 0.6s;
+    }
+    .location-img:hover img {
+      filter: brightness(0.95) saturate(1);
+      transform: scale(1.03);
+    }
+    .location-points {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .location-point {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .location-point:last-child { border-bottom: none; }
+    .location-point-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      margin-top: 0.4rem;
+      flex-shrink: 0;
+    }
+    .location-point-text {
+      font-size: 0.9rem;
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+    .location-point-text strong {
+      display: block;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 0.2rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* PRICING */
+    .pricing-bg {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.5px;
+      background: var(--border);
+      border: 1.5px solid var(--border);
+    }
+    .pricing-col {
+      background: var(--bg-card);
+      padding: 2.5rem;
+    }
+    .pricing-col-header {
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+    .pricing-season {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .pricing-col-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--text-primary);
+    }
+    .pricing-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+      margin-top: 0.75rem;
+    }
+    .pricing-price sup {
+      font-size: 1.2rem;
+      vertical-align: top;
+      margin-top: 0.5rem;
+    }
+    .pricing-price-unit {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 300;
+      margin-top: 0.25rem;
+    }
+    .pricing-rows { margin-top: 1.5rem; }
+    .pricing-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(42,51,40,0.5);
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: var(--text-secondary);
+    }
+    .pricing-row:last-child { border-bottom: none; }
+    .pricing-row-val {
+      font-weight: 400;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+    }
+    .pricing-extras {
+      margin-top: 3rem;
+      padding: 2rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+    }
+    .pricing-extras-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+    .extras-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem 2rem;
+    }
+    .extra-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.83rem;
+      font-weight: 300;
+      color: var(--text-secondary);
+      padding: 0.4rem 0;
+      border-bottom: 1px solid rgba(42,51,40,0.4);
+    }
+    .extra-row span:last-child {
+      color: var(--text-primary);
+      font-weight: 400;
+    }
+    .booking-note {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: rgba(196,154,60,0.06);
+      border-left: 2px solid var(--accent);
+      font-size: 0.83rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--text-secondary);
+    }
+
+    /* CONTACT */
+    .contact-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+    .contact-image {
+      height: 500px;
+      overflow: hidden;
+      position: relative;
+    }
+    .contact-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.75) saturate(0.8);
+    }
+    .contact-image-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(196,154,60,0.15) 0%, transparent 60%);
+      mix-blend-mode: color-dodge;
+    }
+    .contact-info { padding-top: 1rem; }
+    .contact-detail {
+      display: flex;
+      gap: 1.5rem;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid var(--border);
+      align-items: flex-start;
+    }
+    .contact-detail:last-child { border-bottom: none; }
+    .contact-detail-icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .contact-detail-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+    .contact-detail-value {
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .contact-detail-value a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .contact-detail-value a:hover { color: var(--accent); }
+
+    /* CTA BANNER */
+    .cta-banner {
+      background: var(--bg-elevated);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 5rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 3rem;
+    }
+    .cta-banner-text .section-title { margin-bottom: 0.5rem; }
+
+    /* FOOTER */
+    footer {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      padding: 3rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text-primary);
+    }
+    .footer-logo span { color: var(--accent); }
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .footer-links a {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text-secondary); }
+    .footer-copy {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* DIVIDER */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border-light), transparent);
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.2); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.85s cubic-bezier(0.22,1,0.36,1), transform 0.85s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.12s; }
+    .reveal-delay-2 { transition-delay: 0.22s; }
+    .reveal-delay-3 { transition-delay: 0.34s; }
+    .reveal-delay-4 { transition-delay: 0.46s; }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .intro-grid, .contact-split { grid-template-columns: 1fr; gap: 3rem; }
+      .intro-image-stack { height: 400px; }
+      .location-split { grid-template-columns: 1fr; }
+      .location-text { max-width: none; padding: 3rem 2rem; }
+      .location-images { height: 400px; grid-template-rows: 1fr; grid-template-columns: 1fr 1fr; }
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+      .stat-item:nth-child(2) { border-right: none; }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .feature-card:nth-child(3n) { border-right: 1px solid var(--border); }
+      .feature-card:nth-child(2n) { border-right: none; }
+      .pricing-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      nav.scrolled { padding: 0.8rem 1.5rem; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      section { padding: 4rem 1.5rem; }
+      .hero-content { padding: 0 1.5rem 4rem; }
+      .hero-scroll-hint { display: none; }
+      .stats-bar { grid-template-columns: repeat(2, 1fr); padding: 1.5rem; }
+      .gallery-header { padding: 3rem 1.5rem 1.5rem; flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, 200px); }
+      .g1 { grid-column: 1 / 3; }
+      .g2 { grid-column: 1 / 2; }
+      .g3 { grid-column: 2 / 3; grid-row: 2 / 4; }
+      .g4 { grid-column: 1 / 2; }
+      .g5 { display: none; }
+      .g6 { display: none; }
+      .cta-banner { flex-direction: column; text-align: center; padding: 3rem 1.5rem; }
+      footer { flex-direction: column; gap: 1.5rem; text-align: center; padding: 2rem 1.5rem; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+      .extras-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       ADMIN PANEL
+    ═══════════════════════════════════════════════════════════ */
+    #adminToggleBtn {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 9000;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-light);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, color 0.2s, border-color 0.2s, opacity 0.2s;
+      opacity: 0.4;
+    }
+    #adminToggleBtn:hover { opacity: 1; background: var(--bg-card); color: var(--accent); border-color: var(--accent-muted); }
+
+    /* Login modal */
+    #adminLoginModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9100;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+    }
+    #adminLoginModal.open { display: flex; }
+    .admin-modal-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      padding: 2.5rem 3rem;
+      width: 340px;
+      max-width: 90vw;
+    }
+    .admin-modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+      color: var(--text-primary);
+    }
+    .admin-modal-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 1.75rem;
+      line-height: 1.5;
+    }
+    .admin-input {
+      width: 100%;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 0.7rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 1rem;
+    }
+    .admin-input:focus { border-color: var(--accent-muted); }
+    .admin-modal-error {
+      font-size: 0.78rem;
+      color: #e08080;
+      margin-bottom: 0.75rem;
+      display: none;
+    }
+    .admin-btn-row { display: flex; gap: 0.75rem; }
+    .admin-btn {
+      flex: 1;
+      padding: 0.65rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: 1px solid var(--border-light);
+      background: var(--bg-elevated);
+      color: var(--text-secondary);
+      transition: background 0.2s, color 0.2s;
+    }
+    .admin-btn:hover { background: var(--bg-surface); color: var(--text-primary); }
+    .admin-btn.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #0a0f0b;
+      font-weight: 500;
+    }
+    .admin-btn.primary:hover { background: var(--accent-light); border-color: var(--accent-light); }
+
+    /* Edit mode banner */
+    #adminBanner {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 8900;
+      background: var(--accent);
+      color: #0a0f0b;
+      padding: 0.6rem 2rem;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    #adminBanner.active { display: flex; }
+    .admin-banner-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+    .admin-banner-hint {
+      font-size: 0.72rem;
+      opacity: 0.75;
+    }
+    .admin-banner-controls { display: flex; gap: 0.75rem; align-items: center; flex-shrink: 0; }
+    .admin-banner-btn {
+      padding: 0.35rem 1rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: 1px solid rgba(0,0,0,0.2);
+      background: rgba(0,0,0,0.12);
+      color: #0a0f0b;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      transition: background 0.15s;
+    }
+    .admin-banner-btn:hover { background: rgba(0,0,0,0.22); }
+    .admin-banner-btn.danger { background: rgba(180,20,20,0.18); border-color: rgba(180,20,20,0.3); color: #3a0000; }
+    .admin-banner-btn.danger:hover { background: rgba(180,20,20,0.32); }
+
+    /* Editable text overlay */
+    body.admin-mode [data-admin-text] {
+      position: relative;
+      outline: 1px dashed rgba(196,154,60,0.35);
+      cursor: text;
+      transition: outline 0.15s;
+    }
+    body.admin-mode [data-admin-text]:hover {
+      outline: 1px solid var(--accent);
+    }
+    body.admin-mode [data-admin-text]:focus {
+      outline: 2px solid var(--accent);
+    }
+    body.admin-mode [data-admin-text]::after {
+      content: '✏';
+      position: absolute;
+      top: -10px;
+      right: -4px;
+      font-size: 10px;
+      background: var(--accent);
+      color: #0a0f0b;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+      z-index: 200;
+    }
+    body.admin-mode [data-admin-text]:hover::after { opacity: 1; }
+
+    /* Editable image hover overlay (floating, not wrapping) */
+    #adminImgOverlay {
+      display: none;
+      position: fixed;
+      z-index: 8800;
+      background: rgba(196,154,60,0.15);
+      border: 1px dashed rgba(196,154,60,0.6);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.35rem;
+      cursor: pointer;
+      pointer-events: none;
+      transition: opacity 0.15s;
+    }
+    #adminImgOverlay.visible { display: flex; pointer-events: auto; }
+    #adminImgOverlay span {
+      font-size: 0.7rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-family: 'DM Sans', sans-serif;
+      background: rgba(10,15,11,0.7);
+      padding: 0.3rem 0.6rem;
+    }
+    body.admin-mode [data-admin-img] { cursor: pointer; }
+
+    /* Save notification */
+    #adminSavedToast {
+      position: fixed;
+      bottom: 5rem;
+      right: 2rem;
+      z-index: 9200;
+      background: var(--bg-card);
+      border: 1px solid rgba(196,154,60,0.4);
+      color: var(--accent);
+      padding: 0.6rem 1.25rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    #adminSavedToast.show { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="mainNav">
+    <a href="#" class="nav-logo">Chalet <span>Fluh</span></a>
+    <ul class="nav-links">
+      <li><a href="#das-chalet">Das Chalet</a></li>
+      <li><a href="#ausstattung">Ausstattung</a></li>
+      <li><a href="#bilder">Bilder</a></li>
+      <li><a href="#lage">Lage & Karte</a></li>
+      <li><a href="#preise">Preise</a></li>
+      <li><a href="#verfuegbarkeit">Verfügbarkeit</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menü öffnen">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav" id="mobileNav">
+    <button class="mobile-close" id="mobileClose">✕</button>
+    <a href="#das-chalet" onclick="closeMobileNav()">Das Chalet</a>
+    <a href="#ausstattung" onclick="closeMobileNav()">Ausstattung</a>
+    <a href="#bilder" onclick="closeMobileNav()">Bilder</a>
+    <a href="#lage" onclick="closeMobileNav()">Lage & Karte</a>
+    <a href="#preise" onclick="closeMobileNav()">Preise</a>
+    <a href="#verfuegbarkeit" onclick="closeMobileNav()">Verfügbarkeit</a>
+    <a href="#kontakt" onclick="closeMobileNav()">Kontakt</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero section-full" style="padding:0; max-width:none;">
+    <div class="hero-slides" id="heroSlides">
+      <div class="hero-slide active" style="background-image: url('brand_assets/IMG_7104.PNG')"></div>
+      <div class="hero-slide" style="background-image: url('brand_assets/IMG_7965.jpeg')"></div>
+      <div class="hero-slide" style="background-image: url('brand_assets/IMG_3866.jpeg')"></div>
+      <div class="hero-slide" style="background-image: url('brand_assets/IMG_6961.jpeg')"></div>
+      <div class="hero-slide" style="background-image: url('brand_assets/IMG_1987.jpeg')"></div>
+      <div class="hero-slide" style="background-image: url('brand_assets/IMG_1221%20(1).jpeg')"></div>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-overlay-top"></div>
+    <div class="hero-content" style="max-width:none; width:100%;">
+      <div style="max-width:1400px; margin:0 auto; width:100%;">
+        <p class="hero-eyebrow" data-admin-text="hero-eyebrow">Oberstaufen · Allgäu · 900 m ü. NN</p>
+        <h1 class="hero-title" data-admin-text="hero-title">Das <em>Allgäu</em>domizil<br>im Naturpark</h1>
+        <p class="hero-subtitle" data-admin-text="hero-subtitle">Ein exklusives Ferienhaus für 2–12 Personen in unberührter Alleinlage zwischen Steibis und Schindelberg.</p>
+        <div class="hero-cta">
+          <a href="#kontakt" class="btn-primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Anfrage senden
+          </a>
+          <a href="#das-chalet" class="btn-ghost">
+            Mehr entdecken
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+    <!-- Slide indicators -->
+    <div id="slideIndicators" style="position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); display:flex; gap:8px; z-index:3;">
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stat-item reveal">
+      <div class="stat-number">280</div>
+      <div class="stat-label">m² Wohnfläche</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-1">
+      <div class="stat-number">4</div>
+      <div class="stat-label">Schlafzimmer</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-2">
+      <div class="stat-number">12</div>
+      <div class="stat-label">Personen max.</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-3">
+      <div class="stat-number">2.500</div>
+      <div class="stat-label">m² Grundstück</div>
+    </div>
+  </div>
+
+  <!-- DAS CHALET -->
+  <section id="das-chalet">
+    <div class="intro-grid">
+      <div class="intro-image-stack reveal">
+        <img class="intro-img-main" src="brand_assets/IMG_7104.PNG" alt="Chalet Fluh Winterpanorama" data-admin-img="intro-main-img" />
+        <img class="intro-img-accent" src="brand_assets/300_4402.jpeg" alt="Interieur Chalet Fluh" data-admin-img="intro-accent-img" />
+        <div class="intro-badge">
+          <div class="intro-badge-year">2015</div>
+          <div class="intro-badge-label">Erbaut</div>
+        </div>
+      </div>
+      <div class="reveal reveal-delay-2">
+        <p class="section-eyebrow">Das Chalet Fluh</p>
+        <h2 class="section-title" data-admin-text="chalet-title">Naturnah wohnen<br>auf <em>höchstem Niveau</em></h2>
+        <p class="section-body" data-admin-text="chalet-body-1">
+          Das Chalet Fluh liegt in Alleinlage zwischen Steibis und Schindelberg im Naturpark Nagelfluhkette — auf rund 900 Metern, inmitten von 190.000 m² Naturgrundstück.
+        </p>
+        <p class="section-body" style="margin-top:1rem;" data-admin-text="chalet-body-2">
+          Auf zwei Etagen bietet das Haus ca. 280 m² Wohnfläche für bis zu 12 Personen. Handgefertigte Altholzmöbel, Natursteinböden mit Fußbodenheizung und atmungsaktive Lehmputzwände schaffen eine Atmosphäre von authentischer Wärme und modernem Komfort.
+        </p>
+        <div class="highlights-list">
+          <div class="highlight-item">Vollständig rollstuhlgerecht und barrierefrei (EG)</div>
+          <div class="highlight-item">Pelletheizung und Solaranlage — ökologisch heizen</div>
+          <div class="highlight-item">Exklusiv für Gäste — 2.500 m² eingezäuntes Grundstück</div>
+          <div class="highlight-item">Nichtraucherimmobilie · Hunde herzlich willkommen</div>
+          <div class="highlight-item">Glasfaser-WLAN kostenlos inklusive</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUSSTATTUNG -->
+  <div class="features-bg" id="ausstattung">
+    <section style="max-width:1400px; margin:0 auto; padding:5rem 4rem;">
+      <div style="max-width:600px; margin-bottom:3.5rem;" class="reveal">
+        <p class="section-eyebrow">Ausstattung</p>
+        <h2 class="section-title">Alles, was das<br><em>Herz begehrt</em></h2>
+      </div>
+      <div class="features-grid">
+
+        <div class="feature-card reveal">
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <div class="feature-title">Offener Wohnbereich</div>
+          <div class="feature-desc">Großzügiger Grundriss mit Küche, Essen und Wohnen — vereint durch einen zentralen Kamin und ein Klavier.</div>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-1">
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+          <div class="feature-title">4 Schlafzimmer</div>
+          <div class="feature-desc">Master-Suite mit Bad en suite und begehbarem Kleiderschrank. Drei weitere Zimmer im Obergeschoss — für 2 bis 12 Personen.</div>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-2">
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+          <div class="feature-title">Sauna & Fitness</div>
+          <div class="feature-desc">Sauna in zentraler Lage sowie ein vollausgestatteter Fitness- und Mehrzweckraum für die aktive Erholung.</div>
+        </div>
+
+        <div class="feature-card reveal">
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          <div class="feature-title">Profiküche</div>
+          <div class="feature-desc">Dampfgarer, Backofen mit Mikrowelle, Plancha-Grill, zwei Kaffeemaschinen (Filter & Nespresso), Küchenmaschine und mehr.</div>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-1">
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+          <div class="feature-title">Glasfaser-WLAN</div>
+          <div class="feature-desc">Schnelles Internet via Glasfaseranschluss — kostenlos und in allen Räumen verfügbar. TV in jedem Schlafzimmer.</div>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-2">
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+          <div class="feature-title">E-Ladestation & Parken</div>
+          <div class="feature-desc">1 Carport mit Starkstrom-Anschluss (E-Ladestation) sowie mehrere Außenparkplätze auf dem Grundstück.</div>
+        </div>
+
+        <div class="feature-card reveal">
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 3h7l1 7-3.5 2a11 11 0 0 0 5 5L15 14l7 1v7a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2h-2z"/>
+          </svg>
+          <div class="feature-title">Terrassen & Balkone</div>
+          <div class="feature-desc">2 Balkone und 3 Terrassen — für unvergessliche Morgen- und Abenddämmerungen mit Allgäuer Alpenpanorama.</div>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-1">
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <ellipse cx="9" cy="6" rx="2" ry="2.5"/>
+            <ellipse cx="15" cy="6" rx="2" ry="2.5"/>
+            <ellipse cx="5.5" cy="10.5" rx="1.8" ry="2.3"/>
+            <ellipse cx="18.5" cy="10.5" rx="1.8" ry="2.3"/>
+            <path d="M12 22c-3.5 0-6-2-6-4.5 0-1.5.5-2.5 1.5-3.5.5-.5 1-1.5 1-2.5h7c0 1 .5 2 1 2.5 1 1 1.5 2 1.5 3.5 0 2.5-2.5 4.5-6 4.5z"/>
+          </svg>
+          <div class="feature-title">Hunde willkommen</div>
+          <div class="feature-desc">Vierbeiner sind herzlich willkommen. Napf, Hundetücher und eine separate Dusche stehen zur Verfügung. 10 €/Tag.</div>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-2">
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <div class="feature-title">Alles Inklusive</div>
+          <div class="feature-desc">Bettwäsche, Handtücher, Saunatücher, Bademäntel, Hausschuhe und Küchenvorräte sind im Mietpreis inbegriffen.</div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- GALLERY -->
+  <div id="bilder">
+    <div class="gallery-header">
+      <div class="reveal">
+        <p class="section-eyebrow">Einblicke</p>
+        <h2 class="section-title">Das Chalet <em>in Bildern</em></h2>
+      </div>
+      <a href="#kontakt" class="btn-ghost reveal" style="flex-shrink:0;">
+        Verfügbarkeit anfragen
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+
+    <!-- INTERACTIVE SLIDESHOW -->
+    <div class="slideshow-wrap reveal">
+      <div class="slideshow-main" id="gallerySlideshow">
+        <div class="ss-track" id="ssTrack">
+          <div class="ss-slide"><img src="brand_assets/300_4404.jpeg" alt="Sauna & Ruhebereich" data-admin-img="gallery-0" /></div>
+          <div class="ss-slide"><img src="brand_assets/300_4406.jpeg" alt="Schlafzimmer" data-admin-img="gallery-1" /></div>
+          <div class="ss-slide"><img src="brand_assets/300_4402.jpeg" alt="Wohnbereich" data-admin-img="gallery-2" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_7956.jpeg" alt="Schlafzimmer OG" data-admin-img="gallery-3" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_7957%20(1).jpeg" alt="Schlafzimmer" data-admin-img="gallery-4" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_7954.jpeg" alt="Schlafzimmer" data-admin-img="gallery-5" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_2471.jpeg" alt="Mehrbettzimmer" data-admin-img="gallery-6" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_4090.jpeg" alt="Terrasse" data-admin-img="gallery-7" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_2016.jpeg" alt="Garten & Terrasse" data-admin-img="gallery-8" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_7104.PNG" alt="Winterpanorama" data-admin-img="gallery-9" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_7965.jpeg" alt="Außenansicht Winter" data-admin-img="gallery-10" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_3866.jpeg" alt="Chalet im Schnee" data-admin-img="gallery-11" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_3852.jpeg" alt="Herbstansicht" data-admin-img="gallery-12" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_3150.jpeg" alt="Außenansicht" data-admin-img="gallery-13" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_6961.jpeg" alt="Chalet Exterior" data-admin-img="gallery-14" /></div>
+        </div>
+        <!-- Arrows -->
+        <button class="ss-arrow ss-prev" id="ssPrev" aria-label="Vorheriges Bild">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="ss-arrow ss-next" id="ssNext" aria-label="Nächstes Bild">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <!-- Caption + counter -->
+        <div class="ss-caption">
+          <span class="ss-caption-text" id="ssCaptionText">Sauna & Ruhebereich</span>
+          <span class="ss-counter" id="ssCounter">1 / 15</span>
+        </div>
+        <!-- Progress bar -->
+        <div class="ss-progress"><div class="ss-progress-bar" id="ssProgressBar"></div></div>
+      </div>
+
+      <!-- Thumbnail strip -->
+      <div class="ss-thumbs" id="ssThumbs">
+        <div class="ss-thumb ss-thumb-active" onclick="ssGoTo(0)"><img src="brand_assets/300_4404.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(1)"><img src="brand_assets/300_4406.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(2)"><img src="brand_assets/300_4402.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(3)"><img src="brand_assets/IMG_7956.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(4)"><img src="brand_assets/IMG_7957%20(1).jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(5)"><img src="brand_assets/IMG_7954.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(6)"><img src="brand_assets/IMG_2471.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(7)"><img src="brand_assets/IMG_4090.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(8)"><img src="brand_assets/IMG_2016.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(9)"><img src="brand_assets/IMG_7104.PNG" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(10)"><img src="brand_assets/IMG_7965.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(11)"><img src="brand_assets/IMG_3866.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(12)"><img src="brand_assets/IMG_3852.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(13)"><img src="brand_assets/IMG_3150.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(14)"><img src="brand_assets/IMG_6961.jpeg" alt="" /></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <img id="lightboxImg" src="" alt="" />
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+
+  <!-- LAGE / LOCATION -->
+  <section id="lage" style="padding:0; max-width:none;" class="section-full" style="margin-top:0;">
+    <div class="location-split">
+      <div class="location-text reveal">
+        <p class="section-eyebrow">Die Lage</p>
+        <h2 class="section-title">Im Herzen des<br><em>Naturparks</em></h2>
+        <p class="section-body">
+          Das Chalet Fluh liegt in Alleinlage zwischen Steibis und Schindelberg — inmitten des Naturparks Nagelfluhkette, einem 400 km² umfassenden deutsch-österreichischen Naturschutzgebiet auf ca. 900 m Höhe.
+        </p>
+        <div class="location-points">
+          <div class="location-point">
+            <div class="location-point-dot"></div>
+            <div class="location-point-text">
+              <strong>Imberg-Skigebiet</strong>
+              Direkt vor der Tür — Skifahren, Rodeln und Winterwandern
+            </div>
+          </div>
+          <div class="location-point">
+            <div class="location-point-dot"></div>
+            <div class="location-point-text">
+              <strong>Hochgrat & Brunnenauscharte</strong>
+              Beeindruckendes Alpenpanorama auf anspruchsvollen Wanderrouten
+            </div>
+          </div>
+          <div class="location-point">
+            <div class="location-point-dot"></div>
+            <div class="location-point-text">
+              <strong>Weissach & Viehscheid</strong>
+              Idyllische Seen und das traditionelle Allgäuer Almabtriebsfest
+            </div>
+          </div>
+          <div class="location-point">
+            <div class="location-point-dot"></div>
+            <div class="location-point-text">
+              <strong>Oberstaufen</strong>
+              Schrothkurort mit Therme, Restaurants und Einkaufsmöglichkeiten
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:2rem;">
+          <a href="https://www.oberstaufen.de/erleben/" target="_blank" class="btn-ghost" style="display:inline-flex;">
+            Mehr über die Region
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="location-images">
+        <div class="location-img">
+          <img src="brand_assets/IMG_7965.jpeg" alt="Blick vom Hochgrat" loading="lazy" />
+        </div>
+        <div class="location-img">
+          <img src="brand_assets/IMG_3866.jpeg" alt="Imberg-Skigebiet" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AREA SLIDESHOW -->
+  <div class="area-ss-wrap">
+    <div class="area-ss-inner">
+      <div class="area-ss-header reveal">
+        <div>
+          <p class="section-eyebrow">Die Region</p>
+          <h2 class="section-title" style="font-size:clamp(1.8rem,3.5vw,2.8rem);">Natur pur rund <em>ums Chalet</em></h2>
+        </div>
+        <div class="area-ss-nav">
+          <button class="area-ss-nav-btn" id="areaPrev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+          <button class="area-ss-nav-btn" id="areaNext"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+        </div>
+      </div>
+      <div class="area-ss-stage reveal">
+        <div class="area-ss-main-img" id="areaMain">
+          <img id="areaMainImg" src="" alt="" />
+          <div class="area-ss-caption-bar">
+            <div>
+              <div class="area-ss-caption-text" id="areaCaption"></div>
+              <div class="area-ss-caption-sub" id="areaCapSub"></div>
+            </div>
+            <div class="area-ss-counter-badge" id="areaCounterBadge"></div>
+          </div>
+        </div>
+        <div class="area-ss-thumbcol" id="areaThumbcol">
+          <!-- filled by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GOOGLE MAPS -->
+  <div class="map-section" id="karte">
+    <section style="max-width:1400px; margin:0 auto; padding:5rem 4rem 3rem;">
+      <div class="reveal" style="margin-bottom:2rem;">
+        <p class="section-eyebrow">Anfahrt</p>
+        <h2 class="section-title">So finden Sie <em>uns</em></h2>
+      </div>
+    </section>
+    <div style="max-width:1400px; margin:0 auto; padding:0 4rem 5rem;" class="reveal">
+      <div class="map-wrap">
+        <div class="map-info">
+          <div class="map-address-row">
+            <svg class="map-address-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <div>
+              <div class="map-address-label">Adresse</div>
+              <div class="map-address-value">Fluhstr. 1<br>87534 Oberstaufen<br>Allgäu, Bayern</div>
+            </div>
+          </div>
+          <div class="map-address-row">
+            <svg class="map-address-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <div>
+              <div class="map-address-label">Anreise</div>
+              <div class="map-address-value">A7 Ausfahrt Immenstadt oder Oberstaufen · Dann Richtung Steibis/Schindelberg</div>
+            </div>
+          </div>
+          <div class="map-address-row">
+            <svg class="map-address-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <div>
+              <div class="map-address-label">Höhe</div>
+              <div class="map-address-value">ca. 900 m ü. NN · Naturpark Nagelfluhkette</div>
+            </div>
+          </div>
+          <div class="map-address-row">
+            <svg class="map-address-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <div>
+              <div class="map-address-label">Parken</div>
+              <div class="map-address-value">Mehrere Außenparkplätze · 1 Carport mit E-Ladestation</div>
+            </div>
+          </div>
+          <div style="margin-top:1.5rem;">
+            <a href="https://maps.google.com/?q=Fluhstr.+1,+87534+Oberstaufen" target="_blank" class="btn-ghost" style="display:inline-flex;">
+              In Google Maps öffnen
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="map-iframe-wrap">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2664.5!2d10.0333!3d47.4633!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479c17f1c5e3dddb%3A0x3bdc9dc75c26b81b!2sFluhstra%C3%9Fe%201%2C%2087534%20Oberstaufen!5e0!3m2!1sde!2sde!4v1700000000000!5m2!1sde!2sde"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Chalet Fluh – Standort">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PREISE -->
+  <div class="pricing-bg" id="preise">
+    <section style="max-width:1400px; margin:0 auto; padding:6rem 4rem;">
+      <div style="max-width:600px; margin-bottom:3.5rem;" class="reveal">
+        <p class="section-eyebrow">Preise & Verfügbarkeit</p>
+        <h2 class="section-title">Transparente<br><em>Konditionen</em></h2>
+        <p class="section-body">Alle Preise inkl. MwSt. Nebenkosten sind im Mietpreis enthalten. Mindestaufenthalt: 3 Tage.</p>
+      </div>
+
+      <div class="pricing-grid reveal">
+        <!-- Nebensaison -->
+        <div class="pricing-col">
+          <div class="pricing-col-header">
+            <div class="pricing-season">Nebensaison</div>
+            <div class="pricing-col-title">Niedrigsaison</div>
+            <div class="pricing-price"><sup>€</sup>2.900</div>
+            <div class="pricing-price-unit">pro Woche / 2 Personen · alle Nebenkosten inkl.</div>
+          </div>
+          <div class="pricing-rows">
+            <div class="pricing-row">
+              <span>Jan – Jun 2026</span>
+              <span class="pricing-row-val">2.900 €/Wo.</span>
+            </div>
+            <div class="pricing-row">
+              <span>Sep – Dez 2026</span>
+              <span class="pricing-row-val">2.900 €/Wo.</span>
+            </div>
+            <div class="pricing-row">
+              <span>Jan – Jun 2027</span>
+              <span class="pricing-row-val">2.900 €/Wo.</span>
+            </div>
+            <div class="pricing-row">
+              <span>3 Nächte</span>
+              <span class="pricing-row-val">2.150 €</span>
+            </div>
+            <div class="pricing-row">
+              <span>4 Nächte</span>
+              <span class="pricing-row-val">2.300 €</span>
+            </div>
+            <div class="pricing-row">
+              <span>5 Nächte</span>
+              <span class="pricing-row-val">2.500 €</span>
+            </div>
+            <div class="pricing-row">
+              <span>6 Nächte</span>
+              <span class="pricing-row-val">2.700 €</span>
+            </div>
+          </div>
+        </div>
+        <!-- Hochsaison -->
+        <div class="pricing-col" style="background: #1e2a1e; position:relative; border: 1px solid rgba(196,154,60,0.2);">
+          <div style="position:absolute; top:-1px; left:50%; transform:translateX(-50%); background:var(--accent); color:var(--bg-base); font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; padding:0.3rem 1rem; font-weight:500;">Beliebt</div>
+          <div class="pricing-col-header">
+            <div class="pricing-season">Hauptsaison</div>
+            <div class="pricing-col-title">Hochsaison</div>
+            <div class="pricing-price"><sup>€</sup>3.100</div>
+            <div class="pricing-price-unit">pro Woche / 2 Personen · alle Nebenkosten inkl.</div>
+          </div>
+          <div class="pricing-rows">
+            <div class="pricing-row">
+              <span>Jun – Aug 2026</span>
+              <span class="pricing-row-val">3.100 €/Wo.</span>
+            </div>
+            <div class="pricing-row">
+              <span>3 Nächte</span>
+              <span class="pricing-row-val">2.350 €</span>
+            </div>
+            <div class="pricing-row">
+              <span>4 Nächte</span>
+              <span class="pricing-row-val">2.500 €</span>
+            </div>
+            <div class="pricing-row">
+              <span>5 Nächte</span>
+              <span class="pricing-row-val">2.700 €</span>
+            </div>
+            <div class="pricing-row">
+              <span>6 Nächte</span>
+              <span class="pricing-row-val">2.800 €</span>
+            </div>
+            <div class="pricing-row">
+              <span>Weitere Person</span>
+              <span class="pricing-row-val">25 €/Nacht</span>
+            </div>
+          </div>
+        </div>
+        <!-- Weihnachten -->
+        <div class="pricing-col">
+          <div class="pricing-col-header">
+            <div class="pricing-season">Weihnachten & Silvester</div>
+            <div class="pricing-col-title">Festsaison</div>
+            <div class="pricing-price"><sup>€</sup>5.200</div>
+            <div class="pricing-price-unit">pro Woche · alle Nebenkosten inkl.</div>
+          </div>
+          <div class="pricing-rows">
+            <div class="pricing-row">
+              <span>21.12.2026 – 06.01.2027</span>
+              <span class="pricing-row-val">5.200 €/Wo.</span>
+            </div>
+            <div class="pricing-row">
+              <span>Kurzaufenthalt (3–6 Nächte)</span>
+              <span class="pricing-row-val">800 €/Nacht</span>
+            </div>
+            <div class="pricing-row">
+              <span>Max. 4 Personen bei Kurz</span>
+              <span class="pricing-row-val">inklusive</span>
+            </div>
+            <div class="pricing-row">
+              <span>Weitere Person (Woche)</span>
+              <span class="pricing-row-val">160 €/Wo.</span>
+            </div>
+            <div class="pricing-row">
+              <span>Kinder unter 3 Jahren</span>
+              <span class="pricing-row-val">kostenlos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pricing-extras reveal">
+        <div class="pricing-extras-title">Zusatzkosten & Buchungskonditionen</div>
+        <div class="extras-grid">
+          <div class="extra-row"><span>Endreinigung</span><span>400 € (einmalig)</span></div>
+          <div class="extra-row"><span>Anzahlung bei Buchung</span><span>25 % des Gesamtpreises</span></div>
+          <div class="extra-row"><span>Hunde</span><span>10 €/Tag</span></div>
+          <div class="extra-row"><span>Restzahlung + Kaution</span><span>3 Wochen vor Anreise</span></div>
+          <div class="extra-row"><span>Kurtaxe Erwachsene</span><span>3,50 €/Tag/Person</span></div>
+          <div class="extra-row"><span>Kaution</span><span>1.000 € (Rückgabe in 14 Tagen)</span></div>
+          <div class="extra-row"><span>Kurtaxe Jugendliche</span><span>1,75 €/Tag/Person</span></div>
+          <div class="extra-row"><span>Mindestaufenthalt</span><span>3 Tage</span></div>
+        </div>
+      </div>
+
+      <div class="booking-note reveal">
+        <strong style="color:var(--accent); font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase;">Hinweis zur Buchung</strong><br>
+        Eine Reiserücktrittsversicherung wird empfohlen. MwSt. ist in allen ausgewiesenen Preisen enthalten. Für Zwischenreinigungen kontaktieren Sie uns bitte separat.
+      </div>
+    </section>
+  </div>
+
+  <!-- AVAILABILITY CALENDAR -->
+  <div class="cal-section" id="verfuegbarkeit">
+    <section style="max-width:1400px; margin:0 auto; padding:6rem 4rem;">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:2rem;" class="reveal">
+        <div>
+          <p class="section-eyebrow">Verfügbarkeit</p>
+          <h2 class="section-title">Freie <em>Termine</em></h2>
+          <p class="section-body">Grün = verfügbar · Rot = belegt · Anfragen für Kurzaufenthalte jederzeit möglich.</p>
+        </div>
+        <div class="cal-nav">
+          <button class="cal-nav-btn" id="calPrev">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            Zurück
+          </button>
+          <span class="cal-period-label" id="calPeriodLabel"></span>
+          <button class="cal-nav-btn" id="calNext">
+            Weiter
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="cal-grid reveal" id="calGrid"></div>
+      <div class="cal-legend reveal">
+        <div class="cal-legend-item">
+          <div class="cal-legend-dot" style="background:rgba(60,130,70,0.4);outline:1px solid rgba(88,200,100,0.3)"></div>
+          Verfügbar
+        </div>
+        <div class="cal-legend-item">
+          <div class="cal-legend-dot" style="background:rgba(180,60,60,0.35);outline:1px solid rgba(220,80,80,0.3)"></div>
+          Belegt
+        </div>
+        <div class="cal-legend-item">
+          <div class="cal-legend-dot" style="background:rgba(196,154,60,0.25);outline:1px solid rgba(196,154,60,0.4)"></div>
+          Heute
+        </div>
+        <div class="cal-legend-item">
+          <div class="cal-legend-dot" style="background:rgba(255,255,255,0.04)"></div>
+          Vergangen
+        </div>
+      </div>
+      <!-- Range selection summary bar -->
+      <div id="calSummaryBar" style="display:none; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-top:1.5rem; padding:1rem 1.5rem; background:var(--bg-elevated); border:1px solid var(--border-light);">
+        <div style="display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span id="calSummaryText" style="font-size:0.9rem; font-weight:300; color:var(--text-secondary);"></span>
+        </div>
+        <div style="display:flex; gap:0.75rem; align-items:center;">
+          <button id="calResetBtn" style="display:none; background:none; border:1px solid var(--border); color:var(--text-muted); font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.5rem 1rem; cursor:pointer;">Zurücksetzen</button>
+          <a id="calInquiryBtn" class="btn-primary" style="display:none; font-size:0.78rem; padding:0.7rem 1.5rem; text-decoration:none;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Anfrage senden
+          </a>
+        </div>
+      </div>
+      <p class="cal-note reveal" style="margin-top:1rem;">Klicken Sie auf einen Starttag, dann auf den Endtag — wir schicken Ihnen umgehend ein Angebot. Mindestaufenthalt 3 Tage.</p>
+    </section>
+  </div>
+
+  <!-- CTA BANNER -->
+  <div class="cta-banner section-full">
+    <div class="cta-banner-text reveal">
+      <p class="section-eyebrow" style="margin-bottom:0.75rem;">Verfügbarkeit prüfen</p>
+      <h2 class="section-title" style="font-size:clamp(1.8rem,3.5vw,2.8rem);">Ihr Traumurlaub im<br><em>Allgäu</em> wartet</h2>
+    </div>
+    <div class="reveal reveal-delay-2" style="flex-shrink:0;">
+      <a href="#kontakt" class="btn-primary" style="font-size:0.85rem; padding:1rem 2.5rem;">
+        Jetzt anfragen
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- KONTAKT -->
+  <section id="kontakt">
+    <div class="contact-split">
+      <div class="contact-image reveal">
+        <img src="brand_assets/IMG_6961.jpeg" alt="Chalet Fluh Außenansicht" loading="lazy" data-admin-img="contact-img" />
+        <div class="contact-image-overlay"></div>
+      </div>
+      <div class="contact-info reveal reveal-delay-2">
+        <p class="section-eyebrow">Kontakt</p>
+        <h2 class="section-title" style="font-size:clamp(2rem,3.5vw,3rem);">Anfragen &<br><em>Buchungen</em></h2>
+        <p class="section-body" style="margin-bottom:2.5rem;" data-admin-text="contact-intro">
+          Wir freuen uns auf Ihre Anfrage. Dr. Jana Steil steht Ihnen persönlich für alle Fragen zur Verfügbarkeit, Anreise und individuellen Wünschen zur Verfügung.
+        </p>
+
+        <div class="contact-detail">
+          <svg class="contact-detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+          <div>
+            <div class="contact-detail-label">Inhaberin</div>
+            <div class="contact-detail-value" data-admin-text="contact-owner">Dr. Jana Steil</div>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <svg class="contact-detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.6 5.05 2 2 0 0 1 3.56 2.87h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.5a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 18z"/>
+          </svg>
+          <div>
+            <div class="contact-detail-label">Telefon</div>
+            <div class="contact-detail-value" data-admin-text="contact-phone">
+              <a href="tel:+498386991817">+49 8386 9918170</a><br>
+              <a href="tel:+4915510325384">+49 155 10325384</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <svg class="contact-detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+          </svg>
+          <div>
+            <div class="contact-detail-label">E-Mail</div>
+            <div class="contact-detail-value" data-admin-text="contact-email">
+              <a href="mailto:chaletfluh@gmail.com">chaletfluh@gmail.com</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <svg class="contact-detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+          </svg>
+          <div>
+            <div class="contact-detail-label">Anschrift</div>
+            <div class="contact-detail-value" data-admin-text="contact-address">
+              Fluh Services<br>Max-Ostheimer-Str. 6<br>87534 Oberstaufen, Allgäu
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:2rem;">
+          <a href="mailto:chaletfluh@gmail.com" class="btn-primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            E-Mail schreiben
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Chalet <span>Fluh</span><div style="font-size:0.65rem; letter-spacing:0.12em; color:var(--text-muted); font-weight:300; margin-top:0.2rem; font-family:'DM Sans',sans-serif; text-transform:uppercase;">Das Allgäudomizil · FLUH®</div></div>
+    <ul class="footer-links">
+      <li><a href="#das-chalet">Das Chalet</a></li>
+      <li><a href="#ausstattung">Ausstattung</a></li>
+      <li><a href="#preise">Preise</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+    <div class="footer-copy">
+      © 2026 Chalet Fluh · USt-IdNr. DE 205 779 455<br>
+      <span style="font-size:0.65rem;">Fotos © Christian Steil</span>
+    </div>
+  </footer>
+
+  <script>
+    // NAV scroll effect
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 80);
+    });
+
+    // Mobile nav
+    document.getElementById('hamburgerBtn').addEventListener('click', () => {
+      document.getElementById('mobileNav').classList.add('open');
+    });
+    document.getElementById('mobileClose').addEventListener('click', closeMobileNav);
+    function closeMobileNav() {
+      document.getElementById('mobileNav').classList.remove('open');
+    }
+
+    // Hero slideshow
+    const slides = document.querySelectorAll('.hero-slide');
+    const indicatorsContainer = document.getElementById('slideIndicators');
+    let current = 0;
+    let slideTimer;
+
+    // Build indicators
+    slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.style.cssText = `
+        width: ${i === 0 ? '24px' : '6px'}; height: 6px;
+        background: ${i === 0 ? 'var(--accent)' : 'rgba(255,255,255,0.3)'};
+        border: none; cursor: pointer;
+        transition: all 0.3s ease; border-radius: 3px; padding: 0;
+      `;
+      dot.addEventListener('click', () => goToSlide(i));
+      indicatorsContainer.appendChild(dot);
+    });
+
+    function goToSlide(n) {
+      slides[current].classList.remove('active');
+      const dots = indicatorsContainer.children;
+      dots[current].style.width = '6px';
+      dots[current].style.background = 'rgba(255,255,255,0.3)';
+      current = n;
+      slides[current].classList.add('active');
+      dots[current].style.width = '24px';
+      dots[current].style.background = 'var(--accent)';
+    }
+
+    function nextSlide() {
+      goToSlide((current + 1) % slides.length);
+    }
+
+    slideTimer = setInterval(nextSlide, 5000);
+
+    // Lightbox
+    function openLightbox(src, caption) {
+      document.getElementById('lightboxImg').src = src;
+      document.getElementById('lightboxCaption').textContent = caption;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(e) {
+      if (!e || e.target !== document.getElementById('lightboxImg')) {
+        document.getElementById('lightbox').classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    // ─── GALLERY SLIDESHOW ───────────────────────────────────────────
+    const ssCaptions = [
+      'Sauna & Ruhebereich','Schlafzimmer mit Holzbalken','Wohnbereich',
+      'Schlafzimmer OG','Schlafzimmer','Schlafzimmer','Mehrbettzimmer',
+      'Terrasse','Garten & Terrasse','Winterpanorama','Außenansicht Winter',
+      'Chalet im Schnee','Herbstansicht','Außenansicht','Chalet Exterior'
+    ];
+    let ssCurrent = 0;
+    let ssTotal = 15;
+    let ssAutoTimer = null;
+    let ssProgress = 0;
+    let ssProgressTimer = null;
+    const ssInterval = 5000;
+
+    const ssTrack = document.getElementById('ssTrack');
+    const ssThumbs = document.getElementById('ssThumbs').children;
+    const ssProgressBar = document.getElementById('ssProgressBar');
+
+    function ssGoTo(n) {
+      const prev = ssCurrent;
+      ssCurrent = (n + ssTotal) % ssTotal;
+      ssTrack.style.transform = `translateX(-${ssCurrent * 100}%)`;
+      document.getElementById('ssCaptionText').textContent = ssCaptions[ssCurrent];
+      document.getElementById('ssCounter').textContent = `${ssCurrent + 1} / ${ssTotal}`;
+      // Thumbs
+      ssThumbs[prev].classList.remove('ss-thumb-active');
+      ssThumbs[ssCurrent].classList.add('ss-thumb-active');
+      // Scroll thumb horizontally only — never touches page scroll
+      const thumbsEl = document.getElementById('ssThumbs');
+      const th = ssThumbs[ssCurrent];
+      thumbsEl.scrollTo({ left: th.offsetLeft - (thumbsEl.clientWidth - th.offsetWidth) / 2, behavior: 'smooth' });
+      // Slide zoom effect
+      ssTrack.querySelectorAll('.ss-slide').forEach((s,i) => s.classList.toggle('active', i === ssCurrent));
+      // Reset progress
+      ssProgress = 0;
+      ssProgressBar.style.transition = 'none';
+      ssProgressBar.style.width = '0%';
+      ssRestartAuto();
+    }
+
+    function ssRestartAuto() {
+      clearInterval(ssAutoTimer);
+      clearInterval(ssProgressTimer);
+      ssProgress = 0;
+      ssProgressBar.style.transition = 'none';
+      ssProgressBar.style.width = '0%';
+      requestAnimationFrame(() => {
+        ssProgressBar.style.transition = `width ${ssInterval}ms linear`;
+        ssProgressBar.style.width = '100%';
+      });
+      ssAutoTimer = setInterval(() => ssGoTo(ssCurrent + 1), ssInterval);
+    }
+
+    document.getElementById('ssNext').addEventListener('click', () => ssGoTo(ssCurrent + 1));
+    document.getElementById('ssPrev').addEventListener('click', () => ssGoTo(ssCurrent - 1));
+    document.addEventListener('keydown', e => {
+      if (document.getElementById('lightbox').classList.contains('open')) return;
+      if (e.key === 'ArrowRight') ssGoTo(ssCurrent + 1);
+      if (e.key === 'ArrowLeft') ssGoTo(ssCurrent - 1);
+    });
+
+    // Touch/swipe support
+    let ssTouchStart = 0;
+    document.getElementById('gallerySlideshow').addEventListener('touchstart', e => { ssTouchStart = e.touches[0].clientX; }, {passive:true});
+    document.getElementById('gallerySlideshow').addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - ssTouchStart;
+      if (Math.abs(dx) > 50) ssGoTo(ssCurrent + (dx < 0 ? 1 : -1));
+    });
+
+    // Init
+    ssGoTo(0);
+
+    // ─── AREA SLIDESHOW (Lage) ───────────────────────────────────────
+    const AREA_SLIDES = [
+      { src: 'brand_assets/IMG_7104.PNG',           caption: 'Hochgrat',                  sub: '1.832 m · Panoramagipfel Naturpark Nagelfluhkette' },
+      { src: 'brand_assets/IMG_3866.jpeg',           caption: 'Imberg-Skigebiet',           sub: 'Direkt vor der Tür · Ski, Rodeln & Winterwandern' },
+      { src: 'brand_assets/IMG_1221%20(1).jpeg',     caption: 'Allgäuer Winter',            sub: 'Schneesicheres Hochplateau auf 900 m' },
+      { src: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=1200&q=80', caption: 'Buchenegger Wasserfälle',  sub: 'Wildromantische Wasserfälle · 30 min Fußmarsch' },
+      { src: 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80', caption: 'Breitachklamm',            sub: 'Tiefste Schlucht der Alpen · 10 km entfernt' },
+      { src: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80', caption: 'Naturpark Nagelfluhkette', sub: '400 km² · Deutsch-Österreichisches Naturschutzgebiet' },
+      { src: 'brand_assets/IMG_7965.jpeg',           caption: 'Steibis & Schindelberg',     sub: 'Alleinlage des Chalets · Ruhe & unberührte Natur' },
+    ];
+    let areaCurrent = 0;
+
+    function areaGoTo(n) {
+      areaCurrent = (n + AREA_SLIDES.length) % AREA_SLIDES.length;
+      const s = AREA_SLIDES[areaCurrent];
+      document.getElementById('areaMainImg').src = s.src;
+      document.getElementById('areaCaption').textContent = s.caption;
+      document.getElementById('areaCapSub').textContent = s.sub;
+      document.getElementById('areaCounterBadge').textContent = `${areaCurrent + 1} / ${AREA_SLIDES.length}`;
+      document.querySelectorAll('.area-ss-thumb-item').forEach((t, i) => t.classList.toggle('active', i === areaCurrent));
+      const col = document.getElementById('areaThumbcol');
+      const active = col.children[areaCurrent];
+      if (active) col.scrollTo({ top: active.offsetTop - (col.clientHeight - active.offsetHeight) / 2, behavior: 'smooth' });
+    }
+
+    // Build thumbnails
+    const areaThumbcol = document.getElementById('areaThumbcol');
+    AREA_SLIDES.forEach((s, i) => {
+      const div = document.createElement('div');
+      div.className = 'area-ss-thumb-item' + (i === 0 ? ' active' : '');
+      div.innerHTML = `<img src="${s.src}" alt="${s.caption}" loading="lazy" /><div class="area-ss-thumb-label">${s.caption}</div>`;
+      div.addEventListener('click', () => areaGoTo(i));
+      areaThumbcol.appendChild(div);
+    });
+
+    document.getElementById('areaPrev').addEventListener('click', () => areaGoTo(areaCurrent - 1));
+    document.getElementById('areaNext').addEventListener('click', () => areaGoTo(areaCurrent + 1));
+    areaGoTo(0);
+
+    // ─── AVAILABILITY CALENDAR WITH DATE RANGE SELECTION ─────────────
+    const MONTHS_DE = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+    const MONTHS_SHORT = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+    const DAYS_DE = ['Mo','Di','Mi','Do','Fr','Sa','So'];
+
+    const bookedRanges = [
+      [2025,11,21,31],[2026,0,1,6],
+      [2026,5,28,30],[2026,6,1,14],[2026,7,1,10],
+      [2026,9,11,18],
+      [2026,11,21,31],[2027,0,1,6],
+      [2027,2,15,22],[2027,4,1,7],
+    ];
+
+    function isBooked(y,m,d) { return bookedRanges.some(([ry,rm,rs,re])=>ry===y&&rm===m&&d>=rs&&d<=re); }
+
+    let calOffset = 0;
+    let calRangeStart = null; // {y,m,d}
+    let calRangeEnd   = null;
+    let calHover      = null; // {y,m,d}
+    let calSelecting  = false; // true = waiting for end date
+
+    function dateToNum(y,m,d) { return new Date(y,m,d).getTime(); }
+    function inRange(y,m,d) {
+      if (!calRangeStart) return false;
+      const t = dateToNum(y,m,d);
+      const s = dateToNum(calRangeStart.y, calRangeStart.m, calRangeStart.d);
+      const e = calSelecting && calHover
+        ? dateToNum(calHover.y, calHover.m, calHover.d)
+        : (calRangeEnd ? dateToNum(calRangeEnd.y, calRangeEnd.m, calRangeEnd.d) : s);
+      return t >= Math.min(s,e) && t <= Math.max(s,e);
+    }
+    function isRangeStart(y,m,d) { return calRangeStart && calRangeStart.y===y && calRangeStart.m===m && calRangeStart.d===d; }
+    function isRangeEnd(y,m,d) {
+      const end = calSelecting ? calHover : calRangeEnd;
+      return end && end.y===y && end.m===m && end.d===d;
+    }
+
+    function renderCalendar() {
+      const grid = document.getElementById('calGrid');
+      const today = new Date();
+      grid.innerHTML = '';
+
+      const startMonth = new Date(today.getFullYear(), today.getMonth() + calOffset * 3, 1);
+      const months = [0,1,2].map(i => new Date(startMonth.getFullYear(), startMonth.getMonth() + i, 1));
+      document.getElementById('calPeriodLabel').textContent =
+        `${MONTHS_DE[months[0].getMonth()]} – ${MONTHS_DE[months[2].getMonth()]} ${months[2].getFullYear()}`;
+
+      months.forEach(monthDate => {
+        const y = monthDate.getFullYear(), m = monthDate.getMonth();
+        const daysInMonth = new Date(y, m+1, 0).getDate();
+        let startDow = monthDate.getDay();
+        startDow = startDow === 0 ? 6 : startDow - 1;
+
+        const col = document.createElement('div');
+        col.className = 'cal-month';
+        col.innerHTML = `<div class="cal-month-header"><span class="cal-month-name">${MONTHS_DE[m]}</span><span class="cal-month-year">${y}</span></div><div class="cal-dow">${DAYS_DE.map(d=>`<span>${d}</span>`).join('')}</div><div class="cal-days"></div>`;
+        grid.appendChild(col);
+        const daysEl = col.querySelector('.cal-days');
+
+        for (let i=0; i<startDow; i++) {
+          const e=document.createElement('div'); e.className='cal-day empty'; daysEl.appendChild(e);
+        }
+        for (let d=1; d<=daysInMonth; d++) {
+          const cell = document.createElement('div');
+          const thisDate = new Date(y,m,d);
+          const isPast = thisDate < new Date(today.getFullYear(),today.getMonth(),today.getDate());
+          const isToday = y===today.getFullYear()&&m===today.getMonth()&&d===today.getDate();
+          const booked = isBooked(y,m,d);
+          const selectable = !isPast && !booked;
+
+          let cls = 'cal-day';
+          if (isToday) cls += ' today';
+          else if (isPast) cls += ' past';
+          else if (booked) cls += ' booked';
+          else cls += ' available';
+
+          if (selectable && inRange(y,m,d)) cls += ' in-range';
+          if (isRangeStart(y,m,d)) cls += ' range-start';
+          if (isRangeEnd(y,m,d)) cls += ' range-end';
+
+          cell.className = cls;
+          cell.textContent = d;
+          if (selectable) {
+            cell.style.cursor = 'pointer';
+            cell.addEventListener('click', () => calDayClick(y,m,d));
+            cell.addEventListener('mouseenter', () => { calHover={y,m,d}; renderCalendar(); });
+          }
+          daysEl.appendChild(cell);
+        }
+      });
+      updateCalSummary();
+    }
+
+    function calDayClick(y,m,d) {
+      if (!calSelecting || !calRangeStart) {
+        calRangeStart = {y,m,d}; calRangeEnd = null; calSelecting = true;
+      } else {
+        const t = dateToNum(y,m,d), s = dateToNum(calRangeStart.y,calRangeStart.m,calRangeStart.d);
+        if (t < s) { calRangeStart={y,m,d}; calRangeEnd=null; }
+        else { calRangeEnd={y,m,d}; calSelecting=false; }
+      }
+      renderCalendar();
+    }
+
+    function fmtDate(o) { return o ? `${String(o.d).padStart(2,'0')}.${String(o.m+1).padStart(2,'0')}.${o.y}` : '—'; }
+
+    function updateCalSummary() {
+      const bar = document.getElementById('calSummaryBar');
+      const btn = document.getElementById('calInquiryBtn');
+      const resetBtn = document.getElementById('calResetBtn');
+      if (!calRangeStart) { bar.style.display='none'; return; }
+      bar.style.display='flex';
+      if (calSelecting) {
+        document.getElementById('calSummaryText').innerHTML =
+          `<strong style="color:var(--accent)">${fmtDate(calRangeStart)}</strong> &nbsp;→&nbsp; Enddatum wählen …`;
+        btn.style.display='none';
+      } else if (calRangeEnd) {
+        const nights = Math.round((dateToNum(calRangeEnd.y,calRangeEnd.m,calRangeEnd.d) - dateToNum(calRangeStart.y,calRangeStart.m,calRangeStart.d)) / 86400000);
+        document.getElementById('calSummaryText').innerHTML =
+          `<strong style="color:var(--accent)">${fmtDate(calRangeStart)}</strong> &nbsp;–&nbsp; <strong style="color:var(--accent)">${fmtDate(calRangeEnd)}</strong> &nbsp;·&nbsp; <span style="color:var(--text-secondary)">${nights} Nacht${nights!==1?'e':''}</span>`;
+        btn.style.display='inline-flex';
+      }
+      resetBtn.style.display='inline-flex';
+    }
+
+    document.getElementById('calPrev').addEventListener('click', () => { calOffset--; renderCalendar(); });
+    document.getElementById('calNext').addEventListener('click', () => { calOffset++; renderCalendar(); });
+    document.getElementById('calResetBtn').addEventListener('click', () => {
+      calRangeStart=null; calRangeEnd=null; calSelecting=false; renderCalendar();
+    });
+    document.getElementById('calInquiryBtn').addEventListener('click', () => {
+      if (!calRangeStart || !calRangeEnd) return;
+      const nights = Math.round((dateToNum(calRangeEnd.y,calRangeEnd.m,calRangeEnd.d) - dateToNum(calRangeStart.y,calRangeStart.m,calRangeStart.d)) / 86400000);
+      const subject = encodeURIComponent(`Buchungsanfrage Chalet Fluh: ${fmtDate(calRangeStart)} – ${fmtDate(calRangeEnd)}`);
+      const body = encodeURIComponent(`Guten Tag,\n\nwir möchten das Chalet Fluh für folgenden Zeitraum anfragen:\n\nAnreise: ${fmtDate(calRangeStart)}\nAbreise: ${fmtDate(calRangeEnd)}\nAufenthaltsdauer: ${nights} Nacht${nights!==1?'e':''}\n\nAnzahl Personen: \nAnzahl Hunde: \n\nVielen Dank und freundliche Grüße,\n`);
+      window.open(`mailto:chaletfluh@gmail.com?subject=${subject}&body=${body}`);
+    });
+    document.getElementById('calGrid').addEventListener('mouseleave', () => { calHover=null; renderCalendar(); });
+    renderCalendar();
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+    revealEls.forEach(el => observer.observe(el));
+
+    // Trigger all reveals after short delay (for full-page screenshots & no-JS fallback)
+    setTimeout(() => {
+      revealEls.forEach(el => el.classList.add('visible'));
+    }, 800);
+  </script>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ADMIN PANEL HTML
+  ═══════════════════════════════════════════════════════════ -->
+
+  <!-- Floating admin button -->
+  <button id="adminToggleBtn" title="Admin-Bereich">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <rect x="3" y="11" width="18" height="11" rx="2"/>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+    </svg>
+  </button>
+
+  <!-- Login modal -->
+  <div id="adminLoginModal">
+    <div class="admin-modal-box">
+      <div class="admin-modal-title">Admin-Zugang</div>
+      <div class="admin-modal-sub">Bitte geben Sie das Passwort ein, um Texte und Bilder zu bearbeiten.</div>
+      <input class="admin-input" type="password" id="adminPasswordInput" placeholder="Passwort" autocomplete="current-password" />
+      <div class="admin-modal-error" id="adminLoginError">Falsches Passwort. Bitte versuchen Sie es erneut.</div>
+      <div class="admin-btn-row">
+        <button class="admin-btn" id="adminLoginCancel">Abbrechen</button>
+        <button class="admin-btn primary" id="adminLoginSubmit">Anmelden</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit mode banner (shown when logged in) -->
+  <div id="adminBanner">
+    <div>
+      <div class="admin-banner-title">✏ Bearbeitungsmodus aktiv</div>
+      <div class="admin-banner-hint">Klicken Sie auf Texte zum Bearbeiten · Klicken Sie auf Bilder zum Austauschen</div>
+    </div>
+    <div class="admin-banner-controls">
+      <button class="admin-banner-btn" id="adminSaveBtn">Speichern</button>
+      <button class="admin-banner-btn danger" id="adminResetAllBtn">Zurücksetzen</button>
+      <button class="admin-banner-btn" id="adminExitBtn">Beenden</button>
+    </div>
+  </div>
+
+  <!-- Hidden file input for image replacement -->
+  <input type="file" id="adminImgInput" accept="image/*" style="display:none" />
+
+  <!-- Floating image hover overlay -->
+  <div id="adminImgOverlay">
+    <span>📷 Bild austauschen</span>
+  </div>
+
+  <!-- Save toast notification -->
+  <div id="adminSavedToast">✓ Gespeichert</div>
+
+  <script>
+  // ─── ADMIN PANEL ─────────────────────────────────────────────────────────────
+  const ADMIN_PASSWORD = 'ChaletFluh2026';
+  const ADMIN_STORE_KEY = 'chaletfluh_admin_overrides';
+
+  let adminMode = false;
+  let adminOverrides = {}; // { key: value } – persisted to localStorage
+  let adminPendingImgKey = null;
+
+  // ─── Selectors ───────────────────────────────────────────────────────────────
+  const $adminToggle   = document.getElementById('adminToggleBtn');
+  const $loginModal    = document.getElementById('adminLoginModal');
+  const $loginInput    = document.getElementById('adminPasswordInput');
+  const $loginError    = document.getElementById('adminLoginError');
+  const $loginSubmit   = document.getElementById('adminLoginSubmit');
+  const $loginCancel   = document.getElementById('adminLoginCancel');
+  const $adminBanner   = document.getElementById('adminBanner');
+  const $saveBtn       = document.getElementById('adminSaveBtn');
+  const $resetAllBtn   = document.getElementById('adminResetAllBtn');
+  const $exitBtn       = document.getElementById('adminExitBtn');
+  const $imgInput      = document.getElementById('adminImgInput');
+  const $toast         = document.getElementById('adminSavedToast');
+  const $imgOverlay    = document.getElementById('adminImgOverlay');
+
+  // ─── Load saved overrides from localStorage ───────────────────────────────
+  function loadOverrides() {
+    try { adminOverrides = JSON.parse(localStorage.getItem(ADMIN_STORE_KEY) || '{}'); } catch(e) { adminOverrides = {}; }
+  }
+  function saveOverrides() {
+    localStorage.setItem(ADMIN_STORE_KEY, JSON.stringify(adminOverrides));
+  }
+  function applyOverrides() {
+    // Text overrides
+    document.querySelectorAll('[data-admin-text]').forEach(el => {
+      const key = el.getAttribute('data-admin-text');
+      if (adminOverrides[key] !== undefined) el.innerHTML = adminOverrides[key];
+    });
+    // Image overrides
+    document.querySelectorAll('[data-admin-img]').forEach(el => {
+      const key = el.getAttribute('data-admin-img');
+      if (adminOverrides[key] !== undefined) {
+        el.src = adminOverrides[key];
+        // Sync gallery thumbnails
+        if (key.startsWith('gallery-')) {
+          const idx = parseInt(key.split('-')[1]);
+          const thumbs = document.querySelectorAll('#ssThumbs .ss-thumb img');
+          if (thumbs[idx]) thumbs[idx].src = adminOverrides[key];
+        }
+      }
+    });
+  }
+
+  // ─── Toast ────────────────────────────────────────────────────────────────
+  function showToast(msg) {
+    $toast.textContent = msg || '✓ Gespeichert';
+    $toast.classList.add('show');
+    setTimeout(() => $toast.classList.remove('show'), 2000);
+  }
+
+  // ─── Image overlay (floating, no DOM wrapping) ───────────────────────────
+  let adminOverlayTarget = null;
+  function positionOverlayOnImg(img) {
+    const r = img.getBoundingClientRect();
+    $imgOverlay.style.left   = r.left + 'px';
+    $imgOverlay.style.top    = r.top  + 'px';
+    $imgOverlay.style.width  = r.width + 'px';
+    $imgOverlay.style.height = r.height + 'px';
+    $imgOverlay.classList.add('visible');
+    adminOverlayTarget = img;
+  }
+  function hideOverlay() {
+    $imgOverlay.classList.remove('visible');
+    adminOverlayTarget = null;
+  }
+
+  // ─── Enter / Exit admin mode ──────────────────────────────────────────────
+  function enterAdminMode() {
+    adminMode = true;
+    document.body.classList.add('admin-mode');
+    $adminBanner.classList.add('active');
+    $adminToggle.style.opacity = '1';
+    $adminToggle.title = 'Admin aktiv';
+    // Make text elements editable
+    document.querySelectorAll('[data-admin-text]').forEach(el => {
+      el.contentEditable = 'true';
+      el.addEventListener('input', onTextInput);
+    });
+    // Attach hover+click listeners to images (no wrapping)
+    document.querySelectorAll('[data-admin-img]').forEach(img => {
+      img.addEventListener('mouseenter', onImgHover);
+      img.addEventListener('mouseleave', onImgLeave);
+      img.addEventListener('click', onImgClick);
+    });
+    $imgOverlay.addEventListener('click', onOverlayClick);
+    $imgOverlay.addEventListener('mouseleave', hideOverlay);
+  }
+  function exitAdminMode() {
+    adminMode = false;
+    document.body.classList.remove('admin-mode');
+    $adminBanner.classList.remove('active');
+    $adminToggle.style.opacity = '0.4';
+    $adminToggle.title = 'Admin-Bereich';
+    document.querySelectorAll('[data-admin-text]').forEach(el => {
+      el.contentEditable = 'false';
+      el.removeEventListener('input', onTextInput);
+    });
+    document.querySelectorAll('[data-admin-img]').forEach(img => {
+      img.removeEventListener('mouseenter', onImgHover);
+      img.removeEventListener('mouseleave', onImgLeave);
+      img.removeEventListener('click', onImgClick);
+    });
+    $imgOverlay.removeEventListener('click', onOverlayClick);
+    $imgOverlay.removeEventListener('mouseleave', hideOverlay);
+    hideOverlay();
+  }
+
+  // ─── Text edits ──────────────────────────────────────────────────────────
+  function onTextInput(e) {
+    const key = e.target.getAttribute('data-admin-text');
+    adminOverrides[key] = e.target.innerHTML;
+  }
+
+  // ─── Image replacement ────────────────────────────────────────────────────
+  function onImgHover(e) { positionOverlayOnImg(e.currentTarget); }
+  function onImgLeave(e) {
+    // Don't hide if moving to overlay
+    const related = e.relatedTarget;
+    if (related && ($imgOverlay.contains(related) || related === $imgOverlay)) return;
+    hideOverlay();
+  }
+  function onImgClick(e) {
+    adminPendingImgKey = e.currentTarget.getAttribute('data-admin-img');
+    $imgInput.click();
+  }
+  function onOverlayClick() {
+    if (!adminOverlayTarget) return;
+    adminPendingImgKey = adminOverlayTarget.getAttribute('data-admin-img');
+    $imgInput.click();
+  }
+  $imgInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file || !adminPendingImgKey) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const dataUrl = ev.target.result;
+      adminOverrides[adminPendingImgKey] = dataUrl;
+      // Update DOM immediately — all imgs with this key
+      document.querySelectorAll(`[data-admin-img="${adminPendingImgKey}"]`).forEach(el => { el.src = dataUrl; });
+      // If gallery slide, also update the corresponding thumbnail
+      if (adminPendingImgKey.startsWith('gallery-')) {
+        const idx = parseInt(adminPendingImgKey.split('-')[1]);
+        const thumbs = document.querySelectorAll('#ssThumbs .ss-thumb img');
+        if (thumbs[idx]) thumbs[idx].src = dataUrl;
+      }
+      adminPendingImgKey = null;
+      $imgInput.value = '';
+      showToast('✓ Bild ersetzt');
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // ─── Button handlers ──────────────────────────────────────────────────────
+  $adminToggle.addEventListener('click', () => {
+    if (adminMode) { exitAdminMode(); return; }
+    $loginInput.value = '';
+    $loginError.style.display = 'none';
+    $loginModal.classList.add('open');
+    setTimeout(() => $loginInput.focus(), 80);
+  });
+
+  $loginCancel.addEventListener('click', () => $loginModal.classList.remove('open'));
+  $loginModal.addEventListener('click', (e) => { if (e.target === $loginModal) $loginModal.classList.remove('open'); });
+
+  function tryLogin() {
+    if ($loginInput.value === ADMIN_PASSWORD) {
+      $loginModal.classList.remove('open');
+      $loginError.style.display = 'none';
+      enterAdminMode();
+    } else {
+      $loginError.style.display = 'block';
+      $loginInput.select();
+    }
+  }
+  $loginSubmit.addEventListener('click', tryLogin);
+  $loginInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') tryLogin(); });
+
+  $saveBtn.addEventListener('click', () => {
+    // Flush any contentEditable changes to overrides
+    document.querySelectorAll('[data-admin-text]').forEach(el => {
+      adminOverrides[el.getAttribute('data-admin-text')] = el.innerHTML;
+    });
+    saveOverrides();
+    showToast('✓ Alle Änderungen gespeichert');
+  });
+
+  $resetAllBtn.addEventListener('click', () => {
+    if (!confirm('Alle Änderungen zurücksetzen? Diese Aktion kann nicht rückgängig gemacht werden.')) return;
+    adminOverrides = {};
+    localStorage.removeItem(ADMIN_STORE_KEY);
+    // Restore text
+    document.querySelectorAll('[data-admin-text]').forEach(el => {
+      el.innerHTML = el.getAttribute('data-admin-original') || el.innerHTML;
+    });
+    showToast('✓ Zurückgesetzt');
+    exitAdminMode();
+    location.reload();
+  });
+
+  $exitBtn.addEventListener('click', () => { exitAdminMode(); });
+
+  // ─── Init ─────────────────────────────────────────────────────────────────
+  loadOverrides();
+  applyOverrides();
+  </script>
+</body>
+</html>
