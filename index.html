@@ -26,7 +26,7 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
 
     body {
       font-family: 'DM Sans', sans-serif;
@@ -66,6 +66,21 @@
       justify-content: space-between;
       transition: background 0.4s ease, backdrop-filter 0.4s ease, padding 0.4s ease;
     }
+    .nav-keyvisual {
+      display: flex;
+      align-items: flex-start;
+      margin-left: 2rem;
+      margin-top: -1.5rem;
+    }
+    .nav-links { margin-left: auto; }
+    .nav-keyvisual img {
+      height: 88px;
+      width: auto;
+      filter: brightness(0) saturate(100%) invert(68%) sepia(44%) saturate(548%) hue-rotate(1deg) brightness(93%) contrast(88%);
+      opacity: 0.9;
+      transition: height 0.4s ease, opacity 0.3s;
+    }
+    nav.scrolled .nav-keyvisual img { height: 72px; }
     nav.scrolled {
       background: rgba(10, 15, 11, 0.9);
       backdrop-filter: blur(16px);
@@ -453,6 +468,7 @@
     }
     .feature-card:hover { background: var(--bg-elevated); }
     .feature-card:nth-child(3n) { border-right: none; }
+    .feature-card:last-child { border-bottom: none; }
     .feature-icon {
       width: 2.5rem;
       height: 2.5rem;
@@ -1399,11 +1415,12 @@
       nav.scrolled { padding: 0.8rem 1.5rem; }
       .nav-links { display: none; }
       .hamburger { display: flex; }
-      section { padding: 4rem 1.5rem; }
+      /* Override all section and container inline paddings to prevent horizontal overflow */
+      section { padding: 3rem 1.5rem !important; }
+      .gallery-header { padding: 3rem 1.5rem 1.5rem !important; flex-direction: column; align-items: flex-start; gap: 1.5rem; }
       .hero-content { padding: 0 1.5rem 4rem; }
       .hero-scroll-hint { display: none; }
       .stats-bar { grid-template-columns: repeat(2, 1fr); padding: 1.5rem; }
-      .gallery-header { padding: 3rem 1.5rem 1.5rem; flex-direction: column; align-items: flex-start; gap: 1.5rem; }
       .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, 200px); }
       .g1 { grid-column: 1 / 3; }
       .g2 { grid-column: 1 / 2; }
@@ -1415,6 +1432,12 @@
       footer { flex-direction: column; gap: 1.5rem; text-align: center; padding: 2rem 1.5rem; }
       .footer-links { flex-wrap: wrap; justify-content: center; }
       .extras-grid { grid-template-columns: 1fr; }
+      /* Features: single column on mobile */
+      .features-grid { grid-template-columns: 1fr !important; }
+      .feature-card { border-right: none !important; border-bottom: 1px solid var(--border); }
+      .feature-card:last-child { border-bottom: none; }
+      /* Map section div wrapper with inline padding */
+      .map-section > div { padding-left: 1.5rem !important; padding-right: 1.5rem !important; }
     }
 
     /* ═══════════════════════════════════════════════════════════
@@ -1642,6 +1665,9 @@
   <!-- NAV -->
   <nav id="mainNav">
     <a href="#" class="nav-logo">Chalet <span>Fluh</span></a>
+    <div class="nav-keyvisual">
+      <img src="brand_assets/Keyvisual_Dachverzierung_Chalet_Fluh.png" alt="Chalet Fluh" />
+    </div>
     <ul class="nav-links">
       <li><a href="#das-chalet">Das Chalet</a></li>
       <li><a href="#ausstattung">Ausstattung</a></li>
@@ -1671,20 +1697,18 @@
   <!-- HERO -->
   <section class="hero section-full" style="padding:0; max-width:none;">
     <div class="hero-slides" id="heroSlides">
-      <div class="hero-slide active" style="background-image: url('brand_assets/IMG_7104.PNG')"></div>
-      <div class="hero-slide" style="background-image: url('brand_assets/IMG_7965.jpeg')"></div>
+      <div class="hero-slide active" style="background-image: url('brand_assets/IMG_7965.jpeg')"></div>
       <div class="hero-slide" style="background-image: url('brand_assets/IMG_3866.jpeg')"></div>
       <div class="hero-slide" style="background-image: url('brand_assets/IMG_6961.jpeg')"></div>
       <div class="hero-slide" style="background-image: url('brand_assets/IMG_1987.jpeg')"></div>
-      <div class="hero-slide" style="background-image: url('brand_assets/IMG_1221%20(1).jpeg')"></div>
     </div>
     <div class="hero-overlay"></div>
     <div class="hero-overlay-top"></div>
     <div class="hero-content" style="max-width:none; width:100%;">
       <div style="max-width:1400px; margin:0 auto; width:100%;">
-        <p class="hero-eyebrow" data-admin-text="hero-eyebrow">Oberstaufen · Allgäu · 900 m ü. NN</p>
+        <p class="hero-eyebrow" data-admin-text="hero-eyebrow">Oberstaufen · Allgäu · 900 m Höhenlage</p>
         <h1 class="hero-title" data-admin-text="hero-title">Das <em>Allgäu</em>domizil<br>im Naturpark</h1>
-        <p class="hero-subtitle" data-admin-text="hero-subtitle">Ein exklusives Ferienhaus für 2–12 Personen in unberührter Alleinlage zwischen Steibis und Schindelberg.</p>
+        <p class="hero-subtitle" data-admin-text="hero-subtitle">Ein exklusives Ferienhaus für bis zu 10 Personen in unberührter Alleinlage zwischen den Oberstaufener Teilorten Steibis und Schindelberg.</p>
         <div class="hero-cta">
           <a href="#kontakt" class="btn-primary">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
@@ -1709,20 +1733,20 @@
   <!-- STATS BAR -->
   <div class="stats-bar">
     <div class="stat-item reveal">
-      <div class="stat-number">280</div>
-      <div class="stat-label">m² Wohnfläche</div>
+      <div class="stat-number" data-admin-text="stat-sqm">264</div>
+      <div class="stat-label" data-admin-text="stat-label-sqm">m² Wohnfläche</div>
     </div>
     <div class="stat-item reveal reveal-delay-1">
-      <div class="stat-number">4</div>
-      <div class="stat-label">Schlafzimmer</div>
+      <div class="stat-number" data-admin-text="stat-bedrooms">4</div>
+      <div class="stat-label" data-admin-text="stat-label-bedrooms">Schlafzimmer</div>
     </div>
     <div class="stat-item reveal reveal-delay-2">
-      <div class="stat-number">12</div>
-      <div class="stat-label">Personen max.</div>
+      <div class="stat-number" data-admin-text="stat-persons">10</div>
+      <div class="stat-label" data-admin-text="stat-label-persons">Personen max.</div>
     </div>
     <div class="stat-item reveal reveal-delay-3">
-      <div class="stat-number">2.500</div>
-      <div class="stat-label">m² Grundstück</div>
+      <div class="stat-number" data-admin-text="stat-plot">2.500</div>
+      <div class="stat-label" data-admin-text="stat-label-plot">m² Grundstück</div>
     </div>
   </div>
 
@@ -1738,20 +1762,20 @@
         </div>
       </div>
       <div class="reveal reveal-delay-2">
-        <p class="section-eyebrow">Das Chalet Fluh</p>
+        <p class="section-eyebrow" data-admin-text="chalet-eyebrow">Das Chalet Fluh</p>
         <h2 class="section-title" data-admin-text="chalet-title">Naturnah wohnen<br>auf <em>höchstem Niveau</em></h2>
         <p class="section-body" data-admin-text="chalet-body-1">
-          Das Chalet Fluh liegt in Alleinlage zwischen Steibis und Schindelberg im Naturpark Nagelfluhkette — auf rund 900 Metern, inmitten von 190.000 m² Naturgrundstück.
+          Das Chalet Fluh liegt in Alleinlage zwischen Steibis und Schindelberg im Naturpark Nagelfluhkette — auf rund 900 Metern, inmitten von 190.000 m² eigenen Wiesen und Wäldern, eingebettet von zwei Bächen.
         </p>
         <p class="section-body" style="margin-top:1rem;" data-admin-text="chalet-body-2">
-          Auf zwei Etagen bietet das Haus ca. 280 m² Wohnfläche für bis zu 12 Personen. Handgefertigte Altholzmöbel, Natursteinböden mit Fußbodenheizung und atmungsaktive Lehmputzwände schaffen eine Atmosphäre von authentischer Wärme und modernem Komfort.
+          Auf zwei Etagen bietet das Haus ca. 264 m² Wohnfläche für bis zu 10 Personen. Handgefertigte Innenausstattung aus Altholz, ein zentraler Kamin, Natursteinböden mit Fußbodenheizung und atmungsaktive Lehmputzwände schaffen eine Atmosphäre von authentischer Wärme und modernem Komfort.
         </p>
         <div class="highlights-list">
-          <div class="highlight-item">Vollständig rollstuhlgerecht und barrierefrei (EG)</div>
-          <div class="highlight-item">Pelletheizung und Solaranlage — ökologisch heizen</div>
-          <div class="highlight-item">Exklusiv für Gäste — 2.500 m² eingezäuntes Grundstück</div>
-          <div class="highlight-item">Nichtraucherimmobilie · Hunde herzlich willkommen</div>
-          <div class="highlight-item">Glasfaser-WLAN kostenlos inklusive</div>
+          <div class="highlight-item" data-admin-text="chalet-highlight-1">Ein rollstuhlgerechtes und barrierefreies Schlafzimmer mit Bad (EG)</div>
+          <div class="highlight-item" data-admin-text="chalet-highlight-2">Pelletheizung und Solaranlage — ökologisch heizen</div>
+          <div class="highlight-item" data-admin-text="chalet-highlight-3">Hundegerechtes 2.500 m² vollständig eingezäuntes Grundstück zur Alleinbenutzung</div>
+          <div class="highlight-item" data-admin-text="chalet-highlight-4">Nichtraucherimmobilie</div>
+          <div class="highlight-item" data-admin-text="chalet-highlight-5">Glasfaser-WLAN</div>
         </div>
       </div>
     </div>
@@ -1761,68 +1785,98 @@
   <div class="features-bg" id="ausstattung">
     <section style="max-width:1400px; margin:0 auto; padding:5rem 4rem;">
       <div style="max-width:600px; margin-bottom:3.5rem;" class="reveal">
-        <p class="section-eyebrow">Ausstattung</p>
-        <h2 class="section-title">Alles, was das<br><em>Herz begehrt</em></h2>
+        <p class="section-eyebrow" data-admin-text="ausstattung-eyebrow">Ausstattung</p>
+        <h2 class="section-title" data-admin-text="ausstattung-title">Alles, was das<br><em>Herz begehrt</em></h2>
       </div>
       <div class="features-grid">
 
+        <!-- Offener Wohnbereich — fireplace with flame -->
         <div class="feature-card reveal">
           <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+            <path d="M2 22h20"/>
+            <path d="M4 22V4h16v18"/>
+            <path d="M4 4h16"/>
+            <path d="M9 22v-8a3 3 0 0 1 6 0v8"/>
+            <path d="M12 21c-1.2 0-2-1-2-2.2 0-.7.3-1.3.6-1.8.4.4.7.9.7 1.4.3-1 .9-1.8.9-3 1 1.2 1.8 2.2 1.8 3.4C14 20 13.2 21 12 21z"/>
           </svg>
-          <div class="feature-title">Offener Wohnbereich</div>
-          <div class="feature-desc">Großzügiger Grundriss mit Küche, Essen und Wohnen — vereint durch einen zentralen Kamin und ein Klavier.</div>
+          <div class="feature-title" data-admin-text="feat-title-1">Offener Wohnbereich</div>
+          <div class="feature-desc" data-admin-text="feat-desc-1">Großzügiger Grundriss mit offener Küche, großem Esstisch und gemütlicher Sofaecke — vereint durch einen zentralen Kamin und ein Klavier.</div>
         </div>
 
+        <!-- 4 Schlafzimmer — bed icon -->
         <div class="feature-card reveal reveal-delay-1">
           <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+            <path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>
           </svg>
-          <div class="feature-title">4 Schlafzimmer</div>
-          <div class="feature-desc">Master-Suite mit Bad en suite und begehbarem Kleiderschrank. Drei weitere Zimmer im Obergeschoss — für 2 bis 12 Personen.</div>
+          <div class="feature-title" data-admin-text="feat-title-2">4 Schlafzimmer</div>
+          <div class="feature-desc" data-admin-text="feat-desc-2">Master-Suite mit Bad en suite und begehbarem Kleiderschrank. Drei weitere Zimmer im Obergeschoss — für bis zu 10 Personen plus zwei Babys.</div>
         </div>
 
+        <!-- Rollstuhlgerechtes Wohnen — wheelchair icon -->
         <div class="feature-card reveal reveal-delay-2">
           <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            <circle cx="16" cy="3.5" r="1.5"/>
+            <path d="M13 7l-3 4h5l1 4H13"/>
+            <path d="M10 11l-1 4"/>
+            <circle cx="9" cy="19" r="3"/>
+            <path d="M16 15l1 3h-4"/>
+            <circle cx="18.5" cy="18.5" r="2"/>
           </svg>
-          <div class="feature-title">Sauna & Fitness</div>
-          <div class="feature-desc">Sauna in zentraler Lage sowie ein vollausgestatteter Fitness- und Mehrzweckraum für die aktive Erholung.</div>
+          <div class="feature-title" data-admin-text="feat-title-3">Rollstuhlgerechtes Wohnen</div>
+          <div class="feature-desc" data-admin-text="feat-desc-3">Die Master-Suite liegt im EG und ist barrierefrei zu erreichen.</div>
         </div>
 
+        <!-- Sauna & Fitness — flame/heat icon -->
         <div class="feature-card reveal">
           <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
           </svg>
-          <div class="feature-title">Profiküche</div>
-          <div class="feature-desc">Dampfgarer, Backofen mit Mikrowelle, Plancha-Grill, zwei Kaffeemaschinen (Filter & Nespresso), Küchenmaschine und mehr.</div>
+          <div class="feature-title" data-admin-text="feat-title-4">Sauna & Fitness</div>
+          <div class="feature-desc" data-admin-text="feat-desc-4">Sauna in zentraler Lage sowie ein voll ausgestatteter Fitness- und Mehrzweckraum für die aktive Erholung im OG.</div>
         </div>
 
+        <!-- Profiküche — chef/utensils icon -->
         <div class="feature-card reveal reveal-delay-1">
           <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/>
           </svg>
-          <div class="feature-title">Glasfaser-WLAN</div>
-          <div class="feature-desc">Schnelles Internet via Glasfaseranschluss — kostenlos und in allen Räumen verfügbar. TV in jedem Schlafzimmer.</div>
+          <div class="feature-title" data-admin-text="feat-title-5">Profiküche</div>
+          <div class="feature-desc" data-admin-text="feat-desc-5">Dampfgarer, Backofen mit Mikrowelle, Plancha-Grill, drei Kaffeemaschinen (Filter & Nespresso), Küchenmaschine und mehr.</div>
         </div>
 
+        <!-- Glasfaser-WLAN — wifi icon -->
         <div class="feature-card reveal reveal-delay-2">
           <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+            <path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/>
           </svg>
-          <div class="feature-title">E-Ladestation & Parken</div>
-          <div class="feature-desc">1 Carport mit Starkstrom-Anschluss (E-Ladestation) sowie mehrere Außenparkplätze auf dem Grundstück.</div>
+          <div class="feature-title" data-admin-text="feat-title-6">Glasfaser-WLAN</div>
+          <div class="feature-desc" data-admin-text="feat-desc-6">Schnelles Internet via Glasfaseranschluss in allen Räumen verfügbar. Mit TV in jedem Zimmer.</div>
         </div>
 
+        <!-- E-Ladestation & Parken — car icon -->
         <div class="feature-card reveal">
           <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M3 3h7l1 7-3.5 2a11 11 0 0 0 5 5L15 14l7 1v7a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2h-2z"/>
+            <path d="M7 8h10l2 5H5L7 8z"/>
+            <path d="M3 13h18v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4z"/>
+            <path d="M8 8l1-3h6l1 3"/>
+            <circle cx="7" cy="17" r="2"/>
+            <circle cx="17" cy="17" r="2"/>
           </svg>
-          <div class="feature-title">Terrassen & Balkone</div>
-          <div class="feature-desc">2 Balkone und 3 Terrassen — für unvergessliche Morgen- und Abenddämmerungen mit Allgäuer Alpenpanorama.</div>
+          <div class="feature-title" data-admin-text="feat-title-7">E-Ladestation & Parken</div>
+          <div class="feature-desc" data-admin-text="feat-desc-7">1 Carport mit Starkstromanschluss (E-Ladestation) sowie mehrere Außenparkplätze auf dem Grundstück.</div>
         </div>
 
+        <!-- Terrassen & Balkone — sun/mountain icon -->
         <div class="feature-card reveal reveal-delay-1">
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 17l4-8 4 5 3-3 4 6H3z"/><path d="M3 21h18"/><path d="M17 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+          </svg>
+          <div class="feature-title" data-admin-text="feat-title-8">Terrassen & Balkone</div>
+          <div class="feature-desc" data-admin-text="feat-desc-8">2 Balkone und 3 Terrassen — für unvergessliche Morgen- und Abenddämmerungen mit Allgäuer Alpenpanorama.</div>
+        </div>
+
+        <!-- Hunde willkommen — paw print icon -->
+        <div class="feature-card reveal reveal-delay-2">
           <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <ellipse cx="9" cy="6" rx="2" ry="2.5"/>
             <ellipse cx="15" cy="6" rx="2" ry="2.5"/>
@@ -1830,16 +1884,17 @@
             <ellipse cx="18.5" cy="10.5" rx="1.8" ry="2.3"/>
             <path d="M12 22c-3.5 0-6-2-6-4.5 0-1.5.5-2.5 1.5-3.5.5-.5 1-1.5 1-2.5h7c0 1 .5 2 1 2.5 1 1 1.5 2 1.5 3.5 0 2.5-2.5 4.5-6 4.5z"/>
           </svg>
-          <div class="feature-title">Hunde willkommen</div>
-          <div class="feature-desc">Vierbeiner sind herzlich willkommen. Napf, Hundetücher und eine separate Dusche stehen zur Verfügung. 10 €/Tag.</div>
+          <div class="feature-title" data-admin-text="feat-title-9">Hunde willkommen</div>
+          <div class="feature-desc" data-admin-text="feat-desc-9">Vierbeiner sind herzlich willkommen. Napf, Hundetücher und eine separate Dusche sind vorhanden. Das Grundstück von 2.500 m² ist vollständig eingezäunt. 10€/Tag pro Hund (max. 4 Hunde).</div>
         </div>
 
-        <div class="feature-card reveal reveal-delay-2">
+        <!-- Alles Inklusive — gift/package icon -->
+        <div class="feature-card reveal">
           <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            <polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
           </svg>
-          <div class="feature-title">Alles Inklusive</div>
-          <div class="feature-desc">Bettwäsche, Handtücher, Saunatücher, Bademäntel, Hausschuhe und Küchenvorräte sind im Mietpreis inbegriffen.</div>
+          <div class="feature-title" data-admin-text="feat-title-10">Alles Inklusive</div>
+          <div class="feature-desc" data-admin-text="feat-desc-10">Bettwäsche, Handtücher, Saunatücher, Bademäntel, Hausschuhe, Geschirrtücher sowie eine Grundausstattung an Verbrauchsartikeln ist in der Küche und den Bädern vorhanden.</div>
         </div>
 
       </div>
@@ -1850,8 +1905,8 @@
   <div id="bilder">
     <div class="gallery-header">
       <div class="reveal">
-        <p class="section-eyebrow">Einblicke</p>
-        <h2 class="section-title">Das Chalet <em>in Bildern</em></h2>
+        <p class="section-eyebrow" data-admin-text="bilder-eyebrow">Einblicke</p>
+        <h2 class="section-title" data-admin-text="bilder-title">Das Chalet <em>in Bildern</em></h2>
       </div>
       <a href="#kontakt" class="btn-ghost reveal" style="flex-shrink:0;">
         Verfügbarkeit anfragen
@@ -1863,21 +1918,18 @@
     <div class="slideshow-wrap reveal">
       <div class="slideshow-main" id="gallerySlideshow">
         <div class="ss-track" id="ssTrack">
-          <div class="ss-slide"><img src="brand_assets/300_4404.jpeg" alt="Sauna & Ruhebereich" data-admin-img="gallery-0" /></div>
-          <div class="ss-slide"><img src="brand_assets/300_4406.jpeg" alt="Schlafzimmer" data-admin-img="gallery-1" /></div>
-          <div class="ss-slide"><img src="brand_assets/300_4402.jpeg" alt="Wohnbereich" data-admin-img="gallery-2" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_7956.jpeg" alt="Schlafzimmer OG" data-admin-img="gallery-3" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_7957%20(1).jpeg" alt="Schlafzimmer" data-admin-img="gallery-4" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_7954.jpeg" alt="Schlafzimmer" data-admin-img="gallery-5" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_2471.jpeg" alt="Mehrbettzimmer" data-admin-img="gallery-6" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_4090.jpeg" alt="Terrasse" data-admin-img="gallery-7" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_2016.jpeg" alt="Garten & Terrasse" data-admin-img="gallery-8" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_7104.PNG" alt="Winterpanorama" data-admin-img="gallery-9" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_7965.jpeg" alt="Außenansicht Winter" data-admin-img="gallery-10" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_3866.jpeg" alt="Chalet im Schnee" data-admin-img="gallery-11" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_3852.jpeg" alt="Herbstansicht" data-admin-img="gallery-12" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_3150.jpeg" alt="Außenansicht" data-admin-img="gallery-13" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_6961.jpeg" alt="Chalet Exterior" data-admin-img="gallery-14" /></div>
+          <div class="ss-slide"><img src="brand_assets/300_4406.jpeg" alt="Schlafzimmer" data-admin-img="gallery-0" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_7956.jpeg" alt="Schlafzimmer OG" data-admin-img="gallery-1" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_7957%20(1).jpeg" alt="Schlafzimmer" data-admin-img="gallery-2" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_2471.jpeg" alt="Mehrbettzimmer" data-admin-img="gallery-3" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_4090.jpeg" alt="Terrasse" data-admin-img="gallery-4" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_2016.jpeg" alt="Garten & Terrasse" data-admin-img="gallery-5" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_7104.PNG" alt="Winterpanorama" data-admin-img="gallery-6" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_7965.jpeg" alt="Außenansicht Winter" data-admin-img="gallery-7" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_3866.jpeg" alt="Chalet im Schnee" data-admin-img="gallery-8" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_3852.jpeg" alt="Herbstansicht" data-admin-img="gallery-9" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_3150.jpeg" alt="Außenansicht" data-admin-img="gallery-10" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_6961.jpeg" alt="Chalet Exterior" data-admin-img="gallery-11" /></div>
         </div>
         <!-- Arrows -->
         <button class="ss-arrow ss-prev" id="ssPrev" aria-label="Vorheriges Bild">
@@ -1888,8 +1940,8 @@
         </button>
         <!-- Caption + counter -->
         <div class="ss-caption">
-          <span class="ss-caption-text" id="ssCaptionText">Sauna & Ruhebereich</span>
-          <span class="ss-counter" id="ssCounter">1 / 15</span>
+          <span class="ss-caption-text" id="ssCaptionText">Schlafzimmer</span>
+          <span class="ss-counter" id="ssCounter">1 / 12</span>
         </div>
         <!-- Progress bar -->
         <div class="ss-progress"><div class="ss-progress-bar" id="ssProgressBar"></div></div>
@@ -1897,21 +1949,18 @@
 
       <!-- Thumbnail strip -->
       <div class="ss-thumbs" id="ssThumbs">
-        <div class="ss-thumb ss-thumb-active" onclick="ssGoTo(0)"><img src="brand_assets/300_4404.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(1)"><img src="brand_assets/300_4406.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(2)"><img src="brand_assets/300_4402.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(3)"><img src="brand_assets/IMG_7956.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(4)"><img src="brand_assets/IMG_7957%20(1).jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(5)"><img src="brand_assets/IMG_7954.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(6)"><img src="brand_assets/IMG_2471.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(7)"><img src="brand_assets/IMG_4090.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(8)"><img src="brand_assets/IMG_2016.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(9)"><img src="brand_assets/IMG_7104.PNG" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(10)"><img src="brand_assets/IMG_7965.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(11)"><img src="brand_assets/IMG_3866.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(12)"><img src="brand_assets/IMG_3852.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(13)"><img src="brand_assets/IMG_3150.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(14)"><img src="brand_assets/IMG_6961.jpeg" alt="" /></div>
+        <div class="ss-thumb ss-thumb-active" onclick="ssGoTo(0)"><img src="brand_assets/300_4406.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(1)"><img src="brand_assets/IMG_7956.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(2)"><img src="brand_assets/IMG_7957%20(1).jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(3)"><img src="brand_assets/IMG_2471.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(4)"><img src="brand_assets/IMG_4090.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(5)"><img src="brand_assets/IMG_2016.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(6)"><img src="brand_assets/IMG_7104.PNG" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(7)"><img src="brand_assets/IMG_7965.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(8)"><img src="brand_assets/IMG_3866.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(9)"><img src="brand_assets/IMG_3852.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(10)"><img src="brand_assets/IMG_3150.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(11)"><img src="brand_assets/IMG_6961.jpeg" alt="" /></div>
       </div>
     </div>
   </div>
@@ -1927,38 +1976,38 @@
   <section id="lage" style="padding:0; max-width:none;" class="section-full" style="margin-top:0;">
     <div class="location-split">
       <div class="location-text reveal">
-        <p class="section-eyebrow">Die Lage</p>
-        <h2 class="section-title">Im Herzen des<br><em>Naturparks</em></h2>
-        <p class="section-body">
+        <p class="section-eyebrow" data-admin-text="lage-eyebrow">Die Lage</p>
+        <h2 class="section-title" data-admin-text="lage-title">Im Herzen des<br><em>Naturparks</em></h2>
+        <p class="section-body" data-admin-text="lage-body">
           Das Chalet Fluh liegt in Alleinlage zwischen Steibis und Schindelberg — inmitten des Naturparks Nagelfluhkette, einem 400 km² umfassenden deutsch-österreichischen Naturschutzgebiet auf ca. 900 m Höhe.
         </p>
         <div class="location-points">
           <div class="location-point">
             <div class="location-point-dot"></div>
             <div class="location-point-text">
-              <strong>Imberg-Skigebiet</strong>
-              Direkt vor der Tür — Skifahren, Rodeln und Winterwandern
+              <strong data-admin-text="lage-point-1-title">Imberg-Skigebiet</strong>
+              <span data-admin-text="lage-point-1-text">Direkt vor der Tür — Skifahren, Rodeln und Winterwandern</span>
             </div>
           </div>
           <div class="location-point">
             <div class="location-point-dot"></div>
             <div class="location-point-text">
-              <strong>Hochgrat & Brunnenauscharte</strong>
-              Beeindruckendes Alpenpanorama auf anspruchsvollen Wanderrouten
+              <strong data-admin-text="lage-point-2-title">Hochgrat & Brunnenauscharte</strong>
+              <span data-admin-text="lage-point-2-text">Beeindruckendes Alpenpanorama auf anspruchsvollen Wanderrouten</span>
             </div>
           </div>
           <div class="location-point">
             <div class="location-point-dot"></div>
             <div class="location-point-text">
-              <strong>Weissach & Viehscheid</strong>
-              Idyllische Seen und das traditionelle Allgäuer Almabtriebsfest
+              <strong data-admin-text="lage-point-3-title">Weissach & Viehscheid</strong>
+              <span data-admin-text="lage-point-3-text">Idyllische Seen und das traditionelle Allgäuer Almabtriebsfest</span>
             </div>
           </div>
           <div class="location-point">
             <div class="location-point-dot"></div>
             <div class="location-point-text">
-              <strong>Oberstaufen</strong>
-              Schrothkurort mit Therme, Restaurants und Einkaufsmöglichkeiten
+              <strong data-admin-text="lage-point-4-title">Oberstaufen</strong>
+              <span data-admin-text="lage-point-4-text">Schrothkurort mit Panorama Therme, Restaurants, Boutiquen und Einkaufsmöglichkeiten</span>
             </div>
           </div>
         </div>
@@ -1971,10 +2020,10 @@
       </div>
       <div class="location-images">
         <div class="location-img">
-          <img src="brand_assets/IMG_7965.jpeg" alt="Blick vom Hochgrat" loading="lazy" />
+          <img src="brand_assets/IMG_7965.jpeg" alt="Blick vom Hochgrat" loading="lazy" data-admin-img="lage-img-1" />
         </div>
         <div class="location-img">
-          <img src="brand_assets/IMG_3866.jpeg" alt="Imberg-Skigebiet" loading="lazy" />
+          <img src="brand_assets/IMG_3866.jpeg" alt="Imberg-Skigebiet" loading="lazy" data-admin-img="lage-img-2" />
         </div>
       </div>
     </div>
@@ -1985,8 +2034,8 @@
     <div class="area-ss-inner">
       <div class="area-ss-header reveal">
         <div>
-          <p class="section-eyebrow">Die Region</p>
-          <h2 class="section-title" style="font-size:clamp(1.8rem,3.5vw,2.8rem);">Natur pur rund <em>ums Chalet</em></h2>
+          <p class="section-eyebrow" data-admin-text="region-eyebrow">Die Region</p>
+          <h2 class="section-title" style="font-size:clamp(1.8rem,3.5vw,2.8rem);" data-admin-text="region-title">Natur pur rund <em>ums Chalet</em></h2>
         </div>
         <div class="area-ss-nav">
           <button class="area-ss-nav-btn" id="areaPrev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
@@ -2015,8 +2064,8 @@
   <div class="map-section" id="karte">
     <section style="max-width:1400px; margin:0 auto; padding:5rem 4rem 3rem;">
       <div class="reveal" style="margin-bottom:2rem;">
-        <p class="section-eyebrow">Anfahrt</p>
-        <h2 class="section-title">So finden Sie <em>uns</em></h2>
+        <p class="section-eyebrow" data-admin-text="anfahrt-eyebrow">Anfahrt</p>
+        <h2 class="section-title" data-admin-text="anfahrt-title">So finden Sie <em>uns</em></h2>
       </div>
     </section>
     <div style="max-width:1400px; margin:0 auto; padding:0 4rem 5rem;" class="reveal">
@@ -2074,137 +2123,137 @@
   <div class="pricing-bg" id="preise">
     <section style="max-width:1400px; margin:0 auto; padding:6rem 4rem;">
       <div style="max-width:600px; margin-bottom:3.5rem;" class="reveal">
-        <p class="section-eyebrow">Preise & Verfügbarkeit</p>
-        <h2 class="section-title">Transparente<br><em>Konditionen</em></h2>
-        <p class="section-body">Alle Preise inkl. MwSt. Nebenkosten sind im Mietpreis enthalten. Mindestaufenthalt: 3 Tage.</p>
+        <p class="section-eyebrow" data-admin-text="preise-eyebrow">Preise & Verfügbarkeit</p>
+        <h2 class="section-title" data-admin-text="preise-title">Transparente<br><em>Konditionen</em></h2>
+        <p class="section-body" data-admin-text="preise-body">Alle Preise inkl. MwSt. Nebenkosten sind im Mietpreis enthalten. Mindestaufenthalt: 3 Tage.</p>
       </div>
 
       <div class="pricing-grid reveal">
         <!-- Nebensaison -->
         <div class="pricing-col">
           <div class="pricing-col-header">
-            <div class="pricing-season">Nebensaison</div>
-            <div class="pricing-col-title">Niedrigsaison</div>
-            <div class="pricing-price"><sup>€</sup>2.900</div>
-            <div class="pricing-price-unit">pro Woche / 2 Personen · alle Nebenkosten inkl.</div>
+            <div class="pricing-season" data-admin-text="p1-season">Nebensaison</div>
+            <div class="pricing-col-title" data-admin-text="p1-title">Niedrigsaison</div>
+            <div class="pricing-price"><sup>€</sup><span data-admin-text="p1-price">2.900</span></div>
+            <div class="pricing-price-unit" data-admin-text="p1-unit">pro Woche / 2 Personen · alle Nebenkosten inkl.</div>
           </div>
           <div class="pricing-rows">
             <div class="pricing-row">
-              <span>Jan – Jun 2026</span>
-              <span class="pricing-row-val">2.900 €/Wo.</span>
+              <span data-admin-text="p1-r1-label">Jan – Jun 2026</span>
+              <span class="pricing-row-val" data-admin-text="p1-r1-val">2.900 €/Wo.</span>
             </div>
             <div class="pricing-row">
-              <span>Sep – Dez 2026</span>
-              <span class="pricing-row-val">2.900 €/Wo.</span>
+              <span data-admin-text="p1-r2-label">Sep – Dez 2026</span>
+              <span class="pricing-row-val" data-admin-text="p1-r2-val">2.900 €/Wo.</span>
             </div>
             <div class="pricing-row">
-              <span>Jan – Jun 2027</span>
-              <span class="pricing-row-val">2.900 €/Wo.</span>
+              <span data-admin-text="p1-r3-label">Jan – Jun 2027</span>
+              <span class="pricing-row-val" data-admin-text="p1-r3-val">2.900 €/Wo.</span>
             </div>
             <div class="pricing-row">
-              <span>3 Nächte</span>
-              <span class="pricing-row-val">2.150 €</span>
+              <span data-admin-text="p1-r4-label">3 Nächte</span>
+              <span class="pricing-row-val" data-admin-text="p1-r4-val">2.150 €</span>
             </div>
             <div class="pricing-row">
-              <span>4 Nächte</span>
-              <span class="pricing-row-val">2.300 €</span>
+              <span data-admin-text="p1-r5-label">4 Nächte</span>
+              <span class="pricing-row-val" data-admin-text="p1-r5-val">2.300 €</span>
             </div>
             <div class="pricing-row">
-              <span>5 Nächte</span>
-              <span class="pricing-row-val">2.500 €</span>
+              <span data-admin-text="p1-r6-label">5 Nächte</span>
+              <span class="pricing-row-val" data-admin-text="p1-r6-val">2.500 €</span>
             </div>
             <div class="pricing-row">
-              <span>6 Nächte</span>
-              <span class="pricing-row-val">2.700 €</span>
+              <span data-admin-text="p1-r7-label">6 Nächte</span>
+              <span class="pricing-row-val" data-admin-text="p1-r7-val">2.700 €</span>
             </div>
           </div>
         </div>
         <!-- Hochsaison -->
         <div class="pricing-col" style="background: #1e2a1e; position:relative; border: 1px solid rgba(196,154,60,0.2);">
-          <div style="position:absolute; top:-1px; left:50%; transform:translateX(-50%); background:var(--accent); color:var(--bg-base); font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; padding:0.3rem 1rem; font-weight:500;">Beliebt</div>
+          <div style="position:absolute; top:-1px; left:50%; transform:translateX(-50%); background:var(--accent); color:var(--bg-base); font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; padding:0.3rem 1rem; font-weight:500;" data-admin-text="p2-badge">Beliebt</div>
           <div class="pricing-col-header">
-            <div class="pricing-season">Hauptsaison</div>
-            <div class="pricing-col-title">Hochsaison</div>
-            <div class="pricing-price"><sup>€</sup>3.100</div>
-            <div class="pricing-price-unit">pro Woche / 2 Personen · alle Nebenkosten inkl.</div>
+            <div class="pricing-season" data-admin-text="p2-season">Hauptsaison</div>
+            <div class="pricing-col-title" data-admin-text="p2-title">Hochsaison</div>
+            <div class="pricing-price"><sup>€</sup><span data-admin-text="p2-price">3.100</span></div>
+            <div class="pricing-price-unit" data-admin-text="p2-unit">pro Woche / 2 Personen · alle Nebenkosten inkl.</div>
           </div>
           <div class="pricing-rows">
             <div class="pricing-row">
-              <span>Jun – Aug 2026</span>
-              <span class="pricing-row-val">3.100 €/Wo.</span>
+              <span data-admin-text="p2-r1-label">Jun – Aug 2026</span>
+              <span class="pricing-row-val" data-admin-text="p2-r1-val">3.100 €/Wo.</span>
             </div>
             <div class="pricing-row">
-              <span>3 Nächte</span>
-              <span class="pricing-row-val">2.350 €</span>
+              <span data-admin-text="p2-r2-label">3 Nächte</span>
+              <span class="pricing-row-val" data-admin-text="p2-r2-val">2.350 €</span>
             </div>
             <div class="pricing-row">
-              <span>4 Nächte</span>
-              <span class="pricing-row-val">2.500 €</span>
+              <span data-admin-text="p2-r3-label">4 Nächte</span>
+              <span class="pricing-row-val" data-admin-text="p2-r3-val">2.500 €</span>
             </div>
             <div class="pricing-row">
-              <span>5 Nächte</span>
-              <span class="pricing-row-val">2.700 €</span>
+              <span data-admin-text="p2-r4-label">5 Nächte</span>
+              <span class="pricing-row-val" data-admin-text="p2-r4-val">2.700 €</span>
             </div>
             <div class="pricing-row">
-              <span>6 Nächte</span>
-              <span class="pricing-row-val">2.800 €</span>
+              <span data-admin-text="p2-r5-label">6 Nächte</span>
+              <span class="pricing-row-val" data-admin-text="p2-r5-val">2.800 €</span>
             </div>
             <div class="pricing-row">
-              <span>Weitere Person</span>
-              <span class="pricing-row-val">25 €/Nacht</span>
+              <span data-admin-text="p2-r6-label">Weitere Person</span>
+              <span class="pricing-row-val" data-admin-text="p2-r6-val">25 €/Nacht</span>
             </div>
           </div>
         </div>
         <!-- Weihnachten -->
         <div class="pricing-col">
           <div class="pricing-col-header">
-            <div class="pricing-season">Weihnachten & Silvester</div>
-            <div class="pricing-col-title">Festsaison</div>
-            <div class="pricing-price"><sup>€</sup>5.200</div>
-            <div class="pricing-price-unit">pro Woche · alle Nebenkosten inkl.</div>
+            <div class="pricing-season" data-admin-text="p3-season">Weihnachten & Silvester</div>
+            <div class="pricing-col-title" data-admin-text="p3-title">Festsaison</div>
+            <div class="pricing-price"><sup>€</sup><span data-admin-text="p3-price">5.200</span></div>
+            <div class="pricing-price-unit" data-admin-text="p3-unit">pro Woche · alle Nebenkosten inkl.</div>
           </div>
           <div class="pricing-rows">
             <div class="pricing-row">
-              <span>21.12.2026 – 06.01.2027</span>
-              <span class="pricing-row-val">5.200 €/Wo.</span>
+              <span data-admin-text="p3-r1-label">21.12.2026 – 06.01.2027</span>
+              <span class="pricing-row-val" data-admin-text="p3-r1-val">5.200 €/Wo.</span>
             </div>
             <div class="pricing-row">
-              <span>Kurzaufenthalt (3–6 Nächte)</span>
-              <span class="pricing-row-val">800 €/Nacht</span>
+              <span data-admin-text="p3-r2-label">Kurzaufenthalt (3–6 Nächte)</span>
+              <span class="pricing-row-val" data-admin-text="p3-r2-val">800 €/Nacht</span>
             </div>
             <div class="pricing-row">
-              <span>Max. 4 Personen bei Kurz</span>
-              <span class="pricing-row-val">inklusive</span>
+              <span data-admin-text="p3-r3-label">Max. 4 Personen bei Kurz</span>
+              <span class="pricing-row-val" data-admin-text="p3-r3-val">inklusive</span>
             </div>
             <div class="pricing-row">
-              <span>Weitere Person (Woche)</span>
-              <span class="pricing-row-val">160 €/Wo.</span>
+              <span data-admin-text="p3-r4-label">Weitere Person (Woche)</span>
+              <span class="pricing-row-val" data-admin-text="p3-r4-val">160 €/Wo.</span>
             </div>
             <div class="pricing-row">
-              <span>Kinder unter 3 Jahren</span>
-              <span class="pricing-row-val">kostenlos</span>
+              <span data-admin-text="p3-r5-label">Kinder unter 3 Jahren</span>
+              <span class="pricing-row-val" data-admin-text="p3-r5-val">kostenlos</span>
             </div>
           </div>
         </div>
       </div>
 
       <div class="pricing-extras reveal">
-        <div class="pricing-extras-title">Zusatzkosten & Buchungskonditionen</div>
+        <div class="pricing-extras-title" data-admin-text="extras-title">Zusatzkosten & Buchungskonditionen</div>
         <div class="extras-grid">
-          <div class="extra-row"><span>Endreinigung</span><span>400 € (einmalig)</span></div>
-          <div class="extra-row"><span>Anzahlung bei Buchung</span><span>25 % des Gesamtpreises</span></div>
-          <div class="extra-row"><span>Hunde</span><span>10 €/Tag</span></div>
-          <div class="extra-row"><span>Restzahlung + Kaution</span><span>3 Wochen vor Anreise</span></div>
-          <div class="extra-row"><span>Kurtaxe Erwachsene</span><span>3,50 €/Tag/Person</span></div>
-          <div class="extra-row"><span>Kaution</span><span>1.000 € (Rückgabe in 14 Tagen)</span></div>
-          <div class="extra-row"><span>Kurtaxe Jugendliche</span><span>1,75 €/Tag/Person</span></div>
-          <div class="extra-row"><span>Mindestaufenthalt</span><span>3 Tage</span></div>
+          <div class="extra-row"><span data-admin-text="ex-r1-label">Endreinigung</span><span data-admin-text="ex-r1-val">400 € (einmalig)</span></div>
+          <div class="extra-row"><span data-admin-text="ex-r2-label">Anzahlung bei Buchung</span><span data-admin-text="ex-r2-val">25 % des Gesamtpreises</span></div>
+          <div class="extra-row"><span data-admin-text="ex-r3-label">Hunde</span><span data-admin-text="ex-r3-val">10 €/Tag</span></div>
+          <div class="extra-row"><span data-admin-text="ex-r4-label">Restzahlung + Kaution</span><span data-admin-text="ex-r4-val">3 Wochen vor Anreise</span></div>
+          <div class="extra-row"><span data-admin-text="ex-r5-label">Kurtaxe Erwachsene</span><span data-admin-text="ex-r5-val">3,50 €/Tag/Person</span></div>
+          <div class="extra-row"><span data-admin-text="ex-r6-label">Kaution</span><span data-admin-text="ex-r6-val">1.000 € (Rückgabe in 14 Tagen)</span></div>
+          <div class="extra-row"><span data-admin-text="ex-r7-label">Kurtaxe Jugendliche</span><span data-admin-text="ex-r7-val">1,75 €/Tag/Person</span></div>
+          <div class="extra-row"><span data-admin-text="ex-r8-label">Mindestaufenthalt</span><span data-admin-text="ex-r8-val">3 Tage</span></div>
         </div>
       </div>
 
       <div class="booking-note reveal">
-        <strong style="color:var(--accent); font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase;">Hinweis zur Buchung</strong><br>
-        Eine Reiserücktrittsversicherung wird empfohlen. MwSt. ist in allen ausgewiesenen Preisen enthalten. Für Zwischenreinigungen kontaktieren Sie uns bitte separat.
+        <strong style="color:var(--accent); font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase;" data-admin-text="booking-note-title">Hinweis zur Buchung</strong><br>
+        <span data-admin-text="booking-note-body">Eine Reiserücktrittsversicherung wird empfohlen. MwSt. ist in allen ausgewiesenen Preisen enthalten. Für Zwischenreinigungen kontaktieren Sie uns bitte separat.</span>
       </div>
     </section>
   </div>
@@ -2214,9 +2263,9 @@
     <section style="max-width:1400px; margin:0 auto; padding:6rem 4rem;">
       <div style="display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:2rem;" class="reveal">
         <div>
-          <p class="section-eyebrow">Verfügbarkeit</p>
-          <h2 class="section-title">Freie <em>Termine</em></h2>
-          <p class="section-body">Grün = verfügbar · Rot = belegt · Anfragen für Kurzaufenthalte jederzeit möglich.</p>
+          <p class="section-eyebrow" data-admin-text="verfuegbarkeit-eyebrow">Verfügbarkeit</p>
+          <h2 class="section-title" data-admin-text="verfuegbarkeit-title">Freie <em>Termine</em></h2>
+          <p class="section-body" data-admin-text="verfuegbarkeit-body">Grün = verfügbar · Rot = belegt · Anfragen für Kurzaufenthalte jederzeit möglich.</p>
         </div>
         <div class="cal-nav">
           <button class="cal-nav-btn" id="calPrev">
@@ -2249,33 +2298,19 @@
           Vergangen
         </div>
       </div>
-      <!-- Range selection summary bar -->
-      <div id="calSummaryBar" style="display:none; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-top:1.5rem; padding:1rem 1.5rem; background:var(--bg-elevated); border:1px solid var(--border-light);">
-        <div style="display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          <span id="calSummaryText" style="font-size:0.9rem; font-weight:300; color:var(--text-secondary);"></span>
-        </div>
-        <div style="display:flex; gap:0.75rem; align-items:center;">
-          <button id="calResetBtn" style="display:none; background:none; border:1px solid var(--border); color:var(--text-muted); font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.5rem 1rem; cursor:pointer;">Zurücksetzen</button>
-          <a id="calInquiryBtn" class="btn-primary" style="display:none; font-size:0.78rem; padding:0.7rem 1.5rem; text-decoration:none;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            Anfrage senden
-          </a>
-        </div>
-      </div>
-      <p class="cal-note reveal" style="margin-top:1rem;">Klicken Sie auf einen Starttag, dann auf den Endtag — wir schicken Ihnen umgehend ein Angebot. Mindestaufenthalt 3 Tage.</p>
+      <p id="calAdminHint" style="display:none; margin-top:1rem; font-size:0.78rem; color:var(--accent); letter-spacing:0.04em;">Admin-Modus: Klicken Sie auf einen Tag um ihn als belegt/frei zu markieren.</p>
     </section>
   </div>
 
   <!-- CTA BANNER -->
   <div class="cta-banner section-full">
     <div class="cta-banner-text reveal">
-      <p class="section-eyebrow" style="margin-bottom:0.75rem;">Verfügbarkeit prüfen</p>
-      <h2 class="section-title" style="font-size:clamp(1.8rem,3.5vw,2.8rem);">Ihr Traumurlaub im<br><em>Allgäu</em> wartet</h2>
+      <p class="section-eyebrow" style="margin-bottom:0.75rem; visibility:hidden;"></p>
+      <h2 class="section-title" style="font-size:clamp(1.8rem,3.5vw,2.8rem);" data-admin-text="cta-title">Ihr Traumurlaub im<br><em>Allgäu</em> wartet</h2>
     </div>
     <div class="reveal reveal-delay-2" style="flex-shrink:0;">
-      <a href="#kontakt" class="btn-primary" style="font-size:0.85rem; padding:1rem 2.5rem;">
-        Jetzt anfragen
+      <a href="mailto:chaletfluh@gmail.com" class="btn-primary" style="font-size:0.85rem; padding:1rem 2.5rem;">
+        Jetzt via E-Mail anfragen
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </a>
     </div>
@@ -2289,10 +2324,10 @@
         <div class="contact-image-overlay"></div>
       </div>
       <div class="contact-info reveal reveal-delay-2">
-        <p class="section-eyebrow">Kontakt</p>
-        <h2 class="section-title" style="font-size:clamp(2rem,3.5vw,3rem);">Anfragen &<br><em>Buchungen</em></h2>
+        <p class="section-eyebrow" data-admin-text="kontakt-eyebrow">Kontakt</p>
+        <h2 class="section-title" style="font-size:clamp(2rem,3.5vw,3rem);" data-admin-text="kontakt-title">Anfragen &<br><em>Buchungen</em></h2>
         <p class="section-body" style="margin-bottom:2.5rem;" data-admin-text="contact-intro">
-          Wir freuen uns auf Ihre Anfrage. Dr. Jana Steil steht Ihnen persönlich für alle Fragen zur Verfügbarkeit, Anreise und individuellen Wünschen zur Verfügung.
+          Wir freuen uns auf Ihre Anfrage. Jana Steil steht Ihnen persönlich für alle Fragen zur Verfügbarkeit, Anreise und individuellen Wünschen zur Verfügung.
         </p>
 
         <div class="contact-detail">
@@ -2301,7 +2336,7 @@
           </svg>
           <div>
             <div class="contact-detail-label">Inhaberin</div>
-            <div class="contact-detail-value" data-admin-text="contact-owner">Dr. Jana Steil</div>
+            <div class="contact-detail-value" data-admin-text="contact-owner">Jana Steil</div>
           </div>
         </div>
 
@@ -2337,7 +2372,7 @@
           <div>
             <div class="contact-detail-label">Anschrift</div>
             <div class="contact-detail-value" data-admin-text="contact-address">
-              Fluh Services<br>Max-Ostheimer-Str. 6<br>87534 Oberstaufen, Allgäu
+              Jana Steil<br>Fluhstraße 1<br>87534 Oberstaufen, Allgäu
             </div>
           </div>
         </div>
@@ -2363,7 +2398,7 @@
     </ul>
     <div class="footer-copy">
       © 2026 Chalet Fluh · USt-IdNr. DE 205 779 455<br>
-      <span style="font-size:0.65rem;">Fotos © Christian Steil</span>
+      <span style="font-size:0.65rem;">Fotos © Jana Steil</span>
     </div>
   </footer>
 
@@ -2438,10 +2473,10 @@
 
     // ─── GALLERY SLIDESHOW ───────────────────────────────────────────
     const ssCaptions = [
-      'Sauna & Ruhebereich','Schlafzimmer mit Holzbalken','Wohnbereich',
-      'Schlafzimmer OG','Schlafzimmer','Schlafzimmer','Mehrbettzimmer',
-      'Terrasse','Garten & Terrasse','Winterpanorama','Außenansicht Winter',
-      'Chalet im Schnee','Herbstansicht','Außenansicht','Chalet Exterior'
+      'Schlafzimmer mit Holzbalken','Schlafzimmer OG','Schlafzimmer',
+      'Mehrbettzimmer','Terrasse','Garten & Terrasse','Winterpanorama',
+      'Außenansicht Winter','Chalet im Schnee','Herbstansicht',
+      'Außenansicht','Chalet Exterior'
     ];
     let ssCurrent = 0;
     let ssTotal = 15;
@@ -2512,11 +2547,11 @@
     const AREA_SLIDES = [
       { src: 'brand_assets/IMG_7104.PNG',           caption: 'Hochgrat',                  sub: '1.832 m · Panoramagipfel Naturpark Nagelfluhkette' },
       { src: 'brand_assets/IMG_3866.jpeg',           caption: 'Imberg-Skigebiet',           sub: 'Direkt vor der Tür · Ski, Rodeln & Winterwandern' },
-      { src: 'brand_assets/IMG_1221%20(1).jpeg',     caption: 'Allgäuer Winter',            sub: 'Schneesicheres Hochplateau auf 900 m' },
-      { src: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=1200&q=80', caption: 'Buchenegger Wasserfälle',  sub: 'Wildromantische Wasserfälle · 30 min Fußmarsch' },
-      { src: 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80', caption: 'Breitachklamm',            sub: 'Tiefste Schlucht der Alpen · 10 km entfernt' },
+      { src: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=1200&q=80', caption: 'Buchenegger Wasserfälle', sub: 'Wildromantische Wasserfälle · 30 min Fußmarsch' },
       { src: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80', caption: 'Naturpark Nagelfluhkette', sub: '400 km² · Deutsch-Österreichisches Naturschutzgebiet' },
       { src: 'brand_assets/IMG_7965.jpeg',           caption: 'Steibis & Schindelberg',     sub: 'Alleinlage des Chalets · Ruhe & unberührte Natur' },
+      { src: 'https://placehold.co/1200x750/1e2820/c49a3c?text=Brunnauscharte',            caption: 'Brunnauscharte',             sub: 'Aussichtsreicher Bergsattel im Naturpark · Wanderparadies' },
+      { src: 'https://placehold.co/1200x750/1e2820/c49a3c?text=Allgäuer+Viehscheid',      caption: 'Allgäuer Viehscheid',        sub: 'Traditionelles Almabtriebsfest · Weissach im September' },
     ];
     let areaCurrent = 0;
 
@@ -2538,7 +2573,7 @@
     AREA_SLIDES.forEach((s, i) => {
       const div = document.createElement('div');
       div.className = 'area-ss-thumb-item' + (i === 0 ? ' active' : '');
-      div.innerHTML = `<img src="${s.src}" alt="${s.caption}" loading="lazy" /><div class="area-ss-thumb-label">${s.caption}</div>`;
+      div.innerHTML = `<img src="${s.src}" alt="${s.caption}" loading="lazy" data-admin-img="area-${i}" /><div class="area-ss-thumb-label">${s.caption}</div>`;
       div.addEventListener('click', () => areaGoTo(i));
       areaThumbcol.appendChild(div);
     });
@@ -2547,9 +2582,8 @@
     document.getElementById('areaNext').addEventListener('click', () => areaGoTo(areaCurrent + 1));
     areaGoTo(0);
 
-    // ─── AVAILABILITY CALENDAR WITH DATE RANGE SELECTION ─────────────
+    // ─── AVAILABILITY CALENDAR (read-only for guests, admin-editable) ────
     const MONTHS_DE = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
-    const MONTHS_SHORT = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
     const DAYS_DE = ['Mo','Di','Mi','Do','Fr','Sa','So'];
 
     const bookedRanges = [
@@ -2560,34 +2594,50 @@
       [2027,2,15,22],[2027,4,1,7],
     ];
 
-    function isBooked(y,m,d) { return bookedRanges.some(([ry,rm,rs,re])=>ry===y&&rm===m&&d>=rs&&d<=re); }
+    // Admin-managed day overrides — populated by applyOverrides() once admin data loads
+    let calExtraBooked   = new Set();
+    let calForceUnbooked = new Set();
+
+    function isBooked(y,m,d) {
+      const key = `${y}-${m}-${d}`;
+      if (calForceUnbooked.has(key)) return false;
+      if (calExtraBooked.has(key)) return true;
+      return bookedRanges.some(([ry,rm,rs,re]) => ry===y&&rm===m&&d>=rs&&d<=re);
+    }
+
+    function adminToggleDay(y,m,d) {
+      const key = `${y}-${m}-${d}`;
+      if (isBooked(y,m,d)) {
+        calExtraBooked.delete(key);
+        calForceUnbooked.add(key);
+      } else {
+        calForceUnbooked.delete(key);
+        calExtraBooked.add(key);
+      }
+      if (window.adminOverrides) {
+        window.adminOverrides['cal_extra_booked']   = JSON.stringify([...calExtraBooked]);
+        window.adminOverrides['cal_force_unbooked'] = JSON.stringify([...calForceUnbooked]);
+      }
+      if (window.saveOverrides) window.saveOverrides();
+      renderCalendar();
+    }
 
     let calOffset = 0;
-    let calRangeStart = null; // {y,m,d}
-    let calRangeEnd   = null;
-    let calHover      = null; // {y,m,d}
-    let calSelecting  = false; // true = waiting for end date
-
-    function dateToNum(y,m,d) { return new Date(y,m,d).getTime(); }
-    function inRange(y,m,d) {
-      if (!calRangeStart) return false;
-      const t = dateToNum(y,m,d);
-      const s = dateToNum(calRangeStart.y, calRangeStart.m, calRangeStart.d);
-      const e = calSelecting && calHover
-        ? dateToNum(calHover.y, calHover.m, calHover.d)
-        : (calRangeEnd ? dateToNum(calRangeEnd.y, calRangeEnd.m, calRangeEnd.d) : s);
-      return t >= Math.min(s,e) && t <= Math.max(s,e);
-    }
-    function isRangeStart(y,m,d) { return calRangeStart && calRangeStart.y===y && calRangeStart.m===m && calRangeStart.d===d; }
-    function isRangeEnd(y,m,d) {
-      const end = calSelecting ? calHover : calRangeEnd;
-      return end && end.y===y && end.m===m && end.d===d;
-    }
 
     function renderCalendar() {
       const grid = document.getElementById('calGrid');
       const today = new Date();
       grid.innerHTML = '';
+
+      // Never allow navigating before the current month
+      const prevBtn = document.getElementById('calPrev');
+      prevBtn.disabled = calOffset === 0;
+      prevBtn.style.opacity = calOffset === 0 ? '0.3' : '1';
+      prevBtn.style.pointerEvents = calOffset === 0 ? 'none' : 'auto';
+
+      // Show admin hint
+      const hint = document.getElementById('calAdminHint');
+      if (hint) hint.style.display = window.adminMode ? 'block' : 'none';
 
       const startMonth = new Date(today.getFullYear(), today.getMonth() + calOffset * 3, 1);
       const months = [0,1,2].map(i => new Date(startMonth.getFullYear(), startMonth.getMonth() + i, 1));
@@ -2615,7 +2665,6 @@
           const isPast = thisDate < new Date(today.getFullYear(),today.getMonth(),today.getDate());
           const isToday = y===today.getFullYear()&&m===today.getMonth()&&d===today.getDate();
           const booked = isBooked(y,m,d);
-          const selectable = !isPast && !booked;
 
           let cls = 'cal-day';
           if (isToday) cls += ' today';
@@ -2623,68 +2672,22 @@
           else if (booked) cls += ' booked';
           else cls += ' available';
 
-          if (selectable && inRange(y,m,d)) cls += ' in-range';
-          if (isRangeStart(y,m,d)) cls += ' range-start';
-          if (isRangeEnd(y,m,d)) cls += ' range-end';
-
           cell.className = cls;
           cell.textContent = d;
-          if (selectable) {
+
+          // Admin mode only: click to toggle booked/free
+          if (window.adminMode && !isPast) {
             cell.style.cursor = 'pointer';
-            cell.addEventListener('click', () => calDayClick(y,m,d));
-            cell.addEventListener('mouseenter', () => { calHover={y,m,d}; renderCalendar(); });
+            cell.title = booked ? 'Als frei markieren' : 'Als belegt markieren';
+            cell.addEventListener('click', () => adminToggleDay(y,m,d));
           }
           daysEl.appendChild(cell);
         }
       });
-      updateCalSummary();
     }
 
-    function calDayClick(y,m,d) {
-      if (!calSelecting || !calRangeStart) {
-        calRangeStart = {y,m,d}; calRangeEnd = null; calSelecting = true;
-      } else {
-        const t = dateToNum(y,m,d), s = dateToNum(calRangeStart.y,calRangeStart.m,calRangeStart.d);
-        if (t < s) { calRangeStart={y,m,d}; calRangeEnd=null; }
-        else { calRangeEnd={y,m,d}; calSelecting=false; }
-      }
-      renderCalendar();
-    }
-
-    function fmtDate(o) { return o ? `${String(o.d).padStart(2,'0')}.${String(o.m+1).padStart(2,'0')}.${o.y}` : '—'; }
-
-    function updateCalSummary() {
-      const bar = document.getElementById('calSummaryBar');
-      const btn = document.getElementById('calInquiryBtn');
-      const resetBtn = document.getElementById('calResetBtn');
-      if (!calRangeStart) { bar.style.display='none'; return; }
-      bar.style.display='flex';
-      if (calSelecting) {
-        document.getElementById('calSummaryText').innerHTML =
-          `<strong style="color:var(--accent)">${fmtDate(calRangeStart)}</strong> &nbsp;→&nbsp; Enddatum wählen …`;
-        btn.style.display='none';
-      } else if (calRangeEnd) {
-        const nights = Math.round((dateToNum(calRangeEnd.y,calRangeEnd.m,calRangeEnd.d) - dateToNum(calRangeStart.y,calRangeStart.m,calRangeStart.d)) / 86400000);
-        document.getElementById('calSummaryText').innerHTML =
-          `<strong style="color:var(--accent)">${fmtDate(calRangeStart)}</strong> &nbsp;–&nbsp; <strong style="color:var(--accent)">${fmtDate(calRangeEnd)}</strong> &nbsp;·&nbsp; <span style="color:var(--text-secondary)">${nights} Nacht${nights!==1?'e':''}</span>`;
-        btn.style.display='inline-flex';
-      }
-      resetBtn.style.display='inline-flex';
-    }
-
-    document.getElementById('calPrev').addEventListener('click', () => { calOffset--; renderCalendar(); });
+    document.getElementById('calPrev').addEventListener('click', () => { if (calOffset > 0) { calOffset--; renderCalendar(); } });
     document.getElementById('calNext').addEventListener('click', () => { calOffset++; renderCalendar(); });
-    document.getElementById('calResetBtn').addEventListener('click', () => {
-      calRangeStart=null; calRangeEnd=null; calSelecting=false; renderCalendar();
-    });
-    document.getElementById('calInquiryBtn').addEventListener('click', () => {
-      if (!calRangeStart || !calRangeEnd) return;
-      const nights = Math.round((dateToNum(calRangeEnd.y,calRangeEnd.m,calRangeEnd.d) - dateToNum(calRangeStart.y,calRangeStart.m,calRangeStart.d)) / 86400000);
-      const subject = encodeURIComponent(`Buchungsanfrage Chalet Fluh: ${fmtDate(calRangeStart)} – ${fmtDate(calRangeEnd)}`);
-      const body = encodeURIComponent(`Guten Tag,\n\nwir möchten das Chalet Fluh für folgenden Zeitraum anfragen:\n\nAnreise: ${fmtDate(calRangeStart)}\nAbreise: ${fmtDate(calRangeEnd)}\nAufenthaltsdauer: ${nights} Nacht${nights!==1?'e':''}\n\nAnzahl Personen: \nAnzahl Hunde: \n\nVielen Dank und freundliche Grüße,\n`);
-      window.open(`mailto:chaletfluh@gmail.com?subject=${subject}&body=${body}`);
-    });
-    document.getElementById('calGrid').addEventListener('mouseleave', () => { calHover=null; renderCalendar(); });
     renderCalendar();
 
     // Scroll reveal
@@ -2721,12 +2724,21 @@
   <div id="adminLoginModal">
     <div class="admin-modal-box">
       <div class="admin-modal-title">Admin-Zugang</div>
-      <div class="admin-modal-sub">Bitte geben Sie das Passwort ein, um Texte und Bilder zu bearbeiten.</div>
+      <div class="admin-modal-sub" id="adminLoginSub">Passwort eingeben, um Inhalte zu bearbeiten.</div>
+      <!-- Honeypot: hidden from humans, bots fill it -->
+      <input type="text" id="adminHoneypot" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;" aria-hidden="true" />
       <input class="admin-input" type="password" id="adminPasswordInput" placeholder="Passwort" autocomplete="current-password" />
-      <div class="admin-modal-error" id="adminLoginError">Falsches Passwort. Bitte versuchen Sie es erneut.</div>
+      <div class="admin-modal-error" id="adminLoginError"></div>
       <div class="admin-btn-row">
         <button class="admin-btn" id="adminLoginCancel">Abbrechen</button>
         <button class="admin-btn primary" id="adminLoginSubmit">Anmelden</button>
+      </div>
+      <!-- Unlock section: shown only when locked out -->
+      <div id="adminUnlockSection" style="display:none; margin-top:1.5rem; border-top:1px solid var(--border); padding-top:1.5rem;">
+        <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:1rem; line-height:1.5;">Entsperr-Code per E-Mail anfordern. Der Code wird an chaletfluh@gmail.com gesendet.</div>
+        <button class="admin-btn" id="adminRequestUnlock" style="width:100%; margin-bottom:0.75rem;">E-Mail anfordern</button>
+        <input class="admin-input" type="text" id="adminUnlockCode" placeholder="Entsperr-Code eingeben" autocomplete="off" style="margin-top:0; text-transform:uppercase; letter-spacing:0.1em;" maxlength="8" />
+        <button class="admin-btn primary" id="adminSubmitUnlock" style="width:100%; margin-top:0.5rem;">Entsperren</button>
       </div>
     </div>
   </div>
@@ -2757,11 +2769,17 @@
 
   <script>
   // ─── ADMIN PANEL ─────────────────────────────────────────────────────────────
-  const ADMIN_PASSWORD = 'ChaletFluh2026';
-  const ADMIN_STORE_KEY = 'chaletfluh_admin_overrides';
+  const ADMIN_PASSWORD   = 'Schumpen12345!';
+  const ADMIN_STORE_KEY  = 'chaletfluh_admin_overrides';
+  const LOCKOUT_KEY      = 'chaletfluh_lockout';
+  const RESET_TS_KEY     = 'chaletfluh_reset_ts';
+  const MAX_ATTEMPTS     = 5;
+  const LOCKOUT_DURATIONS = [60, 3600, 86400]; // seconds: 1 min → 1 hr → 24 hr
 
   let adminMode = false;
+  window.adminMode = false;
   let adminOverrides = {}; // { key: value } – persisted to localStorage
+  window.adminOverrides = adminOverrides;
   let adminPendingImgKey = null;
 
   // ─── Selectors ───────────────────────────────────────────────────────────────
@@ -2782,7 +2800,11 @@
   // ─── Load saved overrides from localStorage ───────────────────────────────
   function loadOverrides() {
     try { adminOverrides = JSON.parse(localStorage.getItem(ADMIN_STORE_KEY) || '{}'); } catch(e) { adminOverrides = {}; }
+    window.adminOverrides = adminOverrides; // keep window reference in sync after reassignment
   }
+  window.saveOverrides = function() {
+    localStorage.setItem(ADMIN_STORE_KEY, JSON.stringify(adminOverrides));
+  };
   function saveOverrides() {
     localStorage.setItem(ADMIN_STORE_KEY, JSON.stringify(adminOverrides));
   }
@@ -2803,8 +2825,20 @@
           const thumbs = document.querySelectorAll('#ssThumbs .ss-thumb img');
           if (thumbs[idx]) thumbs[idx].src = adminOverrides[key];
         }
+        // Sync area slideshow
+        if (key.startsWith('area-')) {
+          const idx = parseInt(key.split('-')[1]);
+          if (AREA_SLIDES[idx]) {
+            AREA_SLIDES[idx].src = adminOverrides[key];
+            if (areaCurrent === idx) document.getElementById('areaMainImg').src = adminOverrides[key];
+          }
+        }
       }
     });
+    // Sync calendar admin overrides
+    if (adminOverrides['cal_extra_booked'])   calExtraBooked   = new Set(JSON.parse(adminOverrides['cal_extra_booked']));
+    if (adminOverrides['cal_force_unbooked']) calForceUnbooked = new Set(JSON.parse(adminOverrides['cal_force_unbooked']));
+    if (typeof renderCalendar === 'function') renderCalendar();
   }
 
   // ─── Toast ────────────────────────────────────────────────────────────────
@@ -2833,6 +2867,7 @@
   // ─── Enter / Exit admin mode ──────────────────────────────────────────────
   function enterAdminMode() {
     adminMode = true;
+    window.adminMode = true;
     document.body.classList.add('admin-mode');
     $adminBanner.classList.add('active');
     $adminToggle.style.opacity = '1';
@@ -2850,9 +2885,11 @@
     });
     $imgOverlay.addEventListener('click', onOverlayClick);
     $imgOverlay.addEventListener('mouseleave', hideOverlay);
+    if (typeof renderCalendar === 'function') renderCalendar();
   }
   function exitAdminMode() {
     adminMode = false;
+    window.adminMode = false;
     document.body.classList.remove('admin-mode');
     $adminBanner.classList.remove('active');
     $adminToggle.style.opacity = '0.4';
@@ -2869,6 +2906,7 @@
     $imgOverlay.removeEventListener('click', onOverlayClick);
     $imgOverlay.removeEventListener('mouseleave', hideOverlay);
     hideOverlay();
+    if (typeof renderCalendar === 'function') renderCalendar();
   }
 
   // ─── Text edits ──────────────────────────────────────────────────────────
@@ -2909,6 +2947,14 @@
         const thumbs = document.querySelectorAll('#ssThumbs .ss-thumb img');
         if (thumbs[idx]) thumbs[idx].src = dataUrl;
       }
+      // If area slide, update AREA_SLIDES array and main image if active
+      if (adminPendingImgKey.startsWith('area-')) {
+        const idx = parseInt(adminPendingImgKey.split('-')[1]);
+        if (AREA_SLIDES[idx]) {
+          AREA_SLIDES[idx].src = dataUrl;
+          if (areaCurrent === idx) document.getElementById('areaMainImg').src = dataUrl;
+        }
+      }
       adminPendingImgKey = null;
       $imgInput.value = '';
       showToast('✓ Bild ersetzt');
@@ -2916,30 +2962,163 @@
     reader.readAsDataURL(file);
   });
 
+  // ─── Lockout helpers ──────────────────────────────────────────────────────
+  function getLockoutState() {
+    try { return JSON.parse(localStorage.getItem(LOCKOUT_KEY) || '{}'); } catch(e) { return {}; }
+  }
+  function saveLockoutState(s) { localStorage.setItem(LOCKOUT_KEY, JSON.stringify(s)); }
+
+  function checkLockout() {
+    const s = getLockoutState();
+    if (!s.lockedUntil) return null;
+    if (Date.now() >= s.lockedUntil) return null;
+    return { lockedUntil: s.lockedUntil, level: s.lockoutLevel || 1, remaining: s.lockedUntil - Date.now() };
+  }
+
+  function formatRemaining(ms) {
+    const s = Math.ceil(ms / 1000);
+    if (s < 60) return `${s} Sek.`;
+    const m = Math.ceil(s / 60);
+    if (m < 60) return `${m} Minute${m !== 1 ? 'n' : ''}`;
+    const h = Math.ceil(m / 60);
+    return `${h} Stunde${h !== 1 ? 'n' : ''}`;
+  }
+
+  // Daily unlock code — changes every day, derived from password + date
+  function getDailyUnlockCode() {
+    const raw = new Date().toDateString() + '_CF_' + ADMIN_PASSWORD;
+    let h = 5381;
+    for (let i = 0; i < raw.length; i++) { h = ((h << 5) + h) ^ raw.charCodeAt(i); h >>>= 0; }
+    return h.toString(36).toUpperCase().slice(0, 8).padStart(8, '0');
+  }
+
+  // ─── Login UI state ───────────────────────────────────────────────────────
+  let lockoutTimer = null;
+  let lastAttemptTs = 0;
+
+  const $loginSub     = document.getElementById('adminLoginSub');
+  const $unlockSec    = document.getElementById('adminUnlockSection');
+  const $unlockInput  = document.getElementById('adminUnlockCode');
+  const $honeypot     = document.getElementById('adminHoneypot');
+
+  function showLockoutUI(lock) {
+    $loginSub.textContent = `Zugang gesperrt – noch ${formatRemaining(lock.remaining)}`;
+    $loginSub.style.color = '#c45050';
+    $loginSubmit.disabled = true;
+    $loginInput.disabled  = true;
+    $unlockSec.style.display = 'block';
+    if (lockoutTimer) clearInterval(lockoutTimer);
+    lockoutTimer = setInterval(() => {
+      const l = checkLockout();
+      if (!l) { clearInterval(lockoutTimer); lockoutTimer = null; resetLoginUI(); }
+      else $loginSub.textContent = `Zugang gesperrt – noch ${formatRemaining(l.remaining)}`;
+    }, 1000);
+  }
+
+  function resetLoginUI() {
+    $loginSub.textContent = 'Passwort eingeben, um Inhalte zu bearbeiten.';
+    $loginSub.style.color = '';
+    $loginSubmit.disabled = false;
+    $loginInput.disabled  = false;
+    $unlockSec.style.display = 'none';
+    if (lockoutTimer) { clearInterval(lockoutTimer); lockoutTimer = null; }
+  }
+
   // ─── Button handlers ──────────────────────────────────────────────────────
   $adminToggle.addEventListener('click', () => {
     if (adminMode) { exitAdminMode(); return; }
     $loginInput.value = '';
     $loginError.style.display = 'none';
+    $loginError.textContent = '';
     $loginModal.classList.add('open');
-    setTimeout(() => $loginInput.focus(), 80);
+    const lock = checkLockout();
+    if (lock) { showLockoutUI(lock); } else { resetLoginUI(); setTimeout(() => $loginInput.focus(), 80); }
   });
 
-  $loginCancel.addEventListener('click', () => $loginModal.classList.remove('open'));
-  $loginModal.addEventListener('click', (e) => { if (e.target === $loginModal) $loginModal.classList.remove('open'); });
+  $loginCancel.addEventListener('click', () => { $loginModal.classList.remove('open'); if (lockoutTimer) { clearInterval(lockoutTimer); lockoutTimer = null; } });
+  $loginModal.addEventListener('click', (e) => { if (e.target === $loginModal) { $loginModal.classList.remove('open'); if (lockoutTimer) { clearInterval(lockoutTimer); lockoutTimer = null; } } });
 
   function tryLogin() {
+    // Bot protection: honeypot filled → silently reject
+    if ($honeypot.value !== '') return;
+    // Bot protection: minimum 1.5 s between attempts
+    const now = Date.now();
+    if (now - lastAttemptTs < 1500) return;
+    lastAttemptTs = now;
+
+    const lock = checkLockout();
+    if (lock) { showLockoutUI(lock); return; }
+
+    const state = getLockoutState();
     if ($loginInput.value === ADMIN_PASSWORD) {
+      localStorage.removeItem(LOCKOUT_KEY);
       $loginModal.classList.remove('open');
       $loginError.style.display = 'none';
       enterAdminMode();
     } else {
+      const newAttempts = (state.attempts || 0) + 1;
       $loginError.style.display = 'block';
       $loginInput.select();
+      if (newAttempts >= MAX_ATTEMPTS) {
+        const prevLevel = state.lockoutLevel || 0;
+        const nextLevel = Math.min(prevLevel + 1, LOCKOUT_DURATIONS.length);
+        const durMs = LOCKOUT_DURATIONS[nextLevel - 1] * 1000;
+        saveLockoutState({ attempts: 0, lockoutLevel: nextLevel, lockedUntil: now + durMs });
+        $loginError.textContent = `Zu viele Fehlversuche. Zugang für ${formatRemaining(durMs)} gesperrt.`;
+        showLockoutUI(checkLockout());
+      } else {
+        saveLockoutState({ attempts: newAttempts, lockoutLevel: state.lockoutLevel || 0 });
+        const left = MAX_ATTEMPTS - newAttempts;
+        $loginError.textContent = `Falsches Passwort – noch ${left} Versuch${left !== 1 ? 'e' : ''}.`;
+        $loginSubmit.disabled = true;
+        setTimeout(() => { $loginSubmit.disabled = false; }, 2000);
+      }
     }
   }
   $loginSubmit.addEventListener('click', tryLogin);
   $loginInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') tryLogin(); });
+
+  // ─── Unlock via email ─────────────────────────────────────────────────────
+  document.getElementById('adminRequestUnlock').addEventListener('click', () => {
+    // Throttle: max once per 10 minutes
+    const lastReset = parseInt(localStorage.getItem(RESET_TS_KEY) || '0');
+    const now = Date.now();
+    const wait = 10 * 60 * 1000;
+    if (now - lastReset < wait) {
+      $loginError.style.display = 'block';
+      $loginError.textContent = `Bitte warten Sie noch ${formatRemaining(wait - (now - lastReset))}.`;
+      return;
+    }
+    localStorage.setItem(RESET_TS_KEY, String(now));
+    const code = getDailyUnlockCode();
+    const subject = encodeURIComponent('Admin-Zugang Chalet Fluh entsperren');
+    const body = encodeURIComponent(
+      'Hallo,\n\nBitte entsperren Sie den Admin-Zugang der Chalet Fluh Website.\n\n' +
+      'Datum: ' + new Date().toLocaleString('de-DE') + '\n' +
+      'Tages-Code: ' + code + '\n\n' +
+      'Geben Sie diesen Code auf der Website ein, um den Zugang zu entsperren.'
+    );
+    window.open('mailto:chaletfluh@gmail.com?subject=' + subject + '&body=' + body);
+    $loginError.style.display = 'block';
+    $loginError.style.color = 'var(--accent)';
+    $loginError.textContent = 'E-Mail geöffnet. Bitte senden Sie die Anfrage und geben Sie den Code ein.';
+  });
+
+  document.getElementById('adminSubmitUnlock').addEventListener('click', () => {
+    const entered = $unlockInput.value.trim().toUpperCase();
+    if (entered === getDailyUnlockCode()) {
+      localStorage.removeItem(LOCKOUT_KEY);
+      $unlockInput.value = '';
+      resetLoginUI();
+      $loginError.style.display = 'none';
+      $loginError.style.color = '';
+    } else {
+      $loginError.style.display = 'block';
+      $loginError.style.color = '#c45050';
+      $loginError.textContent = 'Ungültiger Entsperr-Code.';
+    }
+  });
+  $unlockInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') document.getElementById('adminSubmitUnlock').click(); });
 
   $saveBtn.addEventListener('click', () => {
     // Flush any contentEditable changes to overrides
