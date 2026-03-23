@@ -1182,11 +1182,6 @@
       line-height: 1;
       margin-top: 0.75rem;
     }
-    .pricing-price sup {
-      font-size: 1.2rem;
-      vertical-align: top;
-      margin-top: 0.5rem;
-    }
     .pricing-price-unit {
       font-family: 'DM Sans', sans-serif;
       font-size: 0.75rem;
@@ -1276,6 +1271,7 @@
       inset: 0;
       background: linear-gradient(135deg, rgba(196,154,60,0.15) 0%, transparent 60%);
       mix-blend-mode: color-dodge;
+      pointer-events: none;
     }
     .contact-info { padding-top: 1rem; }
     .contact-detail {
@@ -1327,6 +1323,71 @@
     .cta-banner-text .section-title { margin-bottom: 0.5rem; }
 
     /* FOOTER */
+    /* LEGAL BAR */
+    .legal-bar {
+      background: var(--bg-base);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: center;
+      gap: 0;
+    }
+    .legal-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 2rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      cursor: pointer;
+      border: none;
+      background: none;
+      transition: color 0.2s;
+      user-select: none;
+    }
+    .legal-toggle:hover { color: var(--text-secondary); }
+    .legal-toggle + .legal-toggle { border-left: 1px solid var(--border); }
+    .legal-chevron { transition: transform 0.3s; flex-shrink: 0; }
+    .legal-toggle.open .legal-chevron { transform: rotate(180deg); }
+    .legal-panel {
+      background: var(--bg-base);
+      border-top: 1px solid var(--border);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .legal-panel.open { max-height: 2000px; }
+    .legal-panel-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2.5rem 4rem 3rem;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      line-height: 1.75;
+    }
+    .legal-panel-inner h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+    }
+    .legal-panel-inner h4 {
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin: 1.5rem 0 0.5rem;
+    }
+    .legal-panel-inner p { margin-bottom: 0.5rem; }
+    .legal-panel-inner a { color: var(--accent); text-decoration: none; }
+    .legal-panel-inner a:hover { color: var(--accent-light); }
+    @media (max-width: 768px) {
+      .legal-panel-inner { padding: 2rem 1.5rem; }
+      .legal-toggle { padding: 0.75rem 1.25rem; }
+    }
+
     footer {
       background: var(--bg-surface);
       border-top: 1px solid var(--border);
@@ -1640,6 +1701,142 @@
     }
     body.admin-mode [data-admin-img] { cursor: pointer; }
 
+    /* ─── CONTACT FORM ─────────────────────────────────────────────────── */
+    .contact-form-section {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      padding: 6rem 4rem;
+    }
+    .contact-form-inner {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .contact-form-inner .section-eyebrow { margin-bottom: 0.5rem; }
+    .contact-form-inner .section-title { margin-bottom: 2.5rem; font-size: clamp(1.8rem,3vw,2.6rem); }
+    .cf-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    .cf-full { grid-column: 1 / -1; }
+    .cf-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .cf-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .cf-label .req { color: var(--accent); margin-left: 2px; }
+    .cf-input, .cf-select, .cf-textarea {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-light);
+      color: var(--text-primary);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      padding: 0.75rem 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .cf-input:focus, .cf-select:focus, .cf-textarea:focus {
+      border-color: var(--accent-muted);
+    }
+    .cf-input::placeholder, .cf-textarea::placeholder { color: var(--text-muted); }
+    .cf-input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.5); cursor: pointer; }
+    .cf-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a7567' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem; cursor: pointer; }
+    .cf-select option { background: var(--bg-card); }
+    .cf-textarea { resize: vertical; min-height: 110px; line-height: 1.6; }
+    .cf-date-row { display: flex; align-items: center; gap: 0.75rem; }
+    .cf-date-row input { flex: 1; }
+    .cf-date-sep { color: var(--text-muted); font-size: 1rem; flex-shrink: 0; }
+    .cf-captcha {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+    }
+    .cf-captcha-q {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .cf-captcha input {
+      width: 80px;
+      text-align: center;
+    }
+    .cf-captcha-hint {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+    .cf-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--accent);
+      color: var(--bg-base);
+      border: none;
+      padding: 1rem 2.5rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, opacity 0.2s;
+    }
+    .cf-submit:hover { background: var(--accent-light); }
+    .cf-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .cf-msg {
+      display: none;
+      padding: 0.9rem 1.25rem;
+      font-size: 0.85rem;
+      margin-top: 1rem;
+    }
+    .cf-msg.success { background: rgba(60,130,70,0.15); border: 1px solid rgba(88,200,100,0.25); color: #7ecf8a; }
+    .cf-msg.error { background: rgba(180,60,60,0.15); border: 1px solid rgba(220,80,80,0.25); color: #e08080; }
+    .cf-input-error { border-color: #e08080 !important; box-shadow: 0 0 0 2px rgba(224,128,128,0.2) !important; }
+    @media (max-width: 768px) {
+      .contact-form-section { padding: 4rem 1.5rem !important; }
+      .cf-grid { grid-template-columns: 1fr; }
+      .cf-full { grid-column: 1; }
+    }
+
+    /* Hero admin slide controls */
+    #heroAdminControls {
+      display: none;
+      position: absolute;
+      bottom: 5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      background: rgba(10,15,11,0.85);
+      border: 1px solid var(--border-light);
+      padding: 0.5rem 1rem;
+      align-items: center;
+      gap: 0.4rem;
+      backdrop-filter: blur(8px);
+    }
+    body.admin-mode #heroAdminControls { display: flex; }
+    .hero-admin-btn {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-light);
+      color: var(--text-secondary);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      padding: 0.35rem 0.75rem;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .hero-admin-btn:hover, .hero-admin-btn.active-slide { background: var(--accent); color: var(--bg-base); border-color: var(--accent); }
+
     /* Save notification */
     #adminSavedToast {
       position: fixed;
@@ -1697,10 +1894,10 @@
   <!-- HERO -->
   <section class="hero section-full" style="padding:0; max-width:none;">
     <div class="hero-slides" id="heroSlides">
-      <div class="hero-slide active" style="background-image: url('brand_assets/IMG_7965.jpeg')"></div>
-      <div class="hero-slide" style="background-image: url('brand_assets/IMG_3866.jpeg')"></div>
-      <div class="hero-slide" style="background-image: url('brand_assets/IMG_6961.jpeg')"></div>
-      <div class="hero-slide" style="background-image: url('brand_assets/IMG_1987.jpeg')"></div>
+      <div class="hero-slide active" style="background-image: url('brand_assets/IMG_7965.jpeg')" data-admin-img="hero-slide-0"></div>
+      <div class="hero-slide" style="background-image: url('brand_assets/IMG_3866.jpeg')" data-admin-img="hero-slide-1"></div>
+      <div class="hero-slide" style="background-image: url('brand_assets/IMG_6961.jpeg')" data-admin-img="hero-slide-2"></div>
+      <div class="hero-slide" style="background-image: url('brand_assets/IMG_1987.jpeg')" data-admin-img="hero-slide-3"></div>
     </div>
     <div class="hero-overlay"></div>
     <div class="hero-overlay-top"></div>
@@ -1720,6 +1917,14 @@
           </a>
         </div>
       </div>
+    </div>
+    <!-- Admin controls for hero slides — only visible in admin mode -->
+    <div id="heroAdminControls">
+      <span style="font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); margin-right:0.75rem;">Slideshow Bilder:</span>
+      <button class="hero-admin-btn" data-slide="0">Bild 1</button>
+      <button class="hero-admin-btn" data-slide="1">Bild 2</button>
+      <button class="hero-admin-btn" data-slide="2">Bild 3</button>
+      <button class="hero-admin-btn" data-slide="3">Bild 4</button>
     </div>
     <div class="hero-scroll-hint">
       <div class="scroll-line"></div>
@@ -1776,6 +1981,8 @@
           <div class="highlight-item" data-admin-text="chalet-highlight-3">Hundegerechtes 2.500 m² vollständig eingezäuntes Grundstück zur Alleinbenutzung</div>
           <div class="highlight-item" data-admin-text="chalet-highlight-4">Nichtraucherimmobilie</div>
           <div class="highlight-item" data-admin-text="chalet-highlight-5">Glasfaser-WLAN</div>
+          <div class="highlight-item" data-admin-text="chalet-highlight-6">Eigenes Quellwasser</div>
+          <div class="highlight-item" data-admin-text="chalet-highlight-7">Profiküche, Fitnessstudio & Sauna</div>
         </div>
       </div>
     </div>
@@ -1808,7 +2015,7 @@
           <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>
           </svg>
-          <div class="feature-title" data-admin-text="feat-title-2">4 Schlafzimmer</div>
+          <div class="feature-title" data-admin-text="feat-title-2">4 Schlafzimmer & 3 Bäder</div>
           <div class="feature-desc" data-admin-text="feat-desc-2">Master-Suite mit Bad en suite und begehbarem Kleiderschrank. Drei weitere Zimmer im Obergeschoss — für bis zu 10 Personen plus zwei Babys.</div>
         </div>
 
@@ -1894,7 +2101,7 @@
             <polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
           </svg>
           <div class="feature-title" data-admin-text="feat-title-10">Alles Inklusive</div>
-          <div class="feature-desc" data-admin-text="feat-desc-10">Bettwäsche, Handtücher, Saunatücher, Bademäntel, Hausschuhe, Geschirrtücher sowie eine Grundausstattung an Verbrauchsartikeln ist in der Küche und den Bädern vorhanden.</div>
+          <div class="feature-desc" data-admin-text="feat-desc-10">Bettwäsche, Handtücher, Saunatücher, Bademäntel, Hausschuhe, Geschirrtücher sowie eine Grundausstattung an Verbrauchsartikeln ist in der Küche und den Bädern vorhanden. Das Chalet verfügt zudem über drei Kinderhochstühle und zwei Babybetten.</div>
         </div>
 
       </div>
@@ -2125,7 +2332,7 @@
       <div style="max-width:600px; margin-bottom:3.5rem;" class="reveal">
         <p class="section-eyebrow" data-admin-text="preise-eyebrow">Preise & Verfügbarkeit</p>
         <h2 class="section-title" data-admin-text="preise-title">Transparente<br><em>Konditionen</em></h2>
-        <p class="section-body" data-admin-text="preise-body">Alle Preise inkl. MwSt. Nebenkosten sind im Mietpreis enthalten. Mindestaufenthalt: 3 Tage.</p>
+        <p class="section-body" data-admin-text="preise-body">Alle Preise inkl. MwSt. Nebenkosten sind im Mietpreis enthalten.</p>
       </div>
 
       <div class="pricing-grid reveal">
@@ -2133,38 +2340,14 @@
         <div class="pricing-col">
           <div class="pricing-col-header">
             <div class="pricing-season" data-admin-text="p1-season">Nebensaison</div>
-            <div class="pricing-col-title" data-admin-text="p1-title">Niedrigsaison</div>
-            <div class="pricing-price"><sup>€</sup><span data-admin-text="p1-price">2.900</span></div>
-            <div class="pricing-price-unit" data-admin-text="p1-unit">pro Woche / 2 Personen · alle Nebenkosten inkl.</div>
+            <div class="pricing-col-title" data-admin-text="p1-title">10 Jan – 27 Jun / 30 Aug – 19 Dez</div>
+            <div class="pricing-price"><span data-admin-text="p1-price">400</span>€</div>
+            <div class="pricing-price-unit" data-admin-text="p1-unit">pro Tag / inkl. 4 Personen</div>
           </div>
           <div class="pricing-rows">
             <div class="pricing-row">
-              <span data-admin-text="p1-r1-label">Jan – Jun 2026</span>
-              <span class="pricing-row-val" data-admin-text="p1-r1-val">2.900 €/Wo.</span>
-            </div>
-            <div class="pricing-row">
-              <span data-admin-text="p1-r2-label">Sep – Dez 2026</span>
-              <span class="pricing-row-val" data-admin-text="p1-r2-val">2.900 €/Wo.</span>
-            </div>
-            <div class="pricing-row">
-              <span data-admin-text="p1-r3-label">Jan – Jun 2027</span>
-              <span class="pricing-row-val" data-admin-text="p1-r3-val">2.900 €/Wo.</span>
-            </div>
-            <div class="pricing-row">
-              <span data-admin-text="p1-r4-label">3 Nächte</span>
-              <span class="pricing-row-val" data-admin-text="p1-r4-val">2.150 €</span>
-            </div>
-            <div class="pricing-row">
-              <span data-admin-text="p1-r5-label">4 Nächte</span>
-              <span class="pricing-row-val" data-admin-text="p1-r5-val">2.300 €</span>
-            </div>
-            <div class="pricing-row">
-              <span data-admin-text="p1-r6-label">5 Nächte</span>
-              <span class="pricing-row-val" data-admin-text="p1-r6-val">2.500 €</span>
-            </div>
-            <div class="pricing-row">
-              <span data-admin-text="p1-r7-label">6 Nächte</span>
-              <span class="pricing-row-val" data-admin-text="p1-r7-val">2.700 €</span>
+              <span data-admin-text="p1-r1-label">Für jede weitere Person</span>
+              <span class="pricing-row-val" data-admin-text="p1-r1-val">25€ pro Tag</span>
             </div>
           </div>
         </div>
@@ -2173,65 +2356,29 @@
           <div style="position:absolute; top:-1px; left:50%; transform:translateX(-50%); background:var(--accent); color:var(--bg-base); font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; padding:0.3rem 1rem; font-weight:500;" data-admin-text="p2-badge">Beliebt</div>
           <div class="pricing-col-header">
             <div class="pricing-season" data-admin-text="p2-season">Hauptsaison</div>
-            <div class="pricing-col-title" data-admin-text="p2-title">Hochsaison</div>
-            <div class="pricing-price"><sup>€</sup><span data-admin-text="p2-price">3.100</span></div>
-            <div class="pricing-price-unit" data-admin-text="p2-unit">pro Woche / 2 Personen · alle Nebenkosten inkl.</div>
+            <div class="pricing-col-title" data-admin-text="p2-title">28 Jun – 29 Aug</div>
+            <div class="pricing-price"><span data-admin-text="p2-price">600</span>€</div>
+            <div class="pricing-price-unit" data-admin-text="p2-unit">pro Tag / inkl. 4 Personen</div>
           </div>
           <div class="pricing-rows">
             <div class="pricing-row">
-              <span data-admin-text="p2-r1-label">Jun – Aug 2026</span>
-              <span class="pricing-row-val" data-admin-text="p2-r1-val">3.100 €/Wo.</span>
-            </div>
-            <div class="pricing-row">
-              <span data-admin-text="p2-r2-label">3 Nächte</span>
-              <span class="pricing-row-val" data-admin-text="p2-r2-val">2.350 €</span>
-            </div>
-            <div class="pricing-row">
-              <span data-admin-text="p2-r3-label">4 Nächte</span>
-              <span class="pricing-row-val" data-admin-text="p2-r3-val">2.500 €</span>
-            </div>
-            <div class="pricing-row">
-              <span data-admin-text="p2-r4-label">5 Nächte</span>
-              <span class="pricing-row-val" data-admin-text="p2-r4-val">2.700 €</span>
-            </div>
-            <div class="pricing-row">
-              <span data-admin-text="p2-r5-label">6 Nächte</span>
-              <span class="pricing-row-val" data-admin-text="p2-r5-val">2.800 €</span>
-            </div>
-            <div class="pricing-row">
-              <span data-admin-text="p2-r6-label">Weitere Person</span>
-              <span class="pricing-row-val" data-admin-text="p2-r6-val">25 €/Nacht</span>
+              <span data-admin-text="p2-r1-label">Für jede weitere Person</span>
+              <span class="pricing-row-val" data-admin-text="p2-r1-val">25€ pro Tag</span>
             </div>
           </div>
         </div>
-        <!-- Weihnachten -->
+        <!-- Festsaison -->
         <div class="pricing-col">
           <div class="pricing-col-header">
-            <div class="pricing-season" data-admin-text="p3-season">Weihnachten & Silvester</div>
-            <div class="pricing-col-title" data-admin-text="p3-title">Festsaison</div>
-            <div class="pricing-price"><sup>€</sup><span data-admin-text="p3-price">5.200</span></div>
-            <div class="pricing-price-unit" data-admin-text="p3-unit">pro Woche · alle Nebenkosten inkl.</div>
+            <div class="pricing-season" data-admin-text="p3-season">Festsaison</div>
+            <div class="pricing-col-title" data-admin-text="p3-title">Weihnachten & Silvester</div>
+            <div class="pricing-price"><span data-admin-text="p3-price">800</span>€</div>
+            <div class="pricing-price-unit" data-admin-text="p3-unit">pro Tag / inkl. 4 Personen</div>
           </div>
           <div class="pricing-rows">
             <div class="pricing-row">
-              <span data-admin-text="p3-r1-label">21.12.2026 – 06.01.2027</span>
-              <span class="pricing-row-val" data-admin-text="p3-r1-val">5.200 €/Wo.</span>
-            </div>
-            <div class="pricing-row">
-              <span data-admin-text="p3-r2-label">Kurzaufenthalt (3–6 Nächte)</span>
-              <span class="pricing-row-val" data-admin-text="p3-r2-val">800 €/Nacht</span>
-            </div>
-            <div class="pricing-row">
-              <span data-admin-text="p3-r3-label">Max. 4 Personen bei Kurz</span>
-              <span class="pricing-row-val" data-admin-text="p3-r3-val">inklusive</span>
-            </div>
-            <div class="pricing-row">
-              <span data-admin-text="p3-r4-label">Weitere Person (Woche)</span>
-              <span class="pricing-row-val" data-admin-text="p3-r4-val">160 €/Wo.</span>
-            </div>
-            <div class="pricing-row">
-              <span data-admin-text="p3-r5-label">Kinder unter 3 Jahren</span>
-              <span class="pricing-row-val" data-admin-text="p3-r5-val">kostenlos</span>
+              <span data-admin-text="p3-r1-label">Für jede weitere Person</span>
+              <span class="pricing-row-val" data-admin-text="p3-r1-val">25€ pro Tag</span>
             </div>
           </div>
         </div>
@@ -2240,14 +2387,14 @@
       <div class="pricing-extras reveal">
         <div class="pricing-extras-title" data-admin-text="extras-title">Zusatzkosten & Buchungskonditionen</div>
         <div class="extras-grid">
-          <div class="extra-row"><span data-admin-text="ex-r1-label">Endreinigung</span><span data-admin-text="ex-r1-val">400 € (einmalig)</span></div>
-          <div class="extra-row"><span data-admin-text="ex-r2-label">Anzahlung bei Buchung</span><span data-admin-text="ex-r2-val">25 % des Gesamtpreises</span></div>
-          <div class="extra-row"><span data-admin-text="ex-r3-label">Hunde</span><span data-admin-text="ex-r3-val">10 €/Tag</span></div>
-          <div class="extra-row"><span data-admin-text="ex-r4-label">Restzahlung + Kaution</span><span data-admin-text="ex-r4-val">3 Wochen vor Anreise</span></div>
-          <div class="extra-row"><span data-admin-text="ex-r5-label">Kurtaxe Erwachsene</span><span data-admin-text="ex-r5-val">3,50 €/Tag/Person</span></div>
-          <div class="extra-row"><span data-admin-text="ex-r6-label">Kaution</span><span data-admin-text="ex-r6-val">1.000 € (Rückgabe in 14 Tagen)</span></div>
-          <div class="extra-row"><span data-admin-text="ex-r7-label">Kurtaxe Jugendliche</span><span data-admin-text="ex-r7-val">1,75 €/Tag/Person</span></div>
-          <div class="extra-row"><span data-admin-text="ex-r8-label">Mindestaufenthalt</span><span data-admin-text="ex-r8-val">3 Tage</span></div>
+          <div class="extra-row"><span data-admin-text="ex-r1-label">Endreinigung</span><span data-admin-text="ex-r1-val">380 € (einmalig)</span></div>
+          <div class="extra-row"><span data-admin-text="ex-r2-label">Kaution</span><span data-admin-text="ex-r2-val">1.000 €</span></div>
+          <div class="extra-row"><span data-admin-text="ex-r3-label">Anzahlung bei Buchung</span><span data-admin-text="ex-r3-val">25 % des Gesamtpreises</span></div>
+          <div class="extra-row"><span data-admin-text="ex-r4-label">Kinder u. 3 Jahren</span><span data-admin-text="ex-r4-val">kostenfrei</span></div>
+          <div class="extra-row"><span data-admin-text="ex-r5-label">Hunde</span><span data-admin-text="ex-r5-val">10 €/Tag</span></div>
+          <div class="extra-row"><span data-admin-text="ex-r6-label">Restzahlung + Kaution</span><span data-admin-text="ex-r6-val">3 Wochen vor Anreise</span></div>
+          <div class="extra-row"><span data-admin-text="ex-r7-label">Kurtaxe Erwachsene</span><span data-admin-text="ex-r7-val">3,50 €/Tag/Person</span></div>
+          <div class="extra-row"><span data-admin-text="ex-r8-label">Kurtaxe Jugendliche</span><span data-admin-text="ex-r8-val">1,75 €/Tag/Person</span></div>
         </div>
       </div>
 
@@ -2309,81 +2456,101 @@
       <h2 class="section-title" style="font-size:clamp(1.8rem,3.5vw,2.8rem);" data-admin-text="cta-title">Ihr Traumurlaub im<br><em>Allgäu</em> wartet</h2>
     </div>
     <div class="reveal reveal-delay-2" style="flex-shrink:0;">
-      <a href="mailto:chaletfluh@gmail.com" class="btn-primary" style="font-size:0.85rem; padding:1rem 2.5rem;">
-        Jetzt via E-Mail anfragen
+      <a href="#kontakt" class="btn-primary" style="font-size:0.85rem; padding:1rem 2.5rem;">
+        Jetzt Kontaktbogen ausfüllen!
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </a>
     </div>
   </div>
 
-  <!-- KONTAKT -->
-  <section id="kontakt">
-    <div class="contact-split">
-      <div class="contact-image reveal">
-        <img src="brand_assets/IMG_6961.jpeg" alt="Chalet Fluh Außenansicht" loading="lazy" data-admin-img="contact-img" />
-        <div class="contact-image-overlay"></div>
-      </div>
-      <div class="contact-info reveal reveal-delay-2">
-        <p class="section-eyebrow" data-admin-text="kontakt-eyebrow">Kontakt</p>
-        <h2 class="section-title" style="font-size:clamp(2rem,3.5vw,3rem);" data-admin-text="kontakt-title">Anfragen &<br><em>Buchungen</em></h2>
-        <p class="section-body" style="margin-bottom:2.5rem;" data-admin-text="contact-intro">
-          Wir freuen uns auf Ihre Anfrage. Jana Steil steht Ihnen persönlich für alle Fragen zur Verfügbarkeit, Anreise und individuellen Wünschen zur Verfügung.
-        </p>
+  <!-- KONTAKT / BUCHUNGSANFRAGE -->
+  <section id="kontakt" style="padding:0; background:var(--bg-surface);">
+    <div class="contact-form-inner reveal" style="max-width:860px; margin:0 auto; padding:6rem 4rem;">
+      <p class="section-eyebrow">Kontakt & Buchung</p>
+      <h2 class="section-title">Jetzt <em>anfragen</em></h2>
 
-        <div class="contact-detail">
-          <svg class="contact-detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-          </svg>
-          <div>
-            <div class="contact-detail-label">Inhaberin</div>
-            <div class="contact-detail-value" data-admin-text="contact-owner">Jana Steil</div>
-          </div>
-        </div>
+      <form id="contactForm" action="https://formspree.io/f/xzdjlrpy" method="POST" novalidate>
+        <!-- Honeypot — bots fill this, humans don't -->
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;" aria-hidden="true" />
+        <input type="hidden" name="_subject" value="Neue Buchungsanfrage – Chalet Fluh" />
 
-        <div class="contact-detail">
-          <svg class="contact-detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.6 5.05 2 2 0 0 1 3.56 2.87h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.5a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 18z"/>
-          </svg>
-          <div>
-            <div class="contact-detail-label">Telefon</div>
-            <div class="contact-detail-value" data-admin-text="contact-phone">
-              <a href="tel:+498386991817">+49 8386 9918170</a><br>
-              <a href="tel:+4915510325384">+49 155 10325384</a>
+        <div class="cf-grid">
+          <!-- Buchungszeitraum -->
+          <div class="cf-group cf-full">
+            <label class="cf-label">Buchungszeitraum <span class="req">*</span></label>
+            <div class="cf-date-row">
+              <input class="cf-input" type="date" name="anreise" id="cfAnreise" required placeholder="Anreise" />
+              <span class="cf-date-sep">–</span>
+              <input class="cf-input" type="date" name="abreise" id="cfAbreise" required placeholder="Abreise" />
             </div>
           </div>
-        </div>
 
-        <div class="contact-detail">
-          <svg class="contact-detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
-          </svg>
-          <div>
-            <div class="contact-detail-label">E-Mail</div>
-            <div class="contact-detail-value" data-admin-text="contact-email">
-              <a href="mailto:chaletfluh@gmail.com">chaletfluh@gmail.com</a>
+          <!-- Name -->
+          <div class="cf-group">
+            <label class="cf-label" for="cfName">Name <span class="req">*</span></label>
+            <input class="cf-input" type="text" name="name" id="cfName" required placeholder="Vor- und Nachname" autocomplete="name" />
+          </div>
+
+          <!-- E-Mail -->
+          <div class="cf-group">
+            <label class="cf-label" for="cfEmail">E-Mail-Adresse <span class="req">*</span></label>
+            <input class="cf-input" type="email" name="email" id="cfEmail" required placeholder="ihre@email.de" autocomplete="email" />
+          </div>
+
+          <!-- Telefon -->
+          <div class="cf-group">
+            <label class="cf-label" for="cfTel">Telefon</label>
+            <input class="cf-input" type="tel" name="telefon" id="cfTel" placeholder="+49 000 000 0000" autocomplete="tel" />
+          </div>
+
+          <!-- Personen -->
+          <div class="cf-group">
+            <label class="cf-label" for="cfPersonen">Personen <span class="req">*</span></label>
+            <select class="cf-select" name="personen" id="cfPersonen" required>
+              <option value="">– Auswählen –</option>
+              <option value="1">1 Person</option>
+              <option value="2">2 Personen</option>
+              <option value="3">3 Personen</option>
+              <option value="4">4 Personen</option>
+              <option value="5">5 Personen</option>
+              <option value="6">6 Personen</option>
+              <option value="7">7 Personen</option>
+              <option value="8">8 Personen</option>
+              <option value="9">9 Personen</option>
+              <option value="10">10 Personen</option>
+              <option value="10+">Mehr als 10</option>
+            </select>
+          </div>
+
+          <!-- Kommentar -->
+          <div class="cf-group cf-full">
+            <label class="cf-label" for="cfComment">Kommentar</label>
+            <textarea class="cf-textarea" name="kommentar" id="cfComment" placeholder="Weitere Wünsche, Fragen oder Anmerkungen …"></textarea>
+          </div>
+
+          <!-- CAPTCHA -->
+          <div class="cf-group cf-full">
+            <div class="cf-captcha">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--accent);flex-shrink:0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span class="cf-captcha-q" id="cfCaptchaQ"></span>
+              <input class="cf-input cf-captcha-input" type="number" id="cfCaptchaA" placeholder="?" min="0" max="99" autocomplete="off" style="width:72px;text-align:center;" />
+              <span class="cf-captcha-hint">Bitte die Rechenaufgabe lösen</span>
             </div>
+          </div>
+
+          <!-- Submit -->
+          <div class="cf-group cf-full" style="display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap; margin-top:0.5rem;">
+            <button class="cf-submit" type="submit" id="cfSubmit">
+              Anfrage senden
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+            <span style="font-size:0.7rem; color:var(--text-muted); letter-spacing:0.04em;">* Pflichtfelder</span>
           </div>
         </div>
 
-        <div class="contact-detail">
-          <svg class="contact-detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
-          </svg>
-          <div>
-            <div class="contact-detail-label">Anschrift</div>
-            <div class="contact-detail-value" data-admin-text="contact-address">
-              Jana Steil<br>Fluhstraße 1<br>87534 Oberstaufen, Allgäu
-            </div>
-          </div>
-        </div>
-
-        <div style="margin-top:2rem;">
-          <a href="mailto:chaletfluh@gmail.com" class="btn-primary">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            E-Mail schreiben
-          </a>
-        </div>
-      </div>
+        <div class="cf-msg success" id="cfSuccess">✓ Ihre Anfrage wurde erfolgreich gesendet. Wir melden uns bald bei Ihnen!</div>
+        <div class="cf-msg error" id="cfError">Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder schreiben Sie uns direkt an chaletfluh@gmail.com.</div>
+      </form>
     </div>
   </section>
 
@@ -2401,6 +2568,77 @@
       <span style="font-size:0.65rem;">Fotos © Jana Steil</span>
     </div>
   </footer>
+
+  <!-- IMPRESSUM & DATENSCHUTZ -->
+  <div class="legal-bar">
+    <div class="legal-toggle" id="toggleImpressum">
+      Impressum
+      <svg class="legal-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="legal-toggle" id="toggleDatenschutz">
+      Datenschutzerklärung
+      <svg class="legal-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+  </div>
+
+  <div class="legal-panel" id="panelImpressum">
+    <div class="legal-panel-inner">
+      <h3>Impressum</h3>
+      <p>Copyright von allen Fotos bei Jana Steil<br>
+      FLUH ist eine eingetragene Deutsche Marke mit dem Aktenzeichen 302013000572</p>
+      <h4>Angaben gemäß § 5 TMG</h4>
+      <p>Jana Steil<br>Fluh Services<br>Fluhstr. 1<br>87534 Oberstaufen</p>
+      <h4>Kontakt</h4>
+      <p>Telefon: 08386/9918170 oder 0155/10325384<br>
+      E-Mail: <a href="mailto:chaletfluh@gmail.com">chaletfluh@gmail.com</a></p>
+      <h4>Umsatzsteuer</h4>
+      <p>Umsatzsteuer-Identifikationsnummer gemäß §27 a Umsatzsteuergesetz: DE 205 779 455</p>
+      <h4>Streitschlichtung</h4>
+      <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">https://ec.europa.eu/consumers/odr</a><br>
+      Unsere E-Mail-Adresse finden Sie oben im Impressum.<br>
+      Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+      <h4>Haftung für Inhalte</h4>
+      <p>Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.<br><br>
+      Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.</p>
+      <h4>Haftung für Links</h4>
+      <p>Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.<br><br>
+      Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.</p>
+      <h4>Urheberrecht</h4>
+      <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.<br><br>
+      Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.<br><br>
+      Quelle: <a href="https://www.e-recht24.de/impressum-generator.html" target="_blank" rel="noopener">e-recht24.de</a></p>
+    </div>
+  </div>
+
+  <div class="legal-panel" id="panelDatenschutz">
+    <div class="legal-panel-inner">
+      <h3>Datenschutzerklärung</h3>
+      <h4>Allgemeiner Hinweis und Pflichtinformationen</h4>
+      <h4>Benennung der verantwortlichen Stelle</h4>
+      <p>Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:<br><br>
+      Fluh Services<br>Dr. Jana Steil<br>Fluhstr. 1<br>87534 Oberstaufen<br><br>
+      Die verantwortliche Stelle entscheidet allein oder gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten (z.B. Namen, Kontaktdaten o. Ä.).</p>
+      <h4>Widerruf Ihrer Einwilligung zur Datenverarbeitung</h4>
+      <p>Nur mit Ihrer ausdrücklichen Einwilligung sind einige Vorgänge der Datenverarbeitung möglich. Ein Widerruf Ihrer bereits erteilten Einwilligung ist jederzeit möglich. Für den Widerruf genügt eine formlose Mitteilung per E-Mail. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Datenverarbeitung bleibt vom Widerruf unberührt.</p>
+      <h4>Recht auf Beschwerde bei der zuständigen Aufsichtsbehörde</h4>
+      <p>Als Betroffener steht Ihnen im Falle eines datenschutzrechtlichen Verstoßes ein Beschwerderecht bei der zuständigen Aufsichtsbehörde zu. Zuständige Aufsichtsbehörde bezüglich datenschutzrechtlicher Fragen ist der Landesdatenschutzbeauftragte des Bundeslandes, in dem sich der Sitz unseres Unternehmens befindet. Der folgende Link stellt eine Liste der Datenschutzbeauftragten sowie deren Kontaktdaten bereit: <a href="https://www.bfdi.bund.de/DE/Infothek/Anschriften_Links/anschriften_links-node.html" target="_blank" rel="noopener">bfdi.bund.de</a>.</p>
+      <h4>Recht auf Datenübertragbarkeit</h4>
+      <p>Ihnen steht das Recht zu, Daten, die wir auf Grundlage Ihrer Einwilligung oder in Erfüllung eines Vertrags automatisiert verarbeiten, an sich oder an Dritte aushändigen zu lassen. Die Bereitstellung erfolgt in einem maschinenlesbaren Format. Sofern Sie die direkte Übertragung der Daten an einen anderen Verantwortlichen verlangen, erfolgt dies nur, soweit es technisch machbar ist.</p>
+      <h4>Server-Log-Dateien</h4>
+      <p>In Server-Log-Dateien erhebt und speichert der Provider der Website automatisch Informationen, die Ihr Browser automatisch an uns übermittelt. Dies sind: Browsertyp und Browserversion, Verwendetes Betriebssystem, Referrer URL, Hostname des zugreifenden Rechners, Uhrzeit der Serveranfrage, IP-Adresse.<br><br>
+      Es findet keine Zusammenführung dieser Daten mit anderen Datenquellen statt. Grundlage der Datenverarbeitung bildet Art. 6 Abs. 1 lit. b DSGVO, der die Verarbeitung von Daten zur Erfüllung eines Vertrags oder vorvertraglicher Maßnahmen gestattet.</p>
+      <h4>Kontaktformular</h4>
+      <p>Per Kontaktformular übermittelte Daten werden einschließlich Ihrer Kontaktdaten gespeichert, um Ihre Anfrage bearbeiten zu können oder um für Anschlussfragen bereitzustehen. Eine Weitergabe dieser Daten findet ohne Ihre Einwilligung nicht statt.<br><br>
+      Die Verarbeitung der in das Kontaktformular eingegebenen Daten erfolgt ausschließlich auf Grundlage Ihrer Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Ein Widerruf Ihrer bereits erteilten Einwilligung ist jederzeit möglich. Für den Widerruf genügt eine formlose Mitteilung per E-Mail. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Datenverarbeitungsvorgänge bleibt vom Widerruf unberührt.<br><br>
+      Über das Kontaktformular übermittelte Daten verbleiben bei uns, bis Sie uns zur Löschung auffordern, Ihre Einwilligung zur Speicherung widerrufen oder keine Notwendigkeit der Datenspeicherung mehr besteht. Zwingende gesetzliche Bestimmungen – insbesondere Aufbewahrungsfristen – bleiben unberührt.</p>
+      <h4>Cookies</h4>
+      <p>Unsere Website verwendet Cookies. Das sind kleine Textdateien, die Ihr Webbrowser auf Ihrem Endgerät speichert. Cookies helfen uns dabei, unser Angebot nutzerfreundlicher, effektiver und sicherer zu machen.<br><br>
+      Einige Cookies sind „Session-Cookies." Solche Cookies werden nach Ende Ihrer Browser-Sitzung von selbst gelöscht. Hingegen bleiben andere Cookies auf Ihrem Endgerät bestehen, bis Sie diese selbst löschen. Solche Cookies helfen uns, Sie bei Rückkehr auf unserer Website wiederzuerkennen.<br><br>
+      Mit einem modernen Webbrowser können Sie das Setzen von Cookies überwachen, einschränken oder unterbinden. Viele Webbrowser lassen sich so konfigurieren, dass Cookies mit dem Schließen des Programms von selbst gelöscht werden. Die Deaktivierung von Cookies kann eine eingeschränkte Funktionalität unserer Website zur Folge haben.<br><br>
+      Das Setzen von Cookies, die zur Ausübung elektronischer Kommunikationsvorgänge oder der Bereitstellung bestimmter, von Ihnen erwünschter Funktionen notwendig sind, erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Als Betreiber dieser Website haben wir ein berechtigtes Interesse an der Speicherung von Cookies zur technisch fehlerfreien und reibungslosen Bereitstellung unserer Dienste.<br><br>
+      Quelle: Datenschutz-Konfigurator von mein-datenschutzbeauftragter.de</p>
+    </div>
+  </div>
 
   <script>
     // NAV scroll effect
@@ -2706,6 +2944,94 @@
     setTimeout(() => {
       revealEls.forEach(el => el.classList.add('visible'));
     }, 800);
+
+    // ─── Legal toggles (Impressum / Datenschutz) ─────────────────────────────────
+    [['toggleImpressum','panelImpressum'],['toggleDatenschutz','panelDatenschutz']].forEach(([btnId, panelId]) => {
+      const btn   = document.getElementById(btnId);
+      const panel = document.getElementById(panelId);
+      if (!btn || !panel) return;
+      btn.addEventListener('click', () => {
+        const open = panel.classList.toggle('open');
+        btn.classList.toggle('open', open);
+      });
+    });
+
+    // ─── Contact Form ────────────────────────────────────────────────────────────
+    let cfCaptchaA = 0, cfCaptchaB = 0;
+
+    function generateCaptcha() {
+      cfCaptchaA = Math.floor(Math.random() * 10) + 1;
+      cfCaptchaB = Math.floor(Math.random() * 10) + 1;
+      const q = document.getElementById('cfCaptchaQ');
+      if (q) q.textContent = cfCaptchaA + ' + ' + cfCaptchaB + ' =';
+    }
+    generateCaptcha();
+
+    const cfForm = document.getElementById('contactForm');
+    if (cfForm) {
+      cfForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        // Honeypot check
+        const hp = cfForm.querySelector('input[name="_gotcha"]');
+        if (hp && hp.value !== '') return;
+
+        // CAPTCHA check
+        const captchaInput = document.getElementById('cfCaptchaA');
+        const captchaVal = parseInt(captchaInput ? captchaInput.value : '', 10);
+        if (isNaN(captchaVal) || captchaVal !== cfCaptchaA + cfCaptchaB) {
+          captchaInput && captchaInput.classList.add('cf-input-error');
+          captchaInput && captchaInput.focus();
+          generateCaptcha();
+          if (captchaInput) captchaInput.value = '';
+          return;
+        }
+        if (captchaInput) captchaInput.classList.remove('cf-input-error');
+
+        // Required field check
+        const required = cfForm.querySelectorAll('[required]');
+        let valid = true;
+        required.forEach(el => {
+          if (!el.value.trim()) { el.classList.add('cf-input-error'); valid = false; }
+          else el.classList.remove('cf-input-error');
+        });
+        if (!valid) return;
+
+        const submitBtn = document.getElementById('cfSubmit');
+        const successEl = document.getElementById('cfSuccess');
+        const errorEl   = document.getElementById('cfError');
+        successEl.style.display = 'none';
+        errorEl.style.display   = 'none';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Senden…';
+
+        try {
+          const data = new FormData(cfForm);
+          const resp = await fetch(cfForm.action, {
+            method: 'POST',
+            body: data,
+            headers: { 'Accept': 'application/json' }
+          });
+          if (resp.ok) {
+            successEl.style.display = 'block';
+            cfForm.reset();
+            generateCaptcha();
+          } else {
+            errorEl.style.display = 'block';
+          }
+        } catch(err) {
+          errorEl.style.display = 'block';
+        }
+
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Anfrage senden <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+      });
+
+      // Remove error highlight on input
+      cfForm.querySelectorAll('.cf-input, .cf-select, .cf-textarea').forEach(el => {
+        el.addEventListener('input', () => el.classList.remove('cf-input-error'));
+      });
+    }
   </script>
 
   <!-- ═══════════════════════════════════════════════════════════
@@ -2818,7 +3144,8 @@
     document.querySelectorAll('[data-admin-img]').forEach(el => {
       const key = el.getAttribute('data-admin-img');
       if (adminOverrides[key] !== undefined) {
-        el.src = adminOverrides[key];
+        if (el.tagName === 'IMG') { el.src = adminOverrides[key]; }
+        else { el.style.backgroundImage = `url(${adminOverrides[key]})`; }
         // Sync gallery thumbnails
         if (key.startsWith('gallery-')) {
           const idx = parseInt(key.split('-')[1]);
@@ -2939,8 +3266,11 @@
     reader.onload = (ev) => {
       const dataUrl = ev.target.result;
       adminOverrides[adminPendingImgKey] = dataUrl;
-      // Update DOM immediately — all imgs with this key
-      document.querySelectorAll(`[data-admin-img="${adminPendingImgKey}"]`).forEach(el => { el.src = dataUrl; });
+      // Update DOM immediately — handle both <img> and background-image divs
+      document.querySelectorAll(`[data-admin-img="${adminPendingImgKey}"]`).forEach(el => {
+        if (el.tagName === 'IMG') { el.src = dataUrl; }
+        else { el.style.backgroundImage = `url(${dataUrl})`; }
+      });
       // If gallery slide, also update the corresponding thumbnail
       if (adminPendingImgKey.startsWith('gallery-')) {
         const idx = parseInt(adminPendingImgKey.split('-')[1]);
@@ -2961,6 +3291,24 @@
     };
     reader.readAsDataURL(file);
   });
+
+  // ─── Hero slide admin buttons ─────────────────────────────────────────────
+  function updateHeroAdminBtns() {
+    document.querySelectorAll('.hero-admin-btn').forEach(btn => {
+      const idx = parseInt(btn.getAttribute('data-slide'));
+      const slides = document.querySelectorAll('.hero-slide');
+      btn.classList.toggle('active-slide', slides[idx] && slides[idx].classList.contains('active'));
+    });
+  }
+  document.querySelectorAll('.hero-admin-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.getAttribute('data-slide'));
+      adminPendingImgKey = `hero-slide-${idx}`;
+      $imgInput.click();
+    });
+  });
+  // Keep buttons in sync with the auto-advancing slideshow
+  const _origHeroInterval = setInterval(() => { if (window.adminMode) updateHeroAdminBtns(); }, 500);
 
   // ─── Lockout helpers ──────────────────────────────────────────────────────
   function getLockoutState() {
