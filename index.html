@@ -1421,6 +1421,93 @@
     .cta-banner-text .section-title { margin-bottom: 0.5rem; }
 
     /* FOOTER */
+    /* REVIEWS */
+    .reviews-section {
+      background: var(--bg-base);
+      border-top: 1px solid var(--border);
+      padding: 6rem 4rem;
+    }
+    .reviews-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+    .reviews-header .section-eyebrow { margin-bottom: 0.5rem; }
+    .reviews-header .section-title { margin-bottom: 1rem; }
+    .reviews-google-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 0.75rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .reviews-stars-row {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      justify-content: center;
+      margin-bottom: 0.25rem;
+    }
+    .reviews-stars-row svg { color: var(--accent); }
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .review-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      position: relative;
+    }
+    .review-card-stars {
+      display: flex;
+      gap: 0.15rem;
+      margin-bottom: 1.25rem;
+    }
+    .review-card-stars svg { color: var(--accent); width: 14px; height: 14px; }
+    .review-card-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .review-card-author {
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .review-card-date {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+      opacity: 0.6;
+    }
+    .review-card-quote {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.75rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem;
+      color: var(--accent);
+      opacity: 0.15;
+      line-height: 1;
+      pointer-events: none;
+    }
+    .reviews-cta {
+      text-align: center;
+    }
+    @media (max-width: 768px) {
+      .reviews-section { padding: 4rem 1.5rem; }
+      .reviews-grid { grid-template-columns: 1fr; }
+    }
+
     /* LEGAL BAR */
     .legal-bar {
       background: var(--bg-base);
@@ -2564,6 +2651,79 @@
       </div>
       <p id="calAdminHint" style="display:none; margin-top:1rem; font-size:0.78rem; color:var(--accent); letter-spacing:0.04em;">Admin-Modus: Klicken Sie auf einen Tag um ihn als belegt/frei zu markieren.</p>
     </section>
+  </div>
+
+  <!-- GOOGLE REVIEWS -->
+  <div class="reviews-section">
+    <div class="reviews-header reveal">
+      <p class="section-eyebrow">Gästestimmen</p>
+      <h2 class="section-title">Was unsere <em>Gäste sagen</em></h2>
+      <div class="reviews-stars-row">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      </div>
+      <div class="reviews-google-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Google Maps · Chalet Fluh
+      </div>
+    </div>
+
+    <div class="reviews-grid">
+      <!-- Review 1 -->
+      <div class="review-card reveal">
+        <div class="review-card-quote">"</div>
+        <div class="review-card-stars">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div class="review-card-text" data-admin-text="review-1-text">Hier kommt Ihre erste Google-Bewertung. Bearbeiten Sie diesen Text im Admin-Modus sobald die erste Bewertung eingeht.</div>
+        <div class="review-card-author" data-admin-text="review-1-author">Gast Name</div>
+        <div class="review-card-date" data-admin-text="review-1-date">März 2026</div>
+      </div>
+
+      <!-- Review 2 -->
+      <div class="review-card reveal reveal-delay-1">
+        <div class="review-card-quote">"</div>
+        <div class="review-card-stars">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div class="review-card-text" data-admin-text="review-2-text">Hier kommt Ihre zweite Google-Bewertung. Bearbeiten Sie diesen Text im Admin-Modus sobald die Bewertung eingeht.</div>
+        <div class="review-card-author" data-admin-text="review-2-author">Gast Name</div>
+        <div class="review-card-date" data-admin-text="review-2-date">März 2026</div>
+      </div>
+
+      <!-- Review 3 -->
+      <div class="review-card reveal reveal-delay-2">
+        <div class="review-card-quote">"</div>
+        <div class="review-card-stars">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div class="review-card-text" data-admin-text="review-3-text">Hier kommt Ihre dritte Google-Bewertung. Bearbeiten Sie diesen Text im Admin-Modus sobald die Bewertung eingeht.</div>
+        <div class="review-card-author" data-admin-text="review-3-author">Gast Name</div>
+        <div class="review-card-date" data-admin-text="review-3-date">März 2026</div>
+      </div>
+    </div>
+
+    <div class="reviews-cta reveal">
+      <a href="https://www.google.com/maps/place/Chalet+Fluh/@47.5276907,10.0085368,666m/data=!3m2!1e3!4b1!4m6!3m5!1s0x479b7b608c30c257:0x440e26f4ce964bdd!8m2!3d47.5276871!4d10.0111117!16s%2Fg%2F11nb3c079y?entry=ttu" target="_blank" rel="noopener" class="btn-ghost">
+        Bewertung auf Google hinterlassen
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
   </div>
 
   <!-- KONTAKT / BUCHUNGSANFRAGE -->
