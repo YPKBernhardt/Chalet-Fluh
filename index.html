@@ -1901,9 +1901,14 @@
     .cf-msg.error { background: rgba(180,60,60,0.15); border: 1px solid rgba(220,80,80,0.25); color: #e08080; }
     .cf-input-error { border-color: #e08080 !important; box-shadow: 0 0 0 2px rgba(224,128,128,0.2) !important; }
     @media (max-width: 768px) {
-      .contact-form-section { padding: 4rem 1.5rem !important; }
+      .contact-form-inner { padding: 3rem 1.5rem !important; }
       .cf-grid { grid-template-columns: 1fr; }
       .cf-full { grid-column: 1; }
+      .cf-date-row { flex-direction: column; align-items: stretch; gap: 0.5rem; }
+      .cf-date-sep { display: none; }
+      .cf-captcha { flex-wrap: wrap; }
+      .cf-captcha-hint { width: 100%; }
+      .cf-submit { width: 100%; justify-content: center; }
     }
 
     /* Hero admin slide controls */
@@ -2190,7 +2195,7 @@
             <path d="M12 22c-3.5 0-6-2-6-4.5 0-1.5.5-2.5 1.5-3.5.5-.5 1-1.5 1-2.5h7c0 1 .5 2 1 2.5 1 1 1.5 2 1.5 3.5 0 2.5-2.5 4.5-6 4.5z"/>
           </svg>
           <div class="feature-title" data-admin-text="feat-title-9">Hunde willkommen</div>
-          <div class="feature-desc" data-admin-text="feat-desc-9">Vierbeiner sind herzlich willkommen. Napf, Hundetücher und eine separate Dusche sind vorhanden. Das Grundstück von 2.500 m² ist vollständig eingezäunt. 10€/Tag pro Hund (max. 4 Hunde).</div>
+          <div class="feature-desc" data-admin-text="feat-desc-9">Vierbeiner sind herzlich willkommen. Napf, Hundetücher und eine separate Dusche sind vorhanden. Das Grundstück von 2.500 m² ist vollständig eingezäunt. 10€/Tag pro Hund.</div>
         </div>
 
         <!-- Alles Inklusive — gift/package icon -->
@@ -2563,7 +2568,7 @@
 
   <!-- KONTAKT / BUCHUNGSANFRAGE -->
   <section id="kontakt" style="padding:0; background:var(--bg-surface);">
-    <div class="contact-form-inner reveal" style="max-width:860px; margin:0 auto; padding:6rem 4rem;">
+    <div class="contact-form-inner reveal" style="max-width:860px; margin:0 auto; padding:6rem 4rem; box-sizing:border-box; width:100%;">
       <p class="section-eyebrow">Kontakt & Buchung</p>
       <h2 class="section-title">Jetzt <em>anfragen</em></h2>
 
