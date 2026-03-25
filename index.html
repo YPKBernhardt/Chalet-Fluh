@@ -2070,6 +2070,8 @@
       transition: background 0.2s, color 0.2s, border-color 0.2s;
     }
     .gallery-admin-btn:hover, .gallery-admin-btn.active-slide { background: var(--accent); color: var(--bg-base); border-color: var(--accent); }
+    #ssPauseBtn { margin-left: auto; flex-shrink: 0; }
+    #ssPauseBtn.paused { background: var(--accent); color: var(--bg-base); border-color: var(--accent); }
 
     /* Gallery caption editable in admin mode */
     body.admin-mode #ssCaptionText {
@@ -2438,6 +2440,7 @@
         <button class="gallery-admin-btn" data-gslide="9">Bild 10</button>
         <button class="gallery-admin-btn" data-gslide="10">Bild 11</button>
         <button class="gallery-admin-btn" data-gslide="11">Bild 12</button>
+        <button class="gallery-admin-btn" id="ssPauseBtn">⏸ Pause</button>
       </div>
     </div>
   </div>
@@ -3093,17 +3096,34 @@
       ssRestartAuto();
     }
 
+    let ssPaused = false;
     function ssRestartAuto() {
       clearInterval(ssAutoTimer);
       clearInterval(ssProgressTimer);
       ssProgress = 0;
       ssProgressBar.style.transition = 'none';
       ssProgressBar.style.width = '0%';
+      if (ssPaused) return;
       requestAnimationFrame(() => {
         ssProgressBar.style.transition = `width ${ssInterval}ms linear`;
         ssProgressBar.style.width = '100%';
       });
       ssAutoTimer = setInterval(() => ssGoTo(ssCurrent + 1), ssInterval);
+    }
+    function ssPause() {
+      ssPaused = true;
+      clearInterval(ssAutoTimer);
+      clearInterval(ssProgressTimer);
+      ssProgressBar.style.transition = 'none';
+      ssProgressBar.style.width = '0%';
+      const btn = document.getElementById('ssPauseBtn');
+      if (btn) { btn.textContent = '▶ Weiter'; btn.classList.add('paused'); }
+    }
+    function ssResume() {
+      ssPaused = false;
+      const btn = document.getElementById('ssPauseBtn');
+      if (btn) { btn.textContent = '⏸ Pause'; btn.classList.remove('paused'); }
+      ssRestartAuto();
     }
 
     document.getElementById('ssNext').addEventListener('click', () => ssGoTo(ssCurrent + 1));
@@ -3605,6 +3625,8 @@
       el.contentEditable = 'true';
       el.addEventListener('input', onTextInput);
     });
+    // Auto-pause gallery slideshow in admin mode
+    ssPause();
     // Gallery caption editable
     const ssCaptionEl = document.getElementById('ssCaptionText');
     if (ssCaptionEl) { ssCaptionEl.contentEditable = 'true'; ssCaptionEl.addEventListener('input', onGalleryCaptionInput); }
@@ -3634,6 +3656,8 @@
       el.contentEditable = 'false';
       el.removeEventListener('input', onTextInput);
     });
+    // Resume gallery slideshow on admin exit
+    ssResume();
     // Remove gallery caption editing
     const ssCaptionEl = document.getElementById('ssCaptionText');
     if (ssCaptionEl) { ssCaptionEl.contentEditable = 'false'; ssCaptionEl.removeEventListener('input', onGalleryCaptionInput); }
@@ -3794,6 +3818,11 @@
     });
   });
   setInterval(() => { if (window.adminMode) updateGalleryAdminBtns(); }, 300);
+
+  // Pause button toggle
+  document.getElementById('ssPauseBtn').addEventListener('click', () => {
+    ssPaused ? ssResume() : ssPause();
+  });
 
   // ─── Lockout helpers ──────────────────────────────────────────────────────
   function getLockoutState() {
