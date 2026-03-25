@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chalet Fluh – Exklusives Ferienhaus in Oberstaufen | Allgäu</title>
 
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="64x64" href="brand_assets/favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="brand_assets/apple-touch-icon.png" />
+
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XQ8V0BNJSG"></script>
   <script>
@@ -732,7 +736,7 @@
       transition: width 0.1s linear;
     }
     .ss-thumbs {
-      display: flex;
+      display: none;
       gap: 3px;
       overflow-x: auto;
       padding: 3px 3px 0;
@@ -2042,6 +2046,49 @@
     }
     .hero-admin-btn:hover, .hero-admin-btn.active-slide { background: var(--accent); color: var(--bg-base); border-color: var(--accent); }
 
+    /* Gallery slideshow admin controls */
+    #galleryAdminControls {
+      display: none;
+      padding: 0.6rem 1rem;
+      background: rgba(10,15,11,0.92);
+      border-top: 1px solid var(--border);
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      backdrop-filter: blur(8px);
+    }
+    body.admin-mode #galleryAdminControls { display: flex; }
+    .gallery-admin-btn {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-light);
+      color: var(--text-secondary);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      padding: 0.35rem 0.75rem;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .gallery-admin-btn:hover, .gallery-admin-btn.active-slide { background: var(--accent); color: var(--bg-base); border-color: var(--accent); }
+
+    /* Gallery caption editable in admin mode */
+    body.admin-mode #ssCaptionText {
+      outline: 1px dashed rgba(196,154,60,0.5);
+      cursor: text;
+      padding: 0 4px;
+    }
+    body.admin-mode #ssCaptionText:focus { outline: 1px solid var(--accent); }
+
+    /* Area slideshow caption editable in admin mode */
+    body.admin-mode #areaCaption,
+    body.admin-mode #areaCapSub {
+      outline: 1px dashed rgba(196,154,60,0.5);
+      cursor: text;
+      padding: 0 4px;
+    }
+    body.admin-mode #areaCaption:focus,
+    body.admin-mode #areaCapSub:focus { outline: 1px solid var(--accent); }
+
     /* Save notification */
     #adminSavedToast {
       position: fixed;
@@ -2166,7 +2213,7 @@
   <section id="das-chalet">
     <div class="intro-grid">
       <div class="intro-image-stack reveal">
-        <img class="intro-img-main" src="brand_assets/IMG_7104.PNG" alt="Chalet Fluh Winterpanorama" data-admin-img="intro-main-img" />
+        <img class="intro-img-main" src="brand_assets/IMG_7104%20(1).PNG" alt="Chalet Fluh Winterpanorama" data-admin-img="intro-main-img" />
         <img class="intro-img-accent" src="brand_assets/300_4402.jpeg" alt="Interieur Chalet Fluh" data-admin-img="intro-accent-img" />
         <div class="intro-badge">
           <div class="intro-badge-year">2015</div>
@@ -2338,7 +2385,7 @@
           <div class="ss-slide"><img src="brand_assets/IMG_2471.jpeg" alt="Mehrbettzimmer" data-admin-img="gallery-3" /></div>
           <div class="ss-slide"><img src="brand_assets/IMG_4090.jpeg" alt="Terrasse" data-admin-img="gallery-4" /></div>
           <div class="ss-slide"><img src="brand_assets/IMG_2016.jpeg" alt="Garten & Terrasse" data-admin-img="gallery-5" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_7104.PNG" alt="Winterpanorama" data-admin-img="gallery-6" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_7104%20(1).PNG" alt="Winterpanorama" data-admin-img="gallery-6" /></div>
           <div class="ss-slide"><img src="brand_assets/IMG_7965.jpeg" alt="Außenansicht Winter" data-admin-img="gallery-7" /></div>
           <div class="ss-slide"><img src="brand_assets/IMG_3866.jpeg" alt="Chalet im Schnee" data-admin-img="gallery-8" /></div>
           <div class="ss-slide"><img src="brand_assets/IMG_3852.jpeg" alt="Herbstansicht" data-admin-img="gallery-9" /></div>
@@ -2369,12 +2416,28 @@
         <div class="ss-thumb" onclick="ssGoTo(3)"><img src="brand_assets/IMG_2471.jpeg" alt="" /></div>
         <div class="ss-thumb" onclick="ssGoTo(4)"><img src="brand_assets/IMG_4090.jpeg" alt="" /></div>
         <div class="ss-thumb" onclick="ssGoTo(5)"><img src="brand_assets/IMG_2016.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(6)"><img src="brand_assets/IMG_7104.PNG" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(6)"><img src="brand_assets/IMG_7104%20(1).PNG" alt="" /></div>
         <div class="ss-thumb" onclick="ssGoTo(7)"><img src="brand_assets/IMG_7965.jpeg" alt="" /></div>
         <div class="ss-thumb" onclick="ssGoTo(8)"><img src="brand_assets/IMG_3866.jpeg" alt="" /></div>
         <div class="ss-thumb" onclick="ssGoTo(9)"><img src="brand_assets/IMG_3852.jpeg" alt="" /></div>
         <div class="ss-thumb" onclick="ssGoTo(10)"><img src="brand_assets/IMG_3150.jpeg" alt="" /></div>
         <div class="ss-thumb" onclick="ssGoTo(11)"><img src="brand_assets/IMG_6961.jpeg" alt="" /></div>
+      </div>
+      <!-- Gallery admin controls — only visible in admin mode -->
+      <div id="galleryAdminControls">
+        <span style="font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); margin-right:0.5rem; flex-shrink:0;">Bilder ändern:</span>
+        <button class="gallery-admin-btn" data-gslide="0">Bild 1</button>
+        <button class="gallery-admin-btn" data-gslide="1">Bild 2</button>
+        <button class="gallery-admin-btn" data-gslide="2">Bild 3</button>
+        <button class="gallery-admin-btn" data-gslide="3">Bild 4</button>
+        <button class="gallery-admin-btn" data-gslide="4">Bild 5</button>
+        <button class="gallery-admin-btn" data-gslide="5">Bild 6</button>
+        <button class="gallery-admin-btn" data-gslide="6">Bild 7</button>
+        <button class="gallery-admin-btn" data-gslide="7">Bild 8</button>
+        <button class="gallery-admin-btn" data-gslide="8">Bild 9</button>
+        <button class="gallery-admin-btn" data-gslide="9">Bild 10</button>
+        <button class="gallery-admin-btn" data-gslide="10">Bild 11</button>
+        <button class="gallery-admin-btn" data-gslide="11">Bild 12</button>
       </div>
     </div>
   </div>
@@ -3012,7 +3075,7 @@
       const prev = ssCurrent;
       ssCurrent = (n + ssTotal) % ssTotal;
       ssTrack.style.transform = `translateX(-${ssCurrent * 100}%)`;
-      document.getElementById('ssCaptionText').textContent = ssCaptions[ssCurrent];
+      document.getElementById('ssCaptionText').textContent = (window.adminOverrides && window.adminOverrides[`gallery-caption-${ssCurrent}`]) || ssCaptions[ssCurrent];
       document.getElementById('ssCounter').textContent = `${ssCurrent + 1} / ${ssTotal}`;
       // Thumbs
       ssThumbs[prev].classList.remove('ss-thumb-active');
@@ -3064,7 +3127,7 @@
 
     // ─── AREA SLIDESHOW (Lage) ───────────────────────────────────────
     const AREA_SLIDES = [
-      { src: 'brand_assets/IMG_7104.PNG',           caption: 'Hochgrat',                  sub: '1.832 m · Panoramagipfel Naturpark Nagelfluhkette' },
+      { src: 'brand_assets/IMG_7104%20(1).PNG',           caption: 'Hochgrat',                  sub: '1.832 m · Panoramagipfel Naturpark Nagelfluhkette' },
       { src: 'brand_assets/IMG_3866.jpeg',           caption: 'Imberg-Skigebiet',           sub: 'Direkt vor der Tür · Ski, Rodeln & Winterwandern' },
       { src: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=1200&q=80', caption: 'Buchenegger Wasserfälle', sub: 'Wildromantische Wasserfälle · 30 min Fußmarsch' },
       { src: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80', caption: 'Naturpark Nagelfluhkette', sub: '400 km² · Deutsch-Österreichisches Naturschutzgebiet' },
@@ -3078,8 +3141,8 @@
       areaCurrent = (n + AREA_SLIDES.length) % AREA_SLIDES.length;
       const s = AREA_SLIDES[areaCurrent];
       document.getElementById('areaMainImg').src = s.src;
-      document.getElementById('areaCaption').textContent = s.caption;
-      document.getElementById('areaCapSub').textContent = s.sub;
+      document.getElementById('areaCaption').textContent = (window.adminOverrides && window.adminOverrides[`area-caption-${areaCurrent}`]) || s.caption;
+      document.getElementById('areaCapSub').textContent = (window.adminOverrides && window.adminOverrides[`area-sub-${areaCurrent}`]) || s.sub;
       document.getElementById('areaCounterBadge').textContent = `${areaCurrent + 1} / ${AREA_SLIDES.length}`;
       document.querySelectorAll('.area-ss-thumb-item').forEach((t, i) => t.classList.toggle('active', i === areaCurrent));
       const col = document.getElementById('areaThumbcol');
@@ -3415,6 +3478,35 @@
   function saveOverrides() {
     localStorage.setItem(ADMIN_STORE_KEY, JSON.stringify(adminOverrides));
   }
+
+  // ─── Server sync helpers ───────────────────────────────────────────────────
+  async function uploadImageToServer(key, dataUrl) {
+    try {
+      const r = await fetch('/api/upload-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key, dataUrl, password: ADMIN_PASSWORD }),
+      });
+      if (!r.ok) return null;
+      const { url } = await r.json();
+      return url || null;
+    } catch { return null; }
+  }
+  async function syncOverridesToServer(overrides) {
+    // Filter: only blob URLs and text, never base64
+    const clean = {};
+    for (const [k, v] of Object.entries(overrides)) {
+      if (typeof v === 'string' && !v.startsWith('data:')) clean[k] = v;
+    }
+    try {
+      const r = await fetch('/api/overrides', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: ADMIN_PASSWORD, overrides: clean }),
+      });
+      return r.ok;
+    } catch { return false; }
+  }
   function applyOverrides() {
     // Text overrides
     document.querySelectorAll('[data-admin-text]').forEach(el => {
@@ -3443,6 +3535,21 @@
         }
       }
     });
+    // Gallery caption overrides
+    for (let i = 0; i < ssCaptions.length; i++) {
+      if (adminOverrides[`gallery-caption-${i}`] !== undefined) ssCaptions[i] = adminOverrides[`gallery-caption-${i}`];
+    }
+    const ssCaptionEl = document.getElementById('ssCaptionText');
+    if (ssCaptionEl) ssCaptionEl.textContent = adminOverrides[`gallery-caption-${ssCurrent}`] || ssCaptions[ssCurrent];
+    // Area caption/sub overrides
+    AREA_SLIDES.forEach((s, i) => {
+      if (adminOverrides[`area-caption-${i}`] !== undefined) s.caption = adminOverrides[`area-caption-${i}`];
+      if (adminOverrides[`area-sub-${i}`] !== undefined) s.sub = adminOverrides[`area-sub-${i}`];
+    });
+    const areaCaptionEl = document.getElementById('areaCaption');
+    const areaSubEl = document.getElementById('areaCapSub');
+    if (areaCaptionEl) areaCaptionEl.textContent = AREA_SLIDES[areaCurrent].caption;
+    if (areaSubEl) areaSubEl.textContent = AREA_SLIDES[areaCurrent].sub;
     // Sync calendar admin overrides
     if (adminOverrides['cal_extra_booked'])   calExtraBooked   = new Set(JSON.parse(adminOverrides['cal_extra_booked']));
     if (adminOverrides['cal_force_unbooked']) calForceUnbooked = new Set(JSON.parse(adminOverrides['cal_force_unbooked']));
@@ -3472,6 +3579,19 @@
     adminOverlayTarget = null;
   }
 
+  // ─── Caption edit handlers ────────────────────────────────────────────────
+  function onGalleryCaptionInput(e) {
+    adminOverrides[`gallery-caption-${ssCurrent}`] = e.target.textContent;
+  }
+  function onAreaCaptionInput(e) {
+    adminOverrides[`area-caption-${areaCurrent}`] = e.target.textContent;
+    if (AREA_SLIDES[areaCurrent]) AREA_SLIDES[areaCurrent].caption = e.target.textContent;
+  }
+  function onAreaSubInput(e) {
+    adminOverrides[`area-sub-${areaCurrent}`] = e.target.textContent;
+    if (AREA_SLIDES[areaCurrent]) AREA_SLIDES[areaCurrent].sub = e.target.textContent;
+  }
+
   // ─── Enter / Exit admin mode ──────────────────────────────────────────────
   function enterAdminMode() {
     adminMode = true;
@@ -3485,6 +3605,14 @@
       el.contentEditable = 'true';
       el.addEventListener('input', onTextInput);
     });
+    // Gallery caption editable
+    const ssCaptionEl = document.getElementById('ssCaptionText');
+    if (ssCaptionEl) { ssCaptionEl.contentEditable = 'true'; ssCaptionEl.addEventListener('input', onGalleryCaptionInput); }
+    // Area caption & sub editable
+    const areaCaptionEl = document.getElementById('areaCaption');
+    const areaSubEl = document.getElementById('areaCapSub');
+    if (areaCaptionEl) { areaCaptionEl.contentEditable = 'true'; areaCaptionEl.addEventListener('input', onAreaCaptionInput); }
+    if (areaSubEl) { areaSubEl.contentEditable = 'true'; areaSubEl.addEventListener('input', onAreaSubInput); }
     // Attach hover+click listeners to images (no wrapping)
     document.querySelectorAll('[data-admin-img]').forEach(img => {
       img.addEventListener('mouseenter', onImgHover);
@@ -3506,6 +3634,14 @@
       el.contentEditable = 'false';
       el.removeEventListener('input', onTextInput);
     });
+    // Remove gallery caption editing
+    const ssCaptionEl = document.getElementById('ssCaptionText');
+    if (ssCaptionEl) { ssCaptionEl.contentEditable = 'false'; ssCaptionEl.removeEventListener('input', onGalleryCaptionInput); }
+    // Remove area caption editing
+    const areaCaptionEl = document.getElementById('areaCaption');
+    const areaSubEl = document.getElementById('areaCapSub');
+    if (areaCaptionEl) { areaCaptionEl.contentEditable = 'false'; areaCaptionEl.removeEventListener('input', onAreaCaptionInput); }
+    if (areaSubEl) { areaSubEl.contentEditable = 'false'; areaSubEl.removeEventListener('input', onAreaSubInput); }
     document.querySelectorAll('[data-admin-img]').forEach(img => {
       img.removeEventListener('mouseenter', onImgHover);
       img.removeEventListener('mouseleave', onImgLeave);
@@ -3586,24 +3722,35 @@
       const isHero = key.startsWith('hero-slide');
       const maxW = isHero ? 1600 : 1200;
       const maxH = isHero ? 1000 : 900;
-      compressImage(ev.target.result, maxW, maxH, 0.82, (dataUrl) => {
-        adminOverrides[key] = dataUrl;
+      compressImage(ev.target.result, maxW, maxH, 0.82, async (dataUrl) => {
+        // Show immediately from base64
         applyImgOverride(key, dataUrl);
-        // Auto-save and handle quota errors
-        try {
-          saveOverrides();
-          showToast('✓ Bild gespeichert');
-        } catch(err) {
-          if (err.name === 'QuotaExceededError') {
-            showToast('⚠ Speicher voll – ältere Bilder werden entfernt');
-            // Remove oldest image overrides to free space and retry
-            const imgKeys = Object.keys(adminOverrides).filter(k => adminOverrides[k].startsWith('data:image'));
-            if (imgKeys.length > 1) {
-              delete adminOverrides[imgKeys[0]];
-              try { saveOverrides(); showToast('✓ Bild gespeichert'); } catch(e2) { showToast('✗ Speicher voll'); }
+        adminOverrides[key] = dataUrl;
+        showToast('⏳ Bild wird hochgeladen…');
+
+        // Upload to Vercel Blob for cross-device sync
+        const blobUrl = await uploadImageToServer(key, dataUrl);
+        if (blobUrl) {
+          adminOverrides[key] = blobUrl;
+          applyImgOverride(key, blobUrl);
+          try { saveOverrides(); } catch(_) {}
+          // Immediately sync manifest so all devices see the change
+          const synced = await syncOverridesToServer(adminOverrides);
+          showToast(synced ? '✓ Bild auf allen Geräten gespeichert' : '✓ Bild hochgeladen');
+        } else {
+          // Fallback: keep base64 in localStorage only
+          try {
+            saveOverrides();
+            showToast('✓ Bild gespeichert (nur lokal)');
+          } catch(err) {
+            if (err.name === 'QuotaExceededError') {
+              const imgKeys = Object.keys(adminOverrides).filter(k => adminOverrides[k].startsWith('data:image'));
+              if (imgKeys.length > 1) { delete adminOverrides[imgKeys[0]]; }
+              try { saveOverrides(); } catch(_) {}
+              showToast('⚠ Lokal gespeichert – Blob-Speicher nicht verfügbar');
+            } else {
+              showToast('✗ Fehler beim Speichern');
             }
-          } else {
-            showToast('✗ Fehler beim Speichern');
           }
         }
         adminPendingImgKey = null;
@@ -3630,6 +3777,23 @@
   });
   // Keep buttons in sync with the auto-advancing slideshow
   const _origHeroInterval = setInterval(() => { if (window.adminMode) updateHeroAdminBtns(); }, 500);
+
+  // ─── Gallery slide admin buttons ──────────────────────────────────────────
+  function updateGalleryAdminBtns() {
+    document.querySelectorAll('.gallery-admin-btn').forEach(btn => {
+      const idx = parseInt(btn.getAttribute('data-gslide'));
+      btn.classList.toggle('active-slide', idx === ssCurrent);
+    });
+  }
+  document.querySelectorAll('.gallery-admin-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.getAttribute('data-gslide'));
+      ssGoTo(idx);
+      adminPendingImgKey = `gallery-${idx}`;
+      $imgInput.click();
+    });
+  });
+  setInterval(() => { if (window.adminMode) updateGalleryAdminBtns(); }, 300);
 
   // ─── Lockout helpers ──────────────────────────────────────────────────────
   function getLockoutState() {
@@ -3789,20 +3953,23 @@
   });
   $unlockInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') document.getElementById('adminSubmitUnlock').click(); });
 
-  $saveBtn.addEventListener('click', () => {
+  $saveBtn.addEventListener('click', async () => {
     // Flush any contentEditable changes to overrides
     document.querySelectorAll('[data-admin-text]').forEach(el => {
       adminOverrides[el.getAttribute('data-admin-text')] = el.innerHTML;
     });
     saveOverrides();
-    showToast('✓ Alle Änderungen gespeichert');
+    showToast('⏳ Wird gespeichert…');
+    const ok = await syncOverridesToServer(adminOverrides);
+    showToast(ok ? '✓ Auf allen Geräten gespeichert' : '✓ Lokal gespeichert');
   });
 
-  $resetAllBtn.addEventListener('click', () => {
+  $resetAllBtn.addEventListener('click', async () => {
     if (!confirm('Alle Änderungen zurücksetzen? Diese Aktion kann nicht rückgängig gemacht werden.')) return;
     adminOverrides = {};
     localStorage.removeItem(ADMIN_STORE_KEY);
-    // Restore text
+    // Also clear server-side overrides
+    await syncOverridesToServer({});
     document.querySelectorAll('[data-admin-text]').forEach(el => {
       el.innerHTML = el.getAttribute('data-admin-original') || el.innerHTML;
     });
@@ -3811,11 +3978,35 @@
     location.reload();
   });
 
-  $exitBtn.addEventListener('click', () => { exitAdminMode(); });
+  $exitBtn.addEventListener('click', async () => {
+    // Flush text and sync to server on exit (safety net)
+    document.querySelectorAll('[data-admin-text]').forEach(el => {
+      adminOverrides[el.getAttribute('data-admin-text')] = el.innerHTML;
+    });
+    saveOverrides();
+    syncOverridesToServer(adminOverrides); // fire-and-forget
+    exitAdminMode();
+  });
 
   // ─── Init ─────────────────────────────────────────────────────────────────
   loadOverrides();
   applyOverrides();
+
+  // Async: fetch server overrides for cross-device sync (non-blocking)
+  (async () => {
+    try {
+      const r = await fetch('/api/overrides?t=' + Date.now());
+      if (!r.ok) return;
+      const serverOverrides = await r.json();
+      if (!serverOverrides || !Object.keys(serverOverrides).length) return;
+      // Server wins — merge into local overrides
+      Object.assign(adminOverrides, serverOverrides);
+      setOverrides(adminOverrides);
+      applyOverrides();
+      // Cache to localStorage so next visit is instant (no waiting for API)
+      try { saveOverrides(); } catch(_) {}
+    } catch (_) { /* server not available (e.g. localhost dev) — ignore */ }
+  })();
   </script>
 </body>
 </html>
