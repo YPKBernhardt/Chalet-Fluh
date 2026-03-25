@@ -1905,6 +1905,47 @@
     }
     body.admin-mode [data-admin-img] { cursor: pointer; }
 
+    /* Admin overlay: two-button layout */
+    #adminImgOverlay span { pointer-events: auto; }
+    .overlay-btn {
+      font-size: 0.7rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-family: 'DM Sans', sans-serif;
+      background: rgba(10,15,11,0.78);
+      padding: 0.35rem 0.7rem;
+      cursor: pointer;
+      border: none;
+      display: block;
+      width: 100%;
+      text-align: center;
+      transition: background 0.15s;
+    }
+    .overlay-btn:hover { background: rgba(10,15,11,0.98); color: #fff; }
+
+    /* Drag-to-reposition */
+    .admin-crop-mode { cursor: grab !important; user-select: none !important; }
+    .admin-crop-mode:active { cursor: grabbing !important; }
+    #adminCropBadge {
+      position: fixed;
+      z-index: 9100;
+      background: var(--accent);
+      color: var(--bg-base);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-family: 'DM Sans', sans-serif;
+      padding: 0.3rem 0.8rem;
+      cursor: pointer;
+      border: none;
+      pointer-events: auto;
+    }
+    #adminCropBadge:hover { background: var(--accent-light); }
+
+    /* Lightbox zoom cursor on content images */
+    body:not(.admin-mode) .lb-trigger { cursor: zoom-in; }
+
     /* ─── CONTACT FORM ─────────────────────────────────────────────────── */
     .contact-form-section {
       background: var(--bg-surface);
@@ -2215,8 +2256,8 @@
   <section id="das-chalet">
     <div class="intro-grid">
       <div class="intro-image-stack reveal">
-        <img class="intro-img-main" src="brand_assets/IMG_7104%20(1).PNG" alt="Chalet Fluh Winterpanorama" data-admin-img="intro-main-img" />
-        <img class="intro-img-accent" src="brand_assets/300_4402.jpeg" alt="Interieur Chalet Fluh" data-admin-img="intro-accent-img" />
+        <img class="intro-img-main lb-trigger" src="brand_assets/IMG_7104%20(1).PNG" alt="Chalet Fluh Winterpanorama" data-admin-img="intro-main-img" />
+        <img class="intro-img-accent lb-trigger" src="brand_assets/300_4402.jpeg" alt="Interieur Chalet Fluh" data-admin-img="intro-accent-img" />
         <div class="intro-badge">
           <div class="intro-badge-year">2015</div>
           <div class="intro-badge-label">Erbaut</div>
@@ -2381,18 +2422,18 @@
     <div class="slideshow-wrap reveal">
       <div class="slideshow-main" id="gallerySlideshow">
         <div class="ss-track" id="ssTrack">
-          <div class="ss-slide"><img src="brand_assets/300_4406.jpeg" alt="Schlafzimmer" data-admin-img="gallery-0" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_7956.jpeg" alt="Schlafzimmer OG" data-admin-img="gallery-1" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_7957%20(1).jpeg" alt="Schlafzimmer" data-admin-img="gallery-2" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_2471.jpeg" alt="Mehrbettzimmer" data-admin-img="gallery-3" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_4090.jpeg" alt="Terrasse" data-admin-img="gallery-4" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_2016.jpeg" alt="Garten & Terrasse" data-admin-img="gallery-5" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_7104%20(1).PNG" alt="Winterpanorama" data-admin-img="gallery-6" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_7965.jpeg" alt="Außenansicht Winter" data-admin-img="gallery-7" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_3866.jpeg" alt="Chalet im Schnee" data-admin-img="gallery-8" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_3852.jpeg" alt="Herbstansicht" data-admin-img="gallery-9" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_3150.jpeg" alt="Außenansicht" data-admin-img="gallery-10" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_6961.jpeg" alt="Chalet Exterior" data-admin-img="gallery-11" /></div>
+          <div class="ss-slide"><img src="brand_assets/300_4406.jpeg" alt="Schlafzimmer" data-admin-img="gallery-0" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_7956.jpeg" alt="Schlafzimmer OG" data-admin-img="gallery-1" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_7957%20(1).jpeg" alt="Schlafzimmer" data-admin-img="gallery-2" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_2471.jpeg" alt="Mehrbettzimmer" data-admin-img="gallery-3" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_4090.jpeg" alt="Terrasse" data-admin-img="gallery-4" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_2016.jpeg" alt="Garten & Terrasse" data-admin-img="gallery-5" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_7104%20(1).PNG" alt="Winterpanorama" data-admin-img="gallery-6" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_7965.jpeg" alt="Außenansicht Winter" data-admin-img="gallery-7" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_3866.jpeg" alt="Chalet im Schnee" data-admin-img="gallery-8" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_3852.jpeg" alt="Herbstansicht" data-admin-img="gallery-9" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_3150.jpeg" alt="Außenansicht" data-admin-img="gallery-10" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/IMG_6961.jpeg" alt="Chalet Exterior" data-admin-img="gallery-11" class="lb-trigger" /></div>
         </div>
         <!-- Arrows -->
         <button class="ss-arrow ss-prev" id="ssPrev" aria-label="Vorheriges Bild">
@@ -2514,10 +2555,10 @@
       </div>
       <div class="location-images">
         <div class="location-img">
-          <img src="brand_assets/IMG_7965.jpeg" alt="Blick vom Hochgrat" loading="lazy" data-admin-img="lage-img-1" />
+          <img src="brand_assets/IMG_7965.jpeg" alt="Blick vom Hochgrat" loading="lazy" data-admin-img="lage-img-1" class="lb-trigger" />
         </div>
         <div class="location-img">
-          <img src="brand_assets/IMG_3866.jpeg" alt="Imberg-Skigebiet" loading="lazy" data-admin-img="lage-img-2" />
+          <img src="brand_assets/IMG_3866.jpeg" alt="Imberg-Skigebiet" loading="lazy" data-admin-img="lage-img-2" class="lb-trigger" />
         </div>
       </div>
     </div>
@@ -2538,7 +2579,7 @@
       </div>
       <div class="area-ss-stage reveal">
         <div class="area-ss-main-img" id="areaMain">
-          <img id="areaMainImg" src="" alt="" />
+          <img id="areaMainImg" src="" alt="" class="lb-trigger" />
           <div class="area-ss-caption-bar">
             <div>
               <div class="area-ss-caption-text" id="areaCaption"></div>
@@ -3064,7 +3105,7 @@
       'Außenansicht','Chalet Exterior'
     ];
     let ssCurrent = 0;
-    let ssTotal = 15;
+    let ssTotal = 12;
     let ssAutoTimer = null;
     let ssProgress = 0;
     let ssProgressTimer = null;
@@ -3080,13 +3121,12 @@
       ssTrack.style.transform = `translateX(-${ssCurrent * 100}%)`;
       document.getElementById('ssCaptionText').textContent = (window.adminOverrides && window.adminOverrides[`gallery-caption-${ssCurrent}`]) || ssCaptions[ssCurrent];
       document.getElementById('ssCounter').textContent = `${ssCurrent + 1} / ${ssTotal}`;
-      // Thumbs
-      ssThumbs[prev].classList.remove('ss-thumb-active');
-      ssThumbs[ssCurrent].classList.add('ss-thumb-active');
-      // Scroll thumb horizontally only — never touches page scroll
+      // Thumbs (strip hidden but maintained for img-sync)
+      if (ssThumbs[prev]) ssThumbs[prev].classList.remove('ss-thumb-active');
+      if (ssThumbs[ssCurrent]) ssThumbs[ssCurrent].classList.add('ss-thumb-active');
       const thumbsEl = document.getElementById('ssThumbs');
       const th = ssThumbs[ssCurrent];
-      thumbsEl.scrollTo({ left: th.offsetLeft - (thumbsEl.clientWidth - th.offsetWidth) / 2, behavior: 'smooth' });
+      if (th) thumbsEl.scrollTo({ left: th.offsetLeft - (thumbsEl.clientWidth - th.offsetWidth) / 2, behavior: 'smooth' });
       // Slide zoom effect
       ssTrack.querySelectorAll('.ss-slide').forEach((s,i) => s.classList.toggle('active', i === ssCurrent));
       // Reset progress
@@ -3145,6 +3185,23 @@
     // Init
     ssGoTo(0);
 
+    // ─── Lightbox triggers ────────────────────────────────────────────
+    // Gallery slideshow: click on current slide image
+    document.getElementById('gallerySlideshow').addEventListener('click', e => {
+      if (window.adminMode) return;
+      if (e.target.closest('.ss-slide img')) openLightbox(ssTrack.querySelectorAll('.ss-slide img')[ssCurrent].src, (window.adminOverrides && window.adminOverrides[`gallery-caption-${ssCurrent}`]) || ssCaptions[ssCurrent]);
+    });
+    // Area main image
+    document.getElementById('areaMainImg').addEventListener('click', () => {
+      if (window.adminMode) return;
+      const img = document.getElementById('areaMainImg');
+      openLightbox(img.src, AREA_SLIDES[areaCurrent] ? ((window.adminOverrides && window.adminOverrides[`area-caption-${areaCurrent}`]) || AREA_SLIDES[areaCurrent].caption) : '');
+    });
+    // Other content images
+    document.querySelectorAll('.intro-img-main, .intro-img-accent, [data-admin-img^="lage-img"]').forEach(img => {
+      img.addEventListener('click', () => { if (!window.adminMode) openLightbox(img.src, img.alt); });
+    });
+
     // ─── AREA SLIDESHOW (Lage) ───────────────────────────────────────
     const AREA_SLIDES = [
       { src: 'brand_assets/IMG_7104%20(1).PNG',           caption: 'Hochgrat',                  sub: '1.832 m · Panoramagipfel Naturpark Nagelfluhkette' },
@@ -3160,7 +3217,10 @@
     function areaGoTo(n) {
       areaCurrent = (n + AREA_SLIDES.length) % AREA_SLIDES.length;
       const s = AREA_SLIDES[areaCurrent];
-      document.getElementById('areaMainImg').src = s.src;
+      const _areaMainImg = document.getElementById('areaMainImg');
+      _areaMainImg.src = s.src;
+      _areaMainImg.setAttribute('data-admin-img', `area-${areaCurrent}`);
+      _areaMainImg.style.objectPosition = (window.adminOverrides && window.adminOverrides[`area-${areaCurrent}-pos`]) || '50% 50%';
       document.getElementById('areaCaption').textContent = (window.adminOverrides && window.adminOverrides[`area-caption-${areaCurrent}`]) || s.caption;
       document.getElementById('areaCapSub').textContent = (window.adminOverrides && window.adminOverrides[`area-sub-${areaCurrent}`]) || s.sub;
       document.getElementById('areaCounterBadge').textContent = `${areaCurrent + 1} / ${AREA_SLIDES.length}`;
@@ -3451,7 +3511,8 @@
 
   <!-- Floating image hover overlay -->
   <div id="adminImgOverlay">
-    <span>📷 Bild austauschen</span>
+    <span class="overlay-btn" id="overlayChangeBtn">📷 Bild austauschen</span>
+    <span class="overlay-btn" id="overlayCropBtn">✥ Ausschnitt wählen</span>
   </div>
 
   <!-- Save toast notification -->
@@ -3555,6 +3616,15 @@
         }
       }
     });
+    // Position (object-position / background-position) overrides
+    document.querySelectorAll('[data-admin-img]').forEach(el => {
+      const key = el.getAttribute('data-admin-img');
+      const pos = adminOverrides[key + '-pos'];
+      if (pos) {
+        if (el.tagName === 'IMG') el.style.objectPosition = pos;
+        else el.style.backgroundPosition = pos;
+      }
+    });
     // Gallery caption overrides
     for (let i = 0; i < ssCaptions.length; i++) {
       if (adminOverrides[`gallery-caption-${i}`] !== undefined) ssCaptions[i] = adminOverrides[`gallery-caption-${i}`];
@@ -3641,7 +3711,6 @@
       img.addEventListener('mouseleave', onImgLeave);
       img.addEventListener('click', onImgClick);
     });
-    $imgOverlay.addEventListener('click', onOverlayClick);
     $imgOverlay.addEventListener('mouseleave', hideOverlay);
     if (typeof renderCalendar === 'function') renderCalendar();
   }
@@ -3671,8 +3740,8 @@
       img.removeEventListener('mouseleave', onImgLeave);
       img.removeEventListener('click', onImgClick);
     });
-    $imgOverlay.removeEventListener('click', onOverlayClick);
     $imgOverlay.removeEventListener('mouseleave', hideOverlay);
+    if (cropTarget) endCropDrag();
     hideOverlay();
     if (typeof renderCalendar === 'function') renderCalendar();
   }
@@ -3686,19 +3755,116 @@
   // ─── Image replacement ────────────────────────────────────────────────────
   function onImgHover(e) { positionOverlayOnImg(e.currentTarget); }
   function onImgLeave(e) {
-    // Don't hide if moving to overlay
     const related = e.relatedTarget;
     if (related && ($imgOverlay.contains(related) || related === $imgOverlay)) return;
     hideOverlay();
   }
-  function onImgClick(e) {
-    adminPendingImgKey = e.currentTarget.getAttribute('data-admin-img');
-    $imgInput.click();
-  }
-  function onOverlayClick() {
+  function onImgClick(e) { /* handled via overlay buttons only */ }
+  function onOverlayClick() { /* not used directly */ }
+
+  // ─── Overlay buttons ─────────────────────────────────────────────────────
+  function onOverlayChangeBtnClick() {
     if (!adminOverlayTarget) return;
     adminPendingImgKey = adminOverlayTarget.getAttribute('data-admin-img');
+    hideOverlay();
     $imgInput.click();
+  }
+  function onOverlayCropBtnClick() {
+    if (!adminOverlayTarget) return;
+    const target = adminOverlayTarget;
+    hideOverlay();
+    startCropDrag(target);
+  }
+  document.getElementById('overlayChangeBtn').addEventListener('click', onOverlayChangeBtnClick);
+  document.getElementById('overlayCropBtn').addEventListener('click', onOverlayCropBtnClick);
+
+  // ─── Drag-to-reposition (crop) ────────────────────────────────────────────
+  let cropTarget = null, cropIsDragging = false;
+  let cropStartX = 0, cropStartY = 0, cropStartPosX = 50, cropStartPosY = 50;
+
+  function parsePosStr(el) {
+    const raw = el.tagName === 'IMG' ? el.style.objectPosition : el.style.backgroundPosition;
+    if (!raw) return { x: 50, y: 50 };
+    const parts = raw.replace(/%/g, '').trim().split(/\s+/);
+    return { x: parseFloat(parts[0]) || 50, y: parseFloat(parts[1] !== undefined ? parts[1] : parts[0]) || 50 };
+  }
+  function applyPos(el, x, y) {
+    const pos = `${x.toFixed(1)}% ${y.toFixed(1)}%`;
+    if (el.tagName === 'IMG') el.style.objectPosition = pos;
+    else el.style.backgroundPosition = pos;
+  }
+
+  function startCropDrag(el) {
+    cropTarget = el;
+    const p = parsePosStr(el);
+    cropStartPosX = p.x; cropStartPosY = p.y;
+    el.classList.add('admin-crop-mode');
+    // Create Fertig badge
+    const badge = document.createElement('button');
+    badge.id = 'adminCropBadge';
+    badge.textContent = '✓ Fertig';
+    const r = el.getBoundingClientRect();
+    badge.style.left = Math.max(0, r.right - 90) + 'px';
+    badge.style.top = (r.top + 8) + 'px';
+    badge.addEventListener('click', endCropDrag);
+    document.body.appendChild(badge);
+    document.addEventListener('mousedown', onCropMouseDown);
+  }
+
+  function endCropDrag() {
+    if (!cropTarget) return;
+    cropTarget.classList.remove('admin-crop-mode');
+    const badge = document.getElementById('adminCropBadge');
+    if (badge) badge.remove();
+    document.removeEventListener('mousedown', onCropMouseDown);
+    document.removeEventListener('mousemove', onCropMouseMove);
+    document.removeEventListener('mouseup', onCropMouseUp);
+    // Save
+    const key = cropTarget.getAttribute('data-admin-img');
+    if (key) {
+      const p = parsePosStr(cropTarget);
+      const posStr = `${p.x.toFixed(1)}% ${p.y.toFixed(1)}%`;
+      adminOverrides[key + '-pos'] = posStr;
+      saveOverrides();
+      syncOverridesToServer(adminOverrides);
+      showToast('✓ Ausschnitt gespeichert');
+    }
+    cropTarget = null;
+    cropIsDragging = false;
+  }
+
+  function onCropMouseDown(e) {
+    if (e.target === document.getElementById('adminCropBadge')) return;
+    if (e.target !== cropTarget) { endCropDrag(); return; }
+    cropIsDragging = true;
+    cropStartX = e.clientX; cropStartY = e.clientY;
+    const p = parsePosStr(cropTarget);
+    cropStartPosX = p.x; cropStartPosY = p.y;
+    document.addEventListener('mousemove', onCropMouseMove);
+    document.addEventListener('mouseup', onCropMouseUp);
+    e.preventDefault();
+  }
+  function onCropMouseMove(e) {
+    if (!cropIsDragging || !cropTarget) return;
+    const dx = (e.clientX - cropStartX) / cropTarget.clientWidth * 100;
+    const dy = (e.clientY - cropStartY) / cropTarget.clientHeight * 100;
+    const nx = Math.max(0, Math.min(100, cropStartPosX - dx));
+    const ny = Math.max(0, Math.min(100, cropStartPosY - dy));
+    applyPos(cropTarget, nx, ny);
+    // Reposition badge
+    const badge = document.getElementById('adminCropBadge');
+    if (badge) {
+      const r = cropTarget.getBoundingClientRect();
+      badge.style.left = Math.max(0, r.right - 90) + 'px';
+      badge.style.top = (r.top + 8) + 'px';
+    }
+  }
+  function onCropMouseUp() {
+    if (cropIsDragging) {
+      cropIsDragging = false;
+      document.removeEventListener('mousemove', onCropMouseMove);
+      document.removeEventListener('mouseup', onCropMouseUp);
+    }
   }
   function compressImage(dataUrl, maxW, maxH, quality, cb) {
     const img = new Image();
