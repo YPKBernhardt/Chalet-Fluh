@@ -3540,35 +3540,75 @@
     adminPendingImgKey = adminOverlayTarget.getAttribute('data-admin-img');
     $imgInput.click();
   }
+  function compressImage(dataUrl, maxW, maxH, quality, cb) {
+    const img = new Image();
+    img.onload = () => {
+      let w = img.width, h = img.height;
+      if (w > maxW || h > maxH) {
+        const ratio = Math.min(maxW / w, maxH / h);
+        w = Math.round(w * ratio);
+        h = Math.round(h * ratio);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      cb(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.src = dataUrl;
+  }
+
+  function applyImgOverride(key, dataUrl) {
+    document.querySelectorAll(`[data-admin-img="${key}"]`).forEach(el => {
+      if (el.tagName === 'IMG') { el.src = dataUrl; }
+      else { el.style.backgroundImage = `url(${dataUrl})`; }
+    });
+    if (key.startsWith('gallery-')) {
+      const idx = parseInt(key.split('-')[1]);
+      const thumbs = document.querySelectorAll('#ssThumbs .ss-thumb img');
+      if (thumbs[idx]) thumbs[idx].src = dataUrl;
+    }
+    if (key.startsWith('area-')) {
+      const idx = parseInt(key.split('-')[1]);
+      if (AREA_SLIDES[idx]) {
+        AREA_SLIDES[idx].src = dataUrl;
+        if (areaCurrent === idx) document.getElementById('areaMainImg').src = dataUrl;
+      }
+    }
+  }
+
   $imgInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file || !adminPendingImgKey) return;
+    const key = adminPendingImgKey;
     const reader = new FileReader();
     reader.onload = (ev) => {
-      const dataUrl = ev.target.result;
-      adminOverrides[adminPendingImgKey] = dataUrl;
-      // Update DOM immediately — handle both <img> and background-image divs
-      document.querySelectorAll(`[data-admin-img="${adminPendingImgKey}"]`).forEach(el => {
-        if (el.tagName === 'IMG') { el.src = dataUrl; }
-        else { el.style.backgroundImage = `url(${dataUrl})`; }
-      });
-      // If gallery slide, also update the corresponding thumbnail
-      if (adminPendingImgKey.startsWith('gallery-')) {
-        const idx = parseInt(adminPendingImgKey.split('-')[1]);
-        const thumbs = document.querySelectorAll('#ssThumbs .ss-thumb img');
-        if (thumbs[idx]) thumbs[idx].src = dataUrl;
-      }
-      // If area slide, update AREA_SLIDES array and main image if active
-      if (adminPendingImgKey.startsWith('area-')) {
-        const idx = parseInt(adminPendingImgKey.split('-')[1]);
-        if (AREA_SLIDES[idx]) {
-          AREA_SLIDES[idx].src = dataUrl;
-          if (areaCurrent === idx) document.getElementById('areaMainImg').src = dataUrl;
+      // Compress: hero slides get a larger canvas, other images smaller
+      const isHero = key.startsWith('hero-slide');
+      const maxW = isHero ? 1600 : 1200;
+      const maxH = isHero ? 1000 : 900;
+      compressImage(ev.target.result, maxW, maxH, 0.82, (dataUrl) => {
+        adminOverrides[key] = dataUrl;
+        applyImgOverride(key, dataUrl);
+        // Auto-save and handle quota errors
+        try {
+          saveOverrides();
+          showToast('✓ Bild gespeichert');
+        } catch(err) {
+          if (err.name === 'QuotaExceededError') {
+            showToast('⚠ Speicher voll – ältere Bilder werden entfernt');
+            // Remove oldest image overrides to free space and retry
+            const imgKeys = Object.keys(adminOverrides).filter(k => adminOverrides[k].startsWith('data:image'));
+            if (imgKeys.length > 1) {
+              delete adminOverrides[imgKeys[0]];
+              try { saveOverrides(); showToast('✓ Bild gespeichert'); } catch(e2) { showToast('✗ Speicher voll'); }
+            }
+          } else {
+            showToast('✗ Fehler beim Speichern');
+          }
         }
-      }
-      adminPendingImgKey = null;
-      $imgInput.value = '';
-      showToast('✓ Bild ersetzt');
+        adminPendingImgKey = null;
+        $imgInput.value = '';
+      });
     };
     reader.readAsDataURL(file);
   });
