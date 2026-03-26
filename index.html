@@ -1924,28 +1924,48 @@
     }
     .overlay-btn:hover { background: rgba(10,15,11,0.98); color: #fff; }
 
-    /* Drag-to-reposition */
-    .admin-crop-mode { cursor: grab !important; user-select: none !important; }
+    /* Crop mode: outline on active image */
+    .admin-crop-mode { outline: 2px solid var(--accent) !important; outline-offset: -2px; cursor: grab !important; user-select: none !important; }
     .admin-crop-mode:active { cursor: grabbing !important; }
-    #adminCropBadge {
+
+    /* ── Crop control panel (fixed bottom) ── */
+    #cropPanel {
+      display: none;
       position: fixed;
-      z-index: 9100;
-      background: rgba(10,15,11,0.92);
-      color: var(--accent);
-      font-size: 0.68rem;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      font-family: 'DM Sans', sans-serif;
-      padding: 0.4rem 1rem;
-      pointer-events: auto;
-      border: 1px solid rgba(196,154,60,0.4);
-      backdrop-filter: blur(6px);
-      display: flex;
+      bottom: 0; left: 50%; transform: translateX(-50%);
+      z-index: 9200;
+      background: rgba(10,15,11,0.97);
+      border: 1px solid rgba(196,154,60,0.35);
+      border-bottom: none;
+      backdrop-filter: blur(14px);
+      padding: 0.7rem 1.25rem;
       align-items: center;
-      gap: 0.25rem;
-      user-select: none;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      min-width: min(680px, 98vw);
+      justify-content: center;
+      font-family: 'DM Sans', sans-serif;
     }
-    #cropFertigBtn:hover { color: #fff !important; }
+    #cropPanel.active { display: flex; }
+    #cropPanelTitle {
+      font-size: 0.6rem; letter-spacing: 0.13em; text-transform: uppercase;
+      color: var(--accent); white-space: nowrap;
+    }
+    .cp-group { display: flex; align-items: center; gap: 0.35rem; }
+    .cp-label { font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-right: 0.1rem; }
+    .cp-btn {
+      background: var(--bg-elevated); border: 1px solid var(--border-light);
+      color: var(--text-secondary); font-size: 0.85rem;
+      width: 2rem; height: 2rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      user-select: none; font-family: 'DM Sans', sans-serif; flex-shrink: 0;
+    }
+    .cp-btn:hover, .cp-btn:active { background: var(--accent); color: var(--bg-base); border-color: var(--accent); }
+    .cp-btn-wide { width: auto; padding: 0 0.8rem; font-size: 0.68rem; letter-spacing: 0.07em; text-transform: uppercase; }
+    .cp-btn-save { background: var(--accent); color: var(--bg-base); border-color: var(--accent); font-weight: 500; }
+    .cp-btn-save:hover { opacity: 0.85; }
+    #cropZoomVal { font-size: 0.75rem; color: var(--accent); min-width: 3rem; text-align: center; }
 
     /* Lightbox zoom cursor on content images */
     body:not(.admin-mode) .lb-trigger { cursor: zoom-in; }
@@ -3791,76 +3811,64 @@
   document.getElementById('overlayCropBtn').addEventListener('click', onOverlayCropBtnClick);
 
   // ─── Crop / reposition / zoom session ────────────────────────────────────
-  let cropTarget = null;
-  let cropIsDragging = false;
-  let cropStartX = 0, cropStartY = 0;
-  let cropStartPosX = 50, cropStartPosY = 50;
-  let cropScale = 1;
+  let cropTarget = null, cropIsDragging = false;
+  let cropStartX = 0, cropStartY = 0, cropStartPosX = 50, cropStartPosY = 50;
+  let cropPosX = 50, cropPosY = 50, cropScale = 1;
+  let cropHoldTimer = null;
+  const $cropPanel = document.getElementById('cropPanel');
 
   function _parsePosStr(el) {
     const raw = el.tagName === 'IMG' ? el.style.objectPosition : el.style.backgroundPosition;
     if (!raw || raw === 'initial') return { x: 50, y: 50 };
-    const parts = raw.replace(/%/g,'').trim().split(/\s+/);
-    return { x: parseFloat(parts[0] ?? 50) || 50, y: parseFloat(parts[1] ?? parts[0]) || 50 };
+    const parts = raw.replace(/%/g, '').trim().split(/\s+/);
+    return { x: parseFloat(parts[0]) || 50, y: parseFloat(parts[1] !== undefined ? parts[1] : parts[0]) || 50 };
   }
-  function _applyPos(el, x, y) {
-    const v = `${x.toFixed(1)}% ${y.toFixed(1)}%`;
-    if (el.tagName === 'IMG') el.style.objectPosition = v;
-    else el.style.backgroundPosition = v;
+  function _applyPosXY(nx, ny) {
+    cropPosX = Math.max(0, Math.min(100, nx));
+    cropPosY = Math.max(0, Math.min(100, ny));
+    const v = `${cropPosX.toFixed(1)}% ${cropPosY.toFixed(1)}%`;
+    if (!cropTarget) return;
+    if (cropTarget.tagName === 'IMG') cropTarget.style.objectPosition = v;
+    else cropTarget.style.backgroundPosition = v;
   }
-  function _applyScale(el, s) {
-    el.style.transform = `scale(${s.toFixed(3)})`;
-  }
-  function _updateBadge() {
-    const b = document.getElementById('adminCropBadge');
-    if (!b || !cropTarget) return;
-    b.querySelector('#cropZoomPct').textContent = Math.round(cropScale * 100) + '%';
-    const r = cropTarget.getBoundingClientRect();
-    b.style.left = (r.left + r.width / 2 - 80) + 'px';
-    b.style.top = (r.top + 10) + 'px';
+  function _applyScale(s) {
+    cropScale = Math.max(0.3, Math.min(4.0, s));
+    if (cropTarget) cropTarget.style.transform = `scale(${cropScale.toFixed(3)})`;
+    const zv = document.getElementById('cropZoomVal');
+    if (zv) zv.textContent = Math.round(cropScale * 100) + '%';
   }
 
   function startCropSession(el) {
     cropTarget = el;
-    // Read existing pos & scale
     const p = _parsePosStr(el);
-    cropStartPosX = p.x; cropStartPosY = p.y;
+    cropPosX = p.x; cropPosY = p.y;
     const key = el.getAttribute('data-admin-img');
-    cropScale = key ? (parseFloat(adminOverrides[key + '-scale']) || 1) : 1;
-    _applyScale(el, cropScale);
+    const savedScale = key ? (parseFloat(adminOverrides[key + '-scale']) || 1) : 1;
+    cropScale = savedScale;
+    el.style.transform = `scale(${cropScale.toFixed(3)})`;
     el.classList.add('admin-crop-mode');
-
-    // Badge
-    const badge = document.createElement('div');
-    badge.id = 'adminCropBadge';
-    badge.innerHTML =
-      `<span style="opacity:.7;font-size:.6rem;">Ziehen = verschieben · Scroll = zoom</span>` +
-      `<span id="cropZoomPct" style="margin-left:.5rem;font-weight:600;">${Math.round(cropScale*100)}%</span>` +
-      `<button id="cropFertigBtn" style="margin-left:.75rem;background:none;border:none;color:inherit;cursor:pointer;font:inherit;text-transform:uppercase;letter-spacing:.08em;">✓ Fertig</button>`;
-    document.body.appendChild(badge);
-    _updateBadge();
-    document.getElementById('cropFertigBtn').addEventListener('click', endCropSession);
-
-    // Listeners — directly on the element to avoid overlay conflicts
+    // Show panel
+    document.getElementById('cropPanelName').textContent = el.alt || key || 'Bild';
+    document.getElementById('cropZoomVal').textContent = Math.round(cropScale * 100) + '%';
+    $cropPanel.classList.add('active');
+    // Drag + scroll on image
     el.addEventListener('mousedown', _onCropDown, { capture: true });
-    el.addEventListener('wheel', _onCropWheel, { passive: false, capture: true });
+    el.addEventListener('wheel',     _onCropWheel, { passive: false, capture: true });
   }
 
   function endCropSession() {
     if (!cropTarget) return;
     cropTarget.classList.remove('admin-crop-mode');
     cropTarget.removeEventListener('mousedown', _onCropDown, { capture: true });
-    cropTarget.removeEventListener('wheel', _onCropWheel, { capture: true });
+    cropTarget.removeEventListener('wheel',     _onCropWheel, { capture: true });
     document.removeEventListener('mousemove', _onCropMove);
-    document.removeEventListener('mouseup', _onCropUp);
-    const badge = document.getElementById('adminCropBadge');
-    if (badge) badge.remove();
-
-    // Save both position and scale
+    document.removeEventListener('mouseup',   _onCropUp);
+    clearInterval(cropHoldTimer);
+    $cropPanel.classList.remove('active');
+    // Save
     const key = cropTarget.getAttribute('data-admin-img');
     if (key) {
-      const p = _parsePosStr(cropTarget);
-      adminOverrides[key + '-pos'] = `${p.x.toFixed(1)}% ${p.y.toFixed(1)}%`;
+      adminOverrides[key + '-pos']   = `${cropPosX.toFixed(1)}% ${cropPosY.toFixed(1)}%`;
       adminOverrides[key + '-scale'] = cropScale.toFixed(3);
       saveOverrides();
       syncOverridesToServer(adminOverrides);
@@ -3870,40 +3878,67 @@
     cropIsDragging = false;
   }
 
+  // Drag (bonus on top of buttons)
   function _onCropDown(e) {
-    // Ignore clicks on the badge
-    if (e.target.closest('#adminCropBadge')) return;
+    if (e.target.closest('#cropPanel')) return;
     cropIsDragging = true;
     cropStartX = e.clientX; cropStartY = e.clientY;
-    const p = _parsePosStr(cropTarget);
-    cropStartPosX = p.x; cropStartPosY = p.y;
+    cropStartPosX = cropPosX; cropStartPosY = cropPosY;
     document.addEventListener('mousemove', _onCropMove);
-    document.addEventListener('mouseup', _onCropUp);
+    document.addEventListener('mouseup',   _onCropUp);
     e.preventDefault(); e.stopPropagation();
   }
   function _onCropMove(e) {
     if (!cropIsDragging || !cropTarget) return;
-    // Sensitivity scales inversely with zoom so panning feels consistent
     const sens = 1 / cropScale;
     const dx = (e.clientX - cropStartX) / cropTarget.clientWidth  * 100 * sens;
     const dy = (e.clientY - cropStartY) / cropTarget.clientHeight * 100 * sens;
-    const nx = Math.max(0, Math.min(100, cropStartPosX - dx));
-    const ny = Math.max(0, Math.min(100, cropStartPosY - dy));
-    _applyPos(cropTarget, nx, ny);
-    _updateBadge();
+    _applyPosXY(cropStartPosX - dx, cropStartPosY - dy);
   }
   function _onCropUp() {
     cropIsDragging = false;
     document.removeEventListener('mousemove', _onCropMove);
-    document.removeEventListener('mouseup', _onCropUp);
+    document.removeEventListener('mouseup',   _onCropUp);
   }
+  // Scroll wheel zoom (bonus)
   function _onCropWheel(e) {
     e.preventDefault(); e.stopPropagation();
-    const step = e.deltaY < 0 ? 0.1 : -0.1;
-    cropScale = Math.max(0.3, Math.min(4.0, cropScale + step));
-    _applyScale(cropTarget, cropScale);
-    _updateBadge();
+    _applyScale(cropScale + (e.deltaY < 0 ? 0.1 : -0.1));
   }
+
+  // Panel buttons — step actions + hold-to-repeat
+  const CROP_STEP = 5; // percent per click
+  function _doCropAction(action) {
+    if (!cropTarget) return;
+    switch (action) {
+      case 'up':      _applyPosXY(cropPosX, cropPosY - CROP_STEP); break;
+      case 'down':    _applyPosXY(cropPosX, cropPosY + CROP_STEP); break;
+      case 'left':    _applyPosXY(cropPosX - CROP_STEP, cropPosY); break;
+      case 'right':   _applyPosXY(cropPosX + CROP_STEP, cropPosY); break;
+      case 'center':  _applyPosXY(50, 50); break;
+      case 'zoomin':  _applyScale(cropScale + 0.1); break;
+      case 'zoomout': _applyScale(cropScale - 0.1); break;
+      case 'reset':
+        _applyPosXY(50, 50);
+        _applyScale(1);
+        break;
+      case 'save':
+        endCropSession();
+        break;
+    }
+  }
+  $cropPanel.querySelectorAll('[data-crop]').forEach(btn => {
+    const action = btn.getAttribute('data-crop');
+    btn.addEventListener('click', () => _doCropAction(action));
+    // Hold-to-repeat for directional and zoom buttons
+    if (['up','down','left','right','zoomin','zoomout'].includes(action)) {
+      btn.addEventListener('mousedown', () => {
+        cropHoldTimer = setInterval(() => _doCropAction(action), 120);
+      });
+      btn.addEventListener('mouseup',    () => clearInterval(cropHoldTimer));
+      btn.addEventListener('mouseleave', () => clearInterval(cropHoldTimer));
+    }
+  });
   function compressImage(dataUrl, maxW, maxH, quality, cb) {
     const img = new Image();
     img.onload = () => {
@@ -3963,8 +3998,9 @@
           applyImgOverride(key, blobUrl);
           try { saveOverrides(); } catch(_) {}
           // Immediately sync manifest so all devices see the change
-          const synced = await syncOverridesToServer(adminOverrides);
-          showToast(synced ? '✓ Bild auf allen Geräten gespeichert' : '✓ Bild hochgeladen');
+          let synced = await syncOverridesToServer(adminOverrides);
+          if (!synced) synced = await syncOverridesToServer(adminOverrides); // one retry
+          showToast(synced ? '✓ Bild auf allen Geräten gespeichert' : '✓ Bild hochgeladen (Sync ausstehend)');
         } else {
           // Fallback: keep base64 in localStorage only
           try {
@@ -3972,10 +4008,11 @@
             showToast('✓ Bild gespeichert (nur lokal)');
           } catch(err) {
             if (err.name === 'QuotaExceededError') {
-              const imgKeys = Object.keys(adminOverrides).filter(k => adminOverrides[k].startsWith('data:image'));
-              if (imgKeys.length > 1) { delete adminOverrides[imgKeys[0]]; }
+              // Free space by removing OTHER base64 images (keep the newest = current key)
+              const base64Keys = Object.keys(adminOverrides).filter(k => k !== key && typeof adminOverrides[k] === 'string' && adminOverrides[k].startsWith('data:image'));
+              base64Keys.forEach(k => delete adminOverrides[k]);
               try { saveOverrides(); } catch(_) {}
-              showToast('⚠ Lokal gespeichert – Blob-Speicher nicht verfügbar');
+              showToast('⚠ Lokal gespeichert – bitte Blob-Speicher prüfen');
             } else {
               showToast('✗ Fehler beim Speichern');
             }
@@ -4241,5 +4278,28 @@
     } catch (_) { /* server not available (e.g. localhost dev) — ignore */ }
   })();
   </script>
+
+  <!-- Crop control panel — visible when in crop mode -->
+  <div id="cropPanel">
+    <span id="cropPanelTitle">✥ <span id="cropPanelName">Bild</span></span>
+    <div class="cp-group">
+      <span class="cp-label">Position</span>
+      <button class="cp-btn" data-crop="up"    title="Hoch">↑</button>
+      <button class="cp-btn" data-crop="down"  title="Runter">↓</button>
+      <button class="cp-btn" data-crop="left"  title="Links">←</button>
+      <button class="cp-btn" data-crop="right" title="Rechts">→</button>
+      <button class="cp-btn" data-crop="center" title="Zentrieren" style="font-size:.65rem;">⊙</button>
+    </div>
+    <div class="cp-group">
+      <span class="cp-label">Zoom</span>
+      <button class="cp-btn" data-crop="zoomout" title="Kleiner">−</button>
+      <span id="cropZoomVal">100%</span>
+      <button class="cp-btn" data-crop="zoomin"  title="Größer">+</button>
+    </div>
+    <div class="cp-group">
+      <button class="cp-btn cp-btn-wide" data-crop="reset">↺ Reset</button>
+      <button class="cp-btn cp-btn-wide cp-btn-save" data-crop="save">✓ Speichern</button>
+    </div>
+  </div>
 </body>
 </html>
