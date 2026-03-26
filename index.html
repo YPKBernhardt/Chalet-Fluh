@@ -3222,8 +3222,11 @@
       openLightbox(img.src, AREA_SLIDES[areaCurrent] ? ((window.adminOverrides && window.adminOverrides[`area-caption-${areaCurrent}`]) || AREA_SLIDES[areaCurrent].caption) : '');
     });
     // Other content images
-    document.querySelectorAll('.intro-img-main, .intro-img-accent, [data-admin-img^="lage-img"]').forEach(img => {
+    document.querySelectorAll('.intro-img-main, .intro-img-accent').forEach(img => {
       img.addEventListener('click', () => { if (!window.adminMode) openLightbox(img.src, img.alt); });
+    });
+    document.querySelectorAll('[data-admin-img^="lage-img"]').forEach(img => {
+      img.addEventListener('click', () => { if (!window.adminMode) openLightbox(img.src, ''); });
     });
 
     // ─── AREA SLIDESHOW (Lage) ───────────────────────────────────────
