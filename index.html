@@ -3544,6 +3544,29 @@
   <!-- Save toast notification -->
   <div id="adminSavedToast">✓ Gespeichert</div>
 
+  <!-- Crop control panel — visible when in crop mode -->
+  <div id="cropPanel">
+    <span id="cropPanelTitle">✥ <span id="cropPanelName">Bild</span></span>
+    <div class="cp-group">
+      <span class="cp-label">Position</span>
+      <button class="cp-btn" data-crop="up"    title="Hoch">↑</button>
+      <button class="cp-btn" data-crop="down"  title="Runter">↓</button>
+      <button class="cp-btn" data-crop="left"  title="Links">←</button>
+      <button class="cp-btn" data-crop="right" title="Rechts">→</button>
+      <button class="cp-btn" data-crop="center" title="Zentrieren" style="font-size:.65rem;">⊙</button>
+    </div>
+    <div class="cp-group">
+      <span class="cp-label">Zoom</span>
+      <button class="cp-btn" data-crop="zoomout" title="Kleiner">−</button>
+      <span id="cropZoomVal">100%</span>
+      <button class="cp-btn" data-crop="zoomin"  title="Größer">+</button>
+    </div>
+    <div class="cp-group">
+      <button class="cp-btn cp-btn-wide" data-crop="reset">↺ Reset</button>
+      <button class="cp-btn cp-btn-wide cp-btn-save" data-crop="save">✓ Speichern</button>
+    </div>
+  </div>
+
   <script>
   // ─── ADMIN PANEL ─────────────────────────────────────────────────────────────
   const ADMIN_PASSWORD   = 'Schumpen12345!';
@@ -4279,27 +4302,5 @@
   })();
   </script>
 
-  <!-- Crop control panel — visible when in crop mode -->
-  <div id="cropPanel">
-    <span id="cropPanelTitle">✥ <span id="cropPanelName">Bild</span></span>
-    <div class="cp-group">
-      <span class="cp-label">Position</span>
-      <button class="cp-btn" data-crop="up"    title="Hoch">↑</button>
-      <button class="cp-btn" data-crop="down"  title="Runter">↓</button>
-      <button class="cp-btn" data-crop="left"  title="Links">←</button>
-      <button class="cp-btn" data-crop="right" title="Rechts">→</button>
-      <button class="cp-btn" data-crop="center" title="Zentrieren" style="font-size:.65rem;">⊙</button>
-    </div>
-    <div class="cp-group">
-      <span class="cp-label">Zoom</span>
-      <button class="cp-btn" data-crop="zoomout" title="Kleiner">−</button>
-      <span id="cropZoomVal">100%</span>
-      <button class="cp-btn" data-crop="zoomin"  title="Größer">+</button>
-    </div>
-    <div class="cp-group">
-      <button class="cp-btn cp-btn-wide" data-crop="reset">↺ Reset</button>
-      <button class="cp-btn cp-btn-wide cp-btn-save" data-crop="save">✓ Speichern</button>
-    </div>
-  </div>
 </body>
 </html>
