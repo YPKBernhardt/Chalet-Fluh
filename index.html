@@ -1930,18 +1930,22 @@
     #adminCropBadge {
       position: fixed;
       z-index: 9100;
-      background: var(--accent);
-      color: var(--bg-base);
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
+      background: rgba(10,15,11,0.92);
+      color: var(--accent);
+      font-size: 0.68rem;
+      letter-spacing: 0.07em;
       text-transform: uppercase;
       font-family: 'DM Sans', sans-serif;
-      padding: 0.3rem 0.8rem;
-      cursor: pointer;
-      border: none;
+      padding: 0.4rem 1rem;
       pointer-events: auto;
+      border: 1px solid rgba(196,154,60,0.4);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      user-select: none;
     }
-    #adminCropBadge:hover { background: var(--accent-light); }
+    #cropFertigBtn:hover { color: #fff !important; }
 
     /* Lightbox zoom cursor on content images */
     body:not(.admin-mode) .lb-trigger { cursor: zoom-in; }
@@ -3221,6 +3225,8 @@
       _areaMainImg.src = s.src;
       _areaMainImg.setAttribute('data-admin-img', `area-${areaCurrent}`);
       _areaMainImg.style.objectPosition = (window.adminOverrides && window.adminOverrides[`area-${areaCurrent}-pos`]) || '50% 50%';
+      const _areaScale = parseFloat(window.adminOverrides && window.adminOverrides[`area-${areaCurrent}-scale`]);
+      _areaMainImg.style.transform = (_areaScale && !isNaN(_areaScale)) ? `scale(${_areaScale.toFixed(3)})` : '';
       document.getElementById('areaCaption').textContent = (window.adminOverrides && window.adminOverrides[`area-caption-${areaCurrent}`]) || s.caption;
       document.getElementById('areaCapSub').textContent = (window.adminOverrides && window.adminOverrides[`area-sub-${areaCurrent}`]) || s.sub;
       document.getElementById('areaCounterBadge').textContent = `${areaCurrent + 1} / ${AREA_SLIDES.length}`;
@@ -3616,7 +3622,7 @@
         }
       }
     });
-    // Position (object-position / background-position) overrides
+    // Position & scale overrides for all admin images
     document.querySelectorAll('[data-admin-img]').forEach(el => {
       const key = el.getAttribute('data-admin-img');
       const pos = adminOverrides[key + '-pos'];
@@ -3624,6 +3630,8 @@
         if (el.tagName === 'IMG') el.style.objectPosition = pos;
         else el.style.backgroundPosition = pos;
       }
+      const scale = parseFloat(adminOverrides[key + '-scale']);
+      if (scale && !isNaN(scale)) el.style.transform = `scale(${scale.toFixed(3)})`;
     });
     // Gallery caption overrides
     for (let i = 0; i < ssCaptions.length; i++) {
@@ -3741,7 +3749,7 @@
       img.removeEventListener('click', onImgClick);
     });
     $imgOverlay.removeEventListener('mouseleave', hideOverlay);
-    if (cropTarget) endCropDrag();
+    if (cropTarget) endCropSession();
     hideOverlay();
     if (typeof renderCalendar === 'function') renderCalendar();
   }
@@ -3753,14 +3761,18 @@
   }
 
   // ─── Image replacement ────────────────────────────────────────────────────
-  function onImgHover(e) { positionOverlayOnImg(e.currentTarget); }
+  function onImgHover(e) {
+    if (cropTarget) return; // never show overlay while in crop mode
+    positionOverlayOnImg(e.currentTarget);
+  }
   function onImgLeave(e) {
+    if (cropTarget) return;
     const related = e.relatedTarget;
     if (related && ($imgOverlay.contains(related) || related === $imgOverlay)) return;
     hideOverlay();
   }
-  function onImgClick(e) { /* handled via overlay buttons only */ }
-  function onOverlayClick() { /* not used directly */ }
+  function onImgClick(e) { /* handled via overlay buttons */ }
+  function onOverlayClick() { /* not used */ }
 
   // ─── Overlay buttons ─────────────────────────────────────────────────────
   function onOverlayChangeBtnClick() {
@@ -3773,98 +3785,124 @@
     if (!adminOverlayTarget) return;
     const target = adminOverlayTarget;
     hideOverlay();
-    startCropDrag(target);
+    startCropSession(target);
   }
   document.getElementById('overlayChangeBtn').addEventListener('click', onOverlayChangeBtnClick);
   document.getElementById('overlayCropBtn').addEventListener('click', onOverlayCropBtnClick);
 
-  // ─── Drag-to-reposition (crop) ────────────────────────────────────────────
-  let cropTarget = null, cropIsDragging = false;
-  let cropStartX = 0, cropStartY = 0, cropStartPosX = 50, cropStartPosY = 50;
+  // ─── Crop / reposition / zoom session ────────────────────────────────────
+  let cropTarget = null;
+  let cropIsDragging = false;
+  let cropStartX = 0, cropStartY = 0;
+  let cropStartPosX = 50, cropStartPosY = 50;
+  let cropScale = 1;
 
-  function parsePosStr(el) {
+  function _parsePosStr(el) {
     const raw = el.tagName === 'IMG' ? el.style.objectPosition : el.style.backgroundPosition;
-    if (!raw) return { x: 50, y: 50 };
-    const parts = raw.replace(/%/g, '').trim().split(/\s+/);
-    return { x: parseFloat(parts[0]) || 50, y: parseFloat(parts[1] !== undefined ? parts[1] : parts[0]) || 50 };
+    if (!raw || raw === 'initial') return { x: 50, y: 50 };
+    const parts = raw.replace(/%/g,'').trim().split(/\s+/);
+    return { x: parseFloat(parts[0] ?? 50) || 50, y: parseFloat(parts[1] ?? parts[0]) || 50 };
   }
-  function applyPos(el, x, y) {
-    const pos = `${x.toFixed(1)}% ${y.toFixed(1)}%`;
-    if (el.tagName === 'IMG') el.style.objectPosition = pos;
-    else el.style.backgroundPosition = pos;
+  function _applyPos(el, x, y) {
+    const v = `${x.toFixed(1)}% ${y.toFixed(1)}%`;
+    if (el.tagName === 'IMG') el.style.objectPosition = v;
+    else el.style.backgroundPosition = v;
+  }
+  function _applyScale(el, s) {
+    el.style.transform = `scale(${s.toFixed(3)})`;
+  }
+  function _updateBadge() {
+    const b = document.getElementById('adminCropBadge');
+    if (!b || !cropTarget) return;
+    b.querySelector('#cropZoomPct').textContent = Math.round(cropScale * 100) + '%';
+    const r = cropTarget.getBoundingClientRect();
+    b.style.left = (r.left + r.width / 2 - 80) + 'px';
+    b.style.top = (r.top + 10) + 'px';
   }
 
-  function startCropDrag(el) {
+  function startCropSession(el) {
     cropTarget = el;
-    const p = parsePosStr(el);
+    // Read existing pos & scale
+    const p = _parsePosStr(el);
     cropStartPosX = p.x; cropStartPosY = p.y;
+    const key = el.getAttribute('data-admin-img');
+    cropScale = key ? (parseFloat(adminOverrides[key + '-scale']) || 1) : 1;
+    _applyScale(el, cropScale);
     el.classList.add('admin-crop-mode');
-    // Create Fertig badge
-    const badge = document.createElement('button');
+
+    // Badge
+    const badge = document.createElement('div');
     badge.id = 'adminCropBadge';
-    badge.textContent = '✓ Fertig';
-    const r = el.getBoundingClientRect();
-    badge.style.left = Math.max(0, r.right - 90) + 'px';
-    badge.style.top = (r.top + 8) + 'px';
-    badge.addEventListener('click', endCropDrag);
+    badge.innerHTML =
+      `<span style="opacity:.7;font-size:.6rem;">Ziehen = verschieben · Scroll = zoom</span>` +
+      `<span id="cropZoomPct" style="margin-left:.5rem;font-weight:600;">${Math.round(cropScale*100)}%</span>` +
+      `<button id="cropFertigBtn" style="margin-left:.75rem;background:none;border:none;color:inherit;cursor:pointer;font:inherit;text-transform:uppercase;letter-spacing:.08em;">✓ Fertig</button>`;
     document.body.appendChild(badge);
-    document.addEventListener('mousedown', onCropMouseDown);
+    _updateBadge();
+    document.getElementById('cropFertigBtn').addEventListener('click', endCropSession);
+
+    // Listeners — directly on the element to avoid overlay conflicts
+    el.addEventListener('mousedown', _onCropDown, { capture: true });
+    el.addEventListener('wheel', _onCropWheel, { passive: false, capture: true });
   }
 
-  function endCropDrag() {
+  function endCropSession() {
     if (!cropTarget) return;
     cropTarget.classList.remove('admin-crop-mode');
+    cropTarget.removeEventListener('mousedown', _onCropDown, { capture: true });
+    cropTarget.removeEventListener('wheel', _onCropWheel, { capture: true });
+    document.removeEventListener('mousemove', _onCropMove);
+    document.removeEventListener('mouseup', _onCropUp);
     const badge = document.getElementById('adminCropBadge');
     if (badge) badge.remove();
-    document.removeEventListener('mousedown', onCropMouseDown);
-    document.removeEventListener('mousemove', onCropMouseMove);
-    document.removeEventListener('mouseup', onCropMouseUp);
-    // Save
+
+    // Save both position and scale
     const key = cropTarget.getAttribute('data-admin-img');
     if (key) {
-      const p = parsePosStr(cropTarget);
-      const posStr = `${p.x.toFixed(1)}% ${p.y.toFixed(1)}%`;
-      adminOverrides[key + '-pos'] = posStr;
+      const p = _parsePosStr(cropTarget);
+      adminOverrides[key + '-pos'] = `${p.x.toFixed(1)}% ${p.y.toFixed(1)}%`;
+      adminOverrides[key + '-scale'] = cropScale.toFixed(3);
       saveOverrides();
       syncOverridesToServer(adminOverrides);
-      showToast('✓ Ausschnitt gespeichert');
+      showToast('✓ Ausschnitt & Zoom gespeichert');
     }
     cropTarget = null;
     cropIsDragging = false;
   }
 
-  function onCropMouseDown(e) {
-    if (e.target === document.getElementById('adminCropBadge')) return;
-    if (e.target !== cropTarget) { endCropDrag(); return; }
+  function _onCropDown(e) {
+    // Ignore clicks on the badge
+    if (e.target.closest('#adminCropBadge')) return;
     cropIsDragging = true;
     cropStartX = e.clientX; cropStartY = e.clientY;
-    const p = parsePosStr(cropTarget);
+    const p = _parsePosStr(cropTarget);
     cropStartPosX = p.x; cropStartPosY = p.y;
-    document.addEventListener('mousemove', onCropMouseMove);
-    document.addEventListener('mouseup', onCropMouseUp);
-    e.preventDefault();
+    document.addEventListener('mousemove', _onCropMove);
+    document.addEventListener('mouseup', _onCropUp);
+    e.preventDefault(); e.stopPropagation();
   }
-  function onCropMouseMove(e) {
+  function _onCropMove(e) {
     if (!cropIsDragging || !cropTarget) return;
-    const dx = (e.clientX - cropStartX) / cropTarget.clientWidth * 100;
-    const dy = (e.clientY - cropStartY) / cropTarget.clientHeight * 100;
+    // Sensitivity scales inversely with zoom so panning feels consistent
+    const sens = 1 / cropScale;
+    const dx = (e.clientX - cropStartX) / cropTarget.clientWidth  * 100 * sens;
+    const dy = (e.clientY - cropStartY) / cropTarget.clientHeight * 100 * sens;
     const nx = Math.max(0, Math.min(100, cropStartPosX - dx));
     const ny = Math.max(0, Math.min(100, cropStartPosY - dy));
-    applyPos(cropTarget, nx, ny);
-    // Reposition badge
-    const badge = document.getElementById('adminCropBadge');
-    if (badge) {
-      const r = cropTarget.getBoundingClientRect();
-      badge.style.left = Math.max(0, r.right - 90) + 'px';
-      badge.style.top = (r.top + 8) + 'px';
-    }
+    _applyPos(cropTarget, nx, ny);
+    _updateBadge();
   }
-  function onCropMouseUp() {
-    if (cropIsDragging) {
-      cropIsDragging = false;
-      document.removeEventListener('mousemove', onCropMouseMove);
-      document.removeEventListener('mouseup', onCropMouseUp);
-    }
+  function _onCropUp() {
+    cropIsDragging = false;
+    document.removeEventListener('mousemove', _onCropMove);
+    document.removeEventListener('mouseup', _onCropUp);
+  }
+  function _onCropWheel(e) {
+    e.preventDefault(); e.stopPropagation();
+    const step = e.deltaY < 0 ? 0.1 : -0.1;
+    cropScale = Math.max(0.3, Math.min(4.0, cropScale + step));
+    _applyScale(cropTarget, cropScale);
+    _updateBadge();
   }
   function compressImage(dataUrl, maxW, maxH, quality, cb) {
     const img = new Image();
