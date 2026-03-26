@@ -4306,7 +4306,6 @@
       if (!serverOverrides || !Object.keys(serverOverrides).length) return;
       // Server wins — merge into local overrides
       Object.assign(adminOverrides, serverOverrides);
-      setOverrides(adminOverrides);
       applyOverrides();
       // Cache to localStorage so next visit is instant (no waiting for API)
       try { saveOverrides(); } catch(_) {}
