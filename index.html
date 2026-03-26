@@ -3310,6 +3310,12 @@
         window.adminOverrides['cal_force_unbooked'] = JSON.stringify([...calForceUnbooked]);
       }
       if (window.saveOverrides) window.saveOverrides();
+      // Sync to server so ALL visitors (and mobile) see the change
+      if (window.syncOverridesToServer) {
+        window.syncOverridesToServer(window.adminOverrides).then(ok => {
+          if (window.showToast) window.showToast(ok ? '✓ Kalender gespeichert' : '⚠ Nur lokal gespeichert');
+        });
+      }
       renderCalendar();
     }
 
@@ -3706,6 +3712,9 @@
     $toast.classList.add('show');
     setTimeout(() => $toast.classList.remove('show'), 2000);
   }
+  // Expose to calendar script (different <script> block)
+  window.syncOverridesToServer = syncOverridesToServer;
+  window.showToast = showToast;
 
   // ─── Image overlay (floating, no DOM wrapping) ───────────────────────────
   let adminOverlayTarget = null;
