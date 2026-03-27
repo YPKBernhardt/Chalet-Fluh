@@ -4343,19 +4343,28 @@
   applyOverrides();
 
   // Async: fetch server overrides for cross-device sync (non-blocking)
-  (async () => {
+  async function fetchAndApplyServerOverrides() {
     try {
       const r = await fetch('/api/overrides?t=' + Date.now());
       if (!r.ok) return;
       const serverOverrides = await r.json();
       if (!serverOverrides || !Object.keys(serverOverrides).length) return;
+      // Check if anything actually changed before re-applying
+      let changed = false;
+      for (const [k, v] of Object.entries(serverOverrides)) {
+        if (adminOverrides[k] !== v) { changed = true; break; }
+      }
+      if (!changed) return;
       // Server wins — merge into local overrides
       Object.assign(adminOverrides, serverOverrides);
       applyOverrides();
       // Cache to localStorage so next visit is instant (no waiting for API)
       try { saveOverrides(); } catch(_) {}
     } catch (_) { /* server not available (e.g. localhost dev) — ignore */ }
-  })();
+  }
+  fetchAndApplyServerOverrides();
+  // Poll every 15s so visitors see admin changes without refreshing
+  setInterval(fetchAndApplyServerOverrides, 15000);
   </script>
 
 </body>
