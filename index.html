@@ -3934,8 +3934,11 @@
       adminOverrides[key + '-pos']   = `${cropPosX.toFixed(1)}% ${cropPosY.toFixed(1)}%`;
       adminOverrides[key + '-scale'] = cropScale.toFixed(3);
       saveOverrides();
-      syncOverridesToServer(adminOverrides);
-      showToast('✓ Ausschnitt & Zoom gespeichert');
+      (async () => {
+        let synced = await syncOverridesToServer(adminOverrides);
+        if (!synced) synced = await syncOverridesToServer(adminOverrides); // one retry
+        showToast(synced ? '✓ Ausschnitt & Zoom gespeichert' : '⚠ Lokal gespeichert – Sync ausstehend');
+      })();
     }
     cropTarget = null;
     cropIsDragging = false;
