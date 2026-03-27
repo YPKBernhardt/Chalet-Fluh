@@ -1893,7 +1893,7 @@
       pointer-events: none;
       transition: opacity 0.15s;
     }
-    #adminImgOverlay.visible { display: flex; pointer-events: auto; }
+    #adminImgOverlay.visible { display: flex; pointer-events: none; }
     #adminImgOverlay span {
       font-size: 0.7rem;
       letter-spacing: 0.09em;
@@ -1905,7 +1905,7 @@
     }
     body.admin-mode [data-admin-img] { cursor: pointer; }
 
-    /* Admin overlay: two-button layout */
+    /* Admin overlay: two-button layout — container is pointer-events:none, only buttons intercept */
     #adminImgOverlay span { pointer-events: auto; }
     .overlay-btn {
       font-size: 0.7rem;
@@ -1913,16 +1913,32 @@
       text-transform: uppercase;
       color: var(--accent);
       font-family: 'DM Sans', sans-serif;
-      background: rgba(10,15,11,0.78);
+      background: rgba(10,15,11,0.88);
       padding: 0.35rem 0.7rem;
       cursor: pointer;
       border: none;
+      pointer-events: auto;
       display: block;
-      width: 100%;
       text-align: center;
       transition: background 0.15s;
+      white-space: nowrap;
     }
     .overlay-btn:hover { background: rgba(10,15,11,0.98); color: #fff; }
+
+    /* Hero admin: crop button paired with image button */
+    .hero-admin-pair { display: flex; }
+    .hero-admin-crop-btn {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-light);
+      border-left: none;
+      color: var(--accent);
+      font-size: 0.85rem;
+      padding: 0.2rem 0.45rem;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .hero-admin-crop-btn:hover { background: var(--accent); color: var(--bg-base); border-color: var(--accent); }
 
     /* Crop mode: outline on active image */
     .admin-crop-mode { outline: 2px solid var(--accent) !important; outline-offset: -2px; cursor: grab !important; user-select: none !important; }
@@ -2242,10 +2258,10 @@
     <!-- Admin controls for hero slides — only visible in admin mode -->
     <div id="heroAdminControls">
       <span style="font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); margin-right:0.75rem;">Slideshow Bilder:</span>
-      <button class="hero-admin-btn" data-slide="0">Bild 1</button>
-      <button class="hero-admin-btn" data-slide="1">Bild 2</button>
-      <button class="hero-admin-btn" data-slide="2">Bild 3</button>
-      <button class="hero-admin-btn" data-slide="3">Bild 4</button>
+      <span class="hero-admin-pair"><button class="hero-admin-btn" data-slide="0">Bild 1</button><button class="hero-admin-crop-btn" data-slide="0" title="Ausschnitt wählen">✥</button></span>
+      <span class="hero-admin-pair"><button class="hero-admin-btn" data-slide="1">Bild 2</button><button class="hero-admin-crop-btn" data-slide="1" title="Ausschnitt wählen">✥</button></span>
+      <span class="hero-admin-pair"><button class="hero-admin-btn" data-slide="2">Bild 3</button><button class="hero-admin-crop-btn" data-slide="2" title="Ausschnitt wählen">✥</button></span>
+      <span class="hero-admin-pair"><button class="hero-admin-btn" data-slide="3">Bild 4</button><button class="hero-admin-crop-btn" data-slide="3" title="Ausschnitt wählen">✥</button></span>
     </div>
     <div class="hero-scroll-hint">
       <div class="scroll-line"></div>
@@ -3103,6 +3119,10 @@
     }
 
     slideTimer = setInterval(nextSlide, 5000);
+    window.heroGoToSlide = goToSlide;
+    window.heroSlides = slides;
+    window.heroPauseSlideshow = () => { clearInterval(slideTimer); slideTimer = null; };
+    window.heroResumeSlideshow = () => { if (!slideTimer) slideTimer = setInterval(nextSlide, 5000); };
 
     // Lightbox
     function openLightbox(src, caption) {
@@ -3774,7 +3794,6 @@
       img.addEventListener('mouseleave', onImgLeave);
       img.addEventListener('click', onImgClick);
     });
-    $imgOverlay.addEventListener('mouseleave', hideOverlay);
     if (typeof renderCalendar === 'function') renderCalendar();
   }
   function exitAdminMode() {
@@ -3803,7 +3822,6 @@
       img.removeEventListener('mouseleave', onImgLeave);
       img.removeEventListener('click', onImgClick);
     });
-    $imgOverlay.removeEventListener('mouseleave', hideOverlay);
     if (cropTarget) endCropSession();
     hideOverlay();
     if (typeof renderCalendar === 'function') renderCalendar();
@@ -3823,7 +3841,7 @@
   function onImgLeave(e) {
     if (cropTarget) return;
     const related = e.relatedTarget;
-    if (related && ($imgOverlay.contains(related) || related === $imgOverlay)) return;
+    if (related && related.closest('#adminImgOverlay')) return;
     hideOverlay();
   }
   function onImgClick(e) { /* handled via overlay buttons */ }
@@ -3844,6 +3862,16 @@
   }
   document.getElementById('overlayChangeBtn').addEventListener('click', onOverlayChangeBtnClick);
   document.getElementById('overlayCropBtn').addEventListener('click', onOverlayCropBtnClick);
+  // Hide overlay when cursor leaves a button (but not if going back to image)
+  document.querySelectorAll('.overlay-btn').forEach(btn => {
+    btn.addEventListener('mouseleave', e => {
+      if (cropTarget) return;
+      const related = e.relatedTarget;
+      if (related && adminOverlayTarget && (related === adminOverlayTarget || adminOverlayTarget.contains(related))) return;
+      if (related && related.closest('#adminImgOverlay')) return;
+      hideOverlay();
+    });
+  });
 
   // ─── Crop / reposition / zoom session ────────────────────────────────────
   let cropTarget = null, cropIsDragging = false;
@@ -3911,6 +3939,10 @@
     }
     cropTarget = null;
     cropIsDragging = false;
+    // Resume hero slideshow if we were cropping a hero slide
+    if (key && key.startsWith('hero-slide') && window.heroResumeSlideshow) {
+      window.heroResumeSlideshow();
+    }
   }
 
   // Drag (bonus on top of buttons)
@@ -4073,6 +4105,16 @@
       const idx = parseInt(btn.getAttribute('data-slide'));
       adminPendingImgKey = `hero-slide-${idx}`;
       $imgInput.click();
+    });
+  });
+  // Hero crop buttons
+  document.querySelectorAll('.hero-admin-crop-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.getAttribute('data-slide'));
+      if (window.heroGoToSlide) window.heroGoToSlide(idx);
+      if (window.heroPauseSlideshow) window.heroPauseSlideshow();
+      const heroSlide = document.querySelector(`.hero-slide[data-admin-img="hero-slide-${idx}"]`);
+      if (heroSlide) startCropSession(heroSlide);
     });
   });
   // Keep buttons in sync with the auto-advancing slideshow
