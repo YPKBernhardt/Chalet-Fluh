@@ -1,6 +1,15 @@
-const { put, list, del } = require('@vercel/blob');
+const { put, del } = require('@vercel/blob');
 
-const PREFIX = 'cf-manifest';
+// Fixed pathname — no random suffix, so URL is deterministic
+const MANIFEST_PATHNAME = 'cf-overrides.json';
+
+// Derive the blob URL from the token without any SDK call (0 Advanced Requests)
+function getManifestUrl() {
+  const token = process.env.BLOB_READ_WRITE_TOKEN || '';
+  const m = token.match(/vercel_blob_rw_([a-zA-Z0-9]+)_/);
+  if (!m) return null;
+  return `https://${m[1]}.public.blob.vercel-storage.com/${MANIFEST_PATHNAME}`;
+}
 
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
@@ -8,23 +17,19 @@ module.exports = async function handler(req, res) {
   res.setHeader('Expires', '0');
 
   if (!process.env.BLOB_READ_WRITE_TOKEN) {
-    // Blob not configured – return empty overrides gracefully
     return res.status(200).json({});
   }
 
   if (req.method === 'GET') {
+    // Zero Advanced Requests — just an HTTP fetch of a known URL
+    const url = getManifestUrl();
+    if (!url) return res.status(200).json({});
     try {
-      const { blobs } = await list({ prefix: PREFIX });
-      if (!blobs.length) return res.status(200).json({});
-      // Take the latest manifest
-      const latest = blobs.sort(
-        (a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt)
-      )[0];
-      const r = await fetch(latest.url + '?t=' + Date.now());
+      const r = await fetch(url + '?t=' + Date.now(), { cache: 'no-store' });
+      if (!r.ok) return res.status(200).json({});
       const data = await r.json();
       return res.status(200).json(data);
-    } catch (e) {
-      console.error('overrides GET error:', e);
+    } catch (_) {
       return res.status(200).json({});
     }
   }
@@ -35,20 +40,23 @@ module.exports = async function handler(req, res) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    // Only persist text and blob URLs — never raw base64 image data
+    // Only persist blob URLs and text — never raw base64
     const clean = {};
     for (const [k, v] of Object.entries(overrides || {})) {
       if (typeof v === 'string' && !v.startsWith('data:')) clean[k] = v;
     }
 
     try {
-      // Replace old manifest blobs
-      const { blobs } = await list({ prefix: PREFIX });
-      if (blobs.length) await del(blobs.map(b => b.url));
+      // Delete old manifest (ignore if it doesn't exist yet)
+      const oldUrl = getManifestUrl();
+      if (oldUrl) { try { await del(oldUrl); } catch (_) {} }
 
-      await put(PREFIX + '.json', JSON.stringify(clean), {
+      // Write new manifest at fixed URL, cacheControlMaxAge:0 ensures CDN always serves fresh content
+      await put(MANIFEST_PATHNAME, JSON.stringify(clean), {
         access: 'public',
         contentType: 'application/json',
+        addRandomSuffix: false,
+        cacheControlMaxAge: 0,
       });
       return res.status(200).json({ ok: true });
     } catch (e) {
