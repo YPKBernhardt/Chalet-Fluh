@@ -3666,7 +3666,9 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password: ADMIN_PASSWORD, overrides: clean }),
       });
-      return r.ok;
+      if (!r.ok) return false;
+      const result = await r.json().catch(() => ({}));
+      return result.ok === true;
     } catch { return false; }
   }
   function applyOverrides() {
@@ -3940,7 +3942,7 @@
       (async () => {
         let synced = await syncOverridesToServer(adminOverrides);
         if (!synced) synced = await syncOverridesToServer(adminOverrides); // one retry
-        showToast(synced ? '✓ Ausschnitt & Zoom gespeichert' : '⚠ Lokal gespeichert – Sync ausstehend');
+        showToast(synced ? '✓ Ausschnitt & Zoom gespeichert' : '⚠ Speichern fehlgeschlagen – GITHUB_TOKEN fehlt');
       })();
     }
     cropTarget = null;
@@ -4073,7 +4075,7 @@
           // Immediately sync manifest so all devices see the change
           let synced = await syncOverridesToServer(adminOverrides);
           if (!synced) synced = await syncOverridesToServer(adminOverrides); // one retry
-          showToast(synced ? '✓ Bild auf allen Geräten gespeichert' : '✓ Bild hochgeladen (Sync ausstehend)');
+          showToast(synced ? '✓ Bild gespeichert – überall sichtbar in ~1 Min' : '✓ Bild hochgeladen (Text/Kalender: GITHUB_TOKEN fehlt)');
         } else {
           // Fallback: keep base64 in localStorage only
           try {
@@ -4314,7 +4316,7 @@
     saveOverrides();
     showToast('⏳ Wird gespeichert…');
     const ok = await syncOverridesToServer(adminOverrides);
-    showToast(ok ? '✓ Auf allen Geräten gespeichert' : '✓ Lokal gespeichert');
+    showToast(ok ? '✓ Gespeichert – überall sichtbar in ~1 Min' : '⚠ Speichern fehlgeschlagen – GITHUB_TOKEN fehlt');
   });
 
   $resetAllBtn.addEventListener('click', async () => {
