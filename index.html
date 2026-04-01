@@ -3622,6 +3622,7 @@
   let adminOverrides = {}; // { key: value } – persisted to localStorage
   window.adminOverrides = adminOverrides;
   let adminPendingImgKey = null;
+  let isUploading = false;
 
   // ─── Selectors ───────────────────────────────────────────────────────────────
   const $adminToggle   = document.getElementById('adminToggleBtn');
@@ -4071,12 +4072,13 @@
       const maxW = isHero ? 1600 : 1200;
       const maxH = isHero ? 1000 : 900;
       compressImage(ev.target.result, maxW, maxH, 0.82, async (dataUrl) => {
+        isUploading = true;
         // Show immediately from base64
         applyImgOverride(key, dataUrl);
         adminOverrides[key] = dataUrl;
         showToast('⏳ Bild wird hochgeladen…');
 
-        // Upload to Vercel Blob for cross-device sync
+        // Upload to GitHub for cross-device sync
         const blobUrl = await uploadImageToServer(key, dataUrl);
         if (blobUrl) {
           adminOverrides[key] = blobUrl;
@@ -4103,6 +4105,7 @@
             }
           }
         }
+        isUploading = false;
         adminPendingImgKey = null;
         $imgInput.value = '';
       });
@@ -4371,8 +4374,8 @@
 
   // Async: fetch server overrides for cross-device sync (non-blocking)
   async function fetchAndApplyServerOverrides() {
-    // Never overwrite while admin is actively editing
-    if (adminMode) return;
+    // Never overwrite while admin is active or an upload is in progress
+    if (adminMode || isUploading) return;
     try {
       const r = await fetch('/api/overrides?t=' + Date.now());
       if (!r.ok) return;
@@ -4384,9 +4387,10 @@
       applyOverrides();
     } catch (_) { /* server not available (e.g. localhost dev) — ignore */ }
   }
-  fetchAndApplyServerOverrides();
-  // Poll every 15s so visitors see admin changes without refreshing
-  setInterval(fetchAndApplyServerOverrides, 15000);
+  // Initial fetch after 1s so page is fully rendered first
+  setTimeout(fetchAndApplyServerOverrides, 1000);
+  // Poll every 30s so visitors see admin changes without refreshing
+  setInterval(fetchAndApplyServerOverrides, 30000);
 
   // ─── Calendar sync (dedicated endpoint, independent of Vercel Blob) ────────
   async function fetchCalendarFromServer() {
