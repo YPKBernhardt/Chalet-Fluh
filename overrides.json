@@ -176,5 +176,6 @@
   "gallery-8": "https://q0abpkpkkcal6bvg.public.blob.vercel-storage.com/cf-img-gallery-8-6xcAGElM1Kzg2B9poFfuYxcq9uECVJ.jpg",
   "gallery-9": "https://q0abpkpkkcal6bvg.public.blob.vercel-storage.com/cf-img-gallery-9-A4hSz3nlLlzI63BxMkcZUTPaHmi2Nf.jpg",
   "intro-main-img-pos": "50.0% 50.0%",
-  "intro-main-img-scale": "1.000"
+  "intro-main-img-scale": "1.000",
+  "intro-main-img": "https://raw.githubusercontent.com/YPKBernhardt/Chalet-Fluh/main/brand_assets/uploads/intro-main-img.jpeg"
 }
