@@ -3623,7 +3623,8 @@
   window.adminOverrides = adminOverrides;
   let adminPendingImgKey = null;
   let isUploading = false;
-  let lastSavedTs = 0; // timestamp of last successful server save
+  let lastSavedTs = 0;
+  let hasBeenInAdminThisSession = false;
 
   // ─── Selectors ───────────────────────────────────────────────────────────────
   const $adminToggle   = document.getElementById('adminToggleBtn');
@@ -3786,6 +3787,7 @@
   function enterAdminMode() {
     adminMode = true;
     window.adminMode = true;
+    hasBeenInAdminThisSession = true;
     document.body.classList.add('admin-mode');
     $adminBanner.classList.add('active');
     $adminToggle.style.opacity = '1';
@@ -4343,8 +4345,13 @@
     saveOverrides();
     showToast('⏳ Wird gespeichert…');
     const ok = await syncOverridesToServer(adminOverrides);
-    if (ok) lastSavedTs = Date.now();
-    showToast(ok ? '✓ Gespeichert – überall sichtbar in ~1 Min' : '⚠ Speichern fehlgeschlagen – GITHUB_TOKEN fehlt');
+    if (ok) {
+      lastSavedTs = Date.now();
+      showToast('✓ Gespeichert – Seite wird neu geladen…');
+      setTimeout(() => location.reload(), 2000);
+    } else {
+      showToast('⚠ Speichern fehlgeschlagen – GITHUB_TOKEN fehlt');
+    }
   });
 
   $resetAllBtn.addEventListener('click', async () => {
@@ -4377,9 +4384,9 @@
 
   // Async: fetch server overrides for cross-device sync (non-blocking)
   async function fetchAndApplyServerOverrides() {
-    // Never overwrite while admin is active, uploading, or within 3 min of a save
-    if (adminMode || isUploading) return;
-    if (Date.now() - lastSavedTs < 3 * 60 * 1000) return;
+    // Never overwrite during or after an admin session, or during upload
+    if (adminMode || isUploading || hasBeenInAdminThisSession) return;
+    if (Date.now() - lastSavedTs < 5 * 60 * 1000) return;
     try {
       const r = await fetch('/api/overrides?t=' + Date.now());
       if (!r.ok) return;
