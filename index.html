@@ -4067,6 +4067,7 @@
     const file = e.target.files[0];
     if (!file || !adminPendingImgKey) return;
     const key = adminPendingImgKey;
+    isUploading = true; // block poll immediately on file selection
     const reader = new FileReader();
     reader.onload = (ev) => {
       // Compress: hero slides get a larger canvas, other images smaller
@@ -4074,7 +4075,6 @@
       const maxW = isHero ? 1600 : 1200;
       const maxH = isHero ? 1000 : 900;
       compressImage(ev.target.result, maxW, maxH, 0.82, async (dataUrl) => {
-        isUploading = true;
         // Show immediately from base64
         applyImgOverride(key, dataUrl);
         adminOverrides[key] = dataUrl;
