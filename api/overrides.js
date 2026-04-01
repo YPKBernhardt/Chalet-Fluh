@@ -45,7 +45,8 @@ module.exports = async function handler(req, res) {
   // ── POST ─────────────────────────────────────────────────────────────────
   if (req.method === 'POST') {
     const { overrides, password } = req.body || {};
-    if (password !== process.env.ADMIN_PASSWORD) {
+    const expectedPw = process.env.ADMIN_PASSWORD || 'Schumpen12345!';
+    if (password !== expectedPw) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 

@@ -33,7 +33,8 @@ module.exports = async function handler(req, res) {
   if (req.method === 'POST') {
     if (!BIN_ID || !KEY) return res.status(503).json({ error: 'Calendar storage not configured. See api/calendar.js for setup instructions.' });
     const { data, password } = req.body || {};
-    if (password !== process.env.ADMIN_PASSWORD) {
+    const expectedPw = process.env.ADMIN_PASSWORD || 'Schumpen12345!';
+    if (password !== expectedPw) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
     try {
