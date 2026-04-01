@@ -3339,7 +3339,7 @@
             cal_extra_booked:   JSON.stringify([...calExtraBooked]),
             cal_force_unbooked: JSON.stringify([...calForceUnbooked])
           },
-          password: 'Schumpen12345!'
+          password: runtimePassword
         })
       }).then(r => r.json()).then(res => {
         if (window.showToast) window.showToast(res.ok ? '✓ Kalender für alle gespeichert' : '⚠ Kalender: ' + (res.error || 'Speichern fehlgeschlagen'));
@@ -3608,7 +3608,9 @@
 
   <script>
   // ─── ADMIN PANEL ─────────────────────────────────────────────────────────────
-  const ADMIN_PASSWORD   = 'Schumpen12345!';
+  // Password is validated server-side via /api/auth — never stored in source.
+  let runtimePassword    = null;
+  const UNLOCK_SALT      = 'CF_UNLOCK_v2'; // used only for lockout-bypass codes, not real auth
   const ADMIN_STORE_KEY  = 'chaletfluh_admin_overrides';
   const LOCKOUT_KEY      = 'chaletfluh_lockout';
   const RESET_TS_KEY     = 'chaletfluh_reset_ts';
@@ -3654,7 +3656,7 @@
       const r = await fetch('/api/upload-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key, dataUrl, password: ADMIN_PASSWORD }),
+        body: JSON.stringify({ key, dataUrl, password: runtimePassword }),
       });
       if (!r.ok) return null;
       const { url } = await r.json();
@@ -3671,7 +3673,7 @@
       const r = await fetch('/api/overrides', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: ADMIN_PASSWORD, overrides: clean }),
+        body: JSON.stringify({ password: runtimePassword, overrides: clean }),
       });
       if (!r.ok) return false;
       const result = await r.json().catch(() => ({}));
@@ -4181,7 +4183,7 @@
 
   // Daily unlock code — changes every day, derived from password + date
   function getDailyUnlockCode() {
-    const raw = new Date().toDateString() + '_CF_' + ADMIN_PASSWORD;
+    const raw = new Date().toDateString() + '_' + UNLOCK_SALT;
     let h = 5381;
     for (let i = 0; i < raw.length; i++) { h = ((h << 5) + h) ^ raw.charCodeAt(i); h >>>= 0; }
     return h.toString(36).toUpperCase().slice(0, 8).padStart(8, '0');
@@ -4245,30 +4247,42 @@
     if (lock) { showLockoutUI(lock); return; }
 
     const state = getLockoutState();
-    if ($loginInput.value === ADMIN_PASSWORD) {
-      localStorage.removeItem(LOCKOUT_KEY);
-      $loginModal.classList.remove('open');
-      $loginError.style.display = 'none';
-      enterAdminMode();
-    } else {
-      const newAttempts = (state.attempts || 0) + 1;
-      $loginError.style.display = 'block';
-      $loginInput.select();
-      if (newAttempts >= MAX_ATTEMPTS) {
-        const prevLevel = state.lockoutLevel || 0;
-        const nextLevel = Math.min(prevLevel + 1, LOCKOUT_DURATIONS.length);
-        const durMs = LOCKOUT_DURATIONS[nextLevel - 1] * 1000;
-        saveLockoutState({ attempts: 0, lockoutLevel: nextLevel, lockedUntil: now + durMs });
-        $loginError.textContent = `Zu viele Fehlversuche. Zugang für ${formatRemaining(durMs)} gesperrt.`;
-        showLockoutUI(checkLockout());
+    const enteredPw = $loginInput.value;
+    $loginSubmit.disabled = true;
+    fetch('/api/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: enteredPw }),
+    }).then(r => {
+      $loginSubmit.disabled = false;
+      if (r.ok) {
+        runtimePassword = enteredPw;
+        localStorage.removeItem(LOCKOUT_KEY);
+        $loginModal.classList.remove('open');
+        $loginError.style.display = 'none';
+        enterAdminMode();
       } else {
-        saveLockoutState({ attempts: newAttempts, lockoutLevel: state.lockoutLevel || 0 });
-        const left = MAX_ATTEMPTS - newAttempts;
-        $loginError.textContent = `Falsches Passwort – noch ${left} Versuch${left !== 1 ? 'e' : ''}.`;
-        $loginSubmit.disabled = true;
-        setTimeout(() => { $loginSubmit.disabled = false; }, 2000);
+        const newAttempts = (state.attempts || 0) + 1;
+        $loginError.style.display = 'block';
+        $loginInput.select();
+        if (newAttempts >= MAX_ATTEMPTS) {
+          const prevLevel = state.lockoutLevel || 0;
+          const nextLevel = Math.min(prevLevel + 1, LOCKOUT_DURATIONS.length);
+          const durMs = LOCKOUT_DURATIONS[nextLevel - 1] * 1000;
+          saveLockoutState({ attempts: 0, lockoutLevel: nextLevel, lockedUntil: Date.now() + durMs });
+          $loginError.textContent = `Zu viele Fehlversuche. Zugang für ${formatRemaining(durMs)} gesperrt.`;
+          showLockoutUI(checkLockout());
+        } else {
+          saveLockoutState({ attempts: newAttempts, lockoutLevel: state.lockoutLevel || 0 });
+          const left = MAX_ATTEMPTS - newAttempts;
+          $loginError.textContent = `Falsches Passwort – noch ${left} Versuch${left !== 1 ? 'e' : ''}.`;
+        }
       }
-    }
+    }).catch(() => {
+      $loginSubmit.disabled = false;
+      $loginError.style.display = 'block';
+      $loginError.textContent = 'Verbindungsfehler – bitte erneut versuchen.';
+    });
   }
   $loginSubmit.addEventListener('click', tryLogin);
   $loginInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') tryLogin(); });
