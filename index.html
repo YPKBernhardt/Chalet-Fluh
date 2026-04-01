@@ -3623,6 +3623,7 @@
   window.adminOverrides = adminOverrides;
   let adminPendingImgKey = null;
   let isUploading = false;
+  let lastSavedTs = 0; // timestamp of last successful server save
 
   // ─── Selectors ───────────────────────────────────────────────────────────────
   const $adminToggle   = document.getElementById('adminToggleBtn');
@@ -4087,6 +4088,7 @@
           // Immediately sync manifest so all devices see the change
           let synced = await syncOverridesToServer(adminOverrides);
           if (!synced) synced = await syncOverridesToServer(adminOverrides); // one retry
+          if (synced) lastSavedTs = Date.now();
           showToast(synced ? '✓ Bild gespeichert – überall sichtbar in ~1 Min' : '✓ Bild hochgeladen (Text/Kalender: GITHUB_TOKEN fehlt)');
         } else {
           // Fallback: keep base64 in localStorage only
@@ -4341,6 +4343,7 @@
     saveOverrides();
     showToast('⏳ Wird gespeichert…');
     const ok = await syncOverridesToServer(adminOverrides);
+    if (ok) lastSavedTs = Date.now();
     showToast(ok ? '✓ Gespeichert – überall sichtbar in ~1 Min' : '⚠ Speichern fehlgeschlagen – GITHUB_TOKEN fehlt');
   });
 
@@ -4374,8 +4377,9 @@
 
   // Async: fetch server overrides for cross-device sync (non-blocking)
   async function fetchAndApplyServerOverrides() {
-    // Never overwrite while admin is active or an upload is in progress
+    // Never overwrite while admin is active, uploading, or within 3 min of a save
     if (adminMode || isUploading) return;
+    if (Date.now() - lastSavedTs < 3 * 60 * 1000) return;
     try {
       const r = await fetch('/api/overrides?t=' + Date.now());
       if (!r.ok) return;
