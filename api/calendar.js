@@ -13,8 +13,8 @@ module.exports = async function handler(req, res) {
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
 
-  const BIN_ID = process.env.JSONBIN_BIN_ID;
-  const KEY    = process.env.JSONBIN_MASTER_KEY;
+  const BIN_ID = process.env.JSONBIN_BIN_ID || '69cce593aaba882197b3fa7c';
+  const KEY    = process.env.JSONBIN_MASTER_KEY || '$2a$10$AtM/PbDFkGXUGN44IZI5Z..x9pCcIeZ5vw.J9pyNaAyOcHI6Y/xSG';
 
   if (req.method === 'GET') {
     if (!BIN_ID || !KEY) return res.status(200).json({});
