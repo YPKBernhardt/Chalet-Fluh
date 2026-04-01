@@ -4386,8 +4386,9 @@
       if (!r.ok) return;
       const serverOverrides = await r.json();
       if (!serverOverrides || !Object.keys(serverOverrides).length) return;
-      // Server always wins — overwrite local with server state
-      adminOverrides = serverOverrides;
+      // Check again after async — admin may have logged in while fetch was in-flight
+      if (adminMode || isUploading || hasBeenInAdminThisSession) return;
+      Object.assign(adminOverrides, serverOverrides);
       window.adminOverrides = adminOverrides;
       applyOverrides();
     } catch (_) { /* server not available (e.g. localhost dev) — ignore */ }
