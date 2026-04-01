@@ -4370,6 +4370,8 @@
 
   // Async: fetch server overrides for cross-device sync (non-blocking)
   async function fetchAndApplyServerOverrides() {
+    // Never overwrite while admin is actively editing
+    if (adminMode) return;
     try {
       const r = await fetch('/api/overrides?t=' + Date.now());
       if (!r.ok) return;
