@@ -3643,8 +3643,7 @@
 
   // ─── Load saved overrides from localStorage ───────────────────────────────
   function loadOverrides() {
-    // Start with empty — server is the source of truth, applied async below
-    adminOverrides = {};
+    try { adminOverrides = JSON.parse(localStorage.getItem(ADMIN_STORE_KEY) || '{}'); } catch(e) { adminOverrides = {}; }
     window.adminOverrides = adminOverrides;
   }
   window.saveOverrides = function() {
@@ -4345,13 +4344,8 @@
     saveOverrides();
     showToast('⏳ Wird gespeichert…');
     const ok = await syncOverridesToServer(adminOverrides);
-    if (ok) {
-      lastSavedTs = Date.now();
-      showToast('✓ Gespeichert – Seite wird neu geladen…');
-      setTimeout(() => location.reload(), 2000);
-    } else {
-      showToast('⚠ Speichern fehlgeschlagen – GITHUB_TOKEN fehlt');
-    }
+    if (ok) lastSavedTs = Date.now();
+    showToast(ok ? '✓ Gespeichert – auf allen Geräten sichtbar in ~90 Sek.' : '⚠ Speichern fehlgeschlagen – GITHUB_TOKEN fehlt');
   });
 
   $resetAllBtn.addEventListener('click', async () => {
