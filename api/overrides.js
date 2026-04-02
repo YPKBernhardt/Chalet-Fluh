@@ -50,12 +50,19 @@ module.exports = async function handler(req, res) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    // Strip companion '-url' keys (internal tracking only) but keep base64 images —
-    // base64 ensures every device sees the new image immediately, no CDN delay.
+    // Strip base64 and companion '-url' keys. For image keys that have a companion
+    // key+'-url' (the GitHub raw URL), store that URL in the manifest instead.
+    // The '-url' keys are internal tracking only and never stored on the server.
     const clean = {};
     for (const [k, v] of Object.entries(overrides || {})) {
-      if (k.endsWith('-url')) continue; // skip companion URL keys
-      clean[k] = v;
+      if (k.endsWith('-url')) continue;
+      if (typeof v === 'string' && v.startsWith('data:')) {
+        const remoteUrl = overrides[k + '-url'];
+        if (remoteUrl) clean[k] = remoteUrl;
+        // else: image not yet uploaded to GitHub — skip entirely, don't bloat manifest
+      } else {
+        clean[k] = v;
+      }
     }
 
     const saved = { github: false, blob: false };

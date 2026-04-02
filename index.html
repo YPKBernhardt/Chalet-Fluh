@@ -3686,6 +3686,11 @@
       return result.ok === true;
     } catch { return false; }
   }
+  // Bust GitHub CDN cache by appending a timestamp to raw.githubusercontent.com URLs
+  function resolveImgUrl(url) {
+    if (url && url.includes('raw.githubusercontent.com')) return url + '?t=' + Date.now();
+    return url;
+  }
   function applyOverrides() {
     // Text overrides
     document.querySelectorAll('[data-admin-text]').forEach(el => {
@@ -3696,20 +3701,21 @@
     document.querySelectorAll('[data-admin-img]').forEach(el => {
       const key = el.getAttribute('data-admin-img');
       if (adminOverrides[key] !== undefined) {
-        if (el.tagName === 'IMG') { el.src = adminOverrides[key]; }
-        else { el.style.backgroundImage = `url(${adminOverrides[key]})`; }
+        const url = resolveImgUrl(adminOverrides[key]);
+        if (el.tagName === 'IMG') { el.src = url; }
+        else { el.style.backgroundImage = `url(${url})`; }
         // Sync gallery thumbnails
         if (key.startsWith('gallery-')) {
           const idx = parseInt(key.split('-')[1]);
           const thumbs = document.querySelectorAll('#ssThumbs .ss-thumb img');
-          if (thumbs[idx]) thumbs[idx].src = adminOverrides[key];
+          if (thumbs[idx]) thumbs[idx].src = url;
         }
         // Sync area slideshow
         if (key.startsWith('area-')) {
           const idx = parseInt(key.split('-')[1]);
           if (AREA_SLIDES[idx]) {
-            AREA_SLIDES[idx].src = adminOverrides[key];
-            if (areaCurrent === idx) document.getElementById('areaMainImg').src = adminOverrides[key];
+            AREA_SLIDES[idx].src = url;
+            if (areaCurrent === idx) document.getElementById('areaMainImg').src = url;
           }
         }
       }
