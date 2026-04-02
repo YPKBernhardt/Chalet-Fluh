@@ -3667,18 +3667,13 @@
     } catch { return null; }
   }
   async function syncOverridesToServer(overrides) {
-    // Filter: only URLs and text, never base64.
-    // If a key has a companion key+'-url' (remote GitHub URL), use that instead of the base64.
+    // Send everything except companion '-url' keys (internal only).
+    // Base64 images are intentionally included — server stores them so every device
+    // sees the new image immediately without depending on GitHub CDN propagation.
     const clean = {};
     for (const [k, v] of Object.entries(overrides)) {
-      if (k.endsWith('-url')) continue; // handled below as companion
-      if (typeof v === 'string' && v.startsWith('data:')) {
-        const remoteUrl = overrides[k + '-url'];
-        if (remoteUrl) clean[k] = remoteUrl; // use the uploaded GitHub URL for server sync
-        // else: no remote URL yet — skip, don't send base64 to server
-      } else {
-        clean[k] = v;
-      }
+      if (k.endsWith('-url')) continue;
+      clean[k] = v;
     }
     try {
       const r = await fetch('/api/overrides', {

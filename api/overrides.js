@@ -50,10 +50,12 @@ module.exports = async function handler(req, res) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    // Strip base64 — only persist blob URLs, text values, and small JSON values
+    // Strip companion '-url' keys (internal tracking only) but keep base64 images —
+    // base64 ensures every device sees the new image immediately, no CDN delay.
     const clean = {};
     for (const [k, v] of Object.entries(overrides || {})) {
-      if (typeof v === 'string' && !v.startsWith('data:')) clean[k] = v;
+      if (k.endsWith('-url')) continue; // skip companion URL keys
+      clean[k] = v;
     }
 
     const saved = { github: false, blob: false };
