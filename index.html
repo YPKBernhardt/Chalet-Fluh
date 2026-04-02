@@ -3667,10 +3667,18 @@
     } catch { return null; }
   }
   async function syncOverridesToServer(overrides) {
-    // Filter: only blob URLs and text, never base64
+    // Filter: only URLs and text, never base64.
+    // If a key has a companion key+'-url' (remote GitHub URL), use that instead of the base64.
     const clean = {};
     for (const [k, v] of Object.entries(overrides)) {
-      if (typeof v === 'string' && !v.startsWith('data:')) clean[k] = v;
+      if (k.endsWith('-url')) continue; // handled below as companion
+      if (typeof v === 'string' && v.startsWith('data:')) {
+        const remoteUrl = overrides[k + '-url'];
+        if (remoteUrl) clean[k] = remoteUrl; // use the uploaded GitHub URL for server sync
+        // else: no remote URL yet — skip, don't send base64 to server
+      } else {
+        clean[k] = v;
+      }
     }
     try {
       const r = await fetch('/api/overrides', {
@@ -4083,8 +4091,11 @@
         // Upload to GitHub for cross-device sync
         const blobUrl = await uploadImageToServer(key, dataUrl);
         if (blobUrl) {
-          adminOverrides[key] = blobUrl;
-          applyImgOverride(key, blobUrl);
+          // Keep base64 in adminOverrides[key] so localStorage and the DOM always show
+          // the new image immediately (no snap-back, no CDN delay on reload).
+          // Store the GitHub raw URL in a companion key used only for server/cross-device sync.
+          adminOverrides[key + '-url'] = blobUrl;
+          // adminOverrides[key] stays as dataUrl (base64) — already set above
           try { saveOverrides(); } catch(_) {}
           // Immediately sync manifest so all devices see the change
           let synced = await syncOverridesToServer(adminOverrides);
