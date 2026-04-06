@@ -143,7 +143,7 @@
   "t": "v",
   "gallery-4": "https://q0abpkpkkcal6bvg.public.blob.vercel-storage.com/cf-img-gallery-4-Dc76k3yd5XkfrqIaC4uMspBGvJ5xgl.jpg",
   "area-caption-0": "Hochgrat",
-  "lage-img-1-pos": "50.0% 50.0%",
+  "lage-img-1-pos": "50.0% 65.0%",
   "gallery-4-pos": "50.0% 50.0%",
   "intro-accent-img-pos": "50.0% 50.0%",
   "intro-accent-img-scale": "1.000",
@@ -175,5 +175,6 @@
   "intro-main-img-scale": "1.000",
   "hero-slide-3": "https://raw.githubusercontent.com/YPKBernhardt/Chalet-Fluh/main/brand_assets/uploads/hero-slide-3.jpeg",
   "gallery-11-pos": "50.0% 55.0%",
-  "gallery-11-scale": "1.000"
+  "gallery-11-scale": "1.000",
+  "lage-img-1-scale": "1.000"
 }
