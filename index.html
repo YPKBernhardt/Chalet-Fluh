@@ -1878,110 +1878,6 @@
     }
     body.admin-mode [data-admin-text]:hover::after { opacity: 1; }
 
-    /* Editable image hover overlay (floating, not wrapping) */
-    #adminImgOverlay {
-      display: none;
-      position: fixed;
-      z-index: 8800;
-      background: rgba(196,154,60,0.15);
-      border: 1px dashed rgba(196,154,60,0.6);
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 0.35rem;
-      cursor: pointer;
-      pointer-events: none;
-      transition: opacity 0.15s;
-    }
-    #adminImgOverlay.visible { display: flex; pointer-events: none; }
-    #adminImgOverlay span {
-      font-size: 0.7rem;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      color: var(--accent);
-      font-family: 'DM Sans', sans-serif;
-      background: rgba(10,15,11,0.7);
-      padding: 0.3rem 0.6rem;
-    }
-    body.admin-mode [data-admin-img] { cursor: pointer; }
-
-    /* Admin overlay: two-button layout — container is pointer-events:none, only buttons intercept */
-    #adminImgOverlay span { pointer-events: auto; }
-    .overlay-btn {
-      font-size: 0.7rem;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      color: var(--accent);
-      font-family: 'DM Sans', sans-serif;
-      background: rgba(10,15,11,0.88);
-      padding: 0.35rem 0.7rem;
-      cursor: pointer;
-      border: none;
-      pointer-events: auto;
-      display: block;
-      text-align: center;
-      transition: background 0.15s;
-      white-space: nowrap;
-    }
-    .overlay-btn:hover { background: rgba(10,15,11,0.98); color: #fff; }
-
-    /* Hero admin: crop button paired with image button */
-    .hero-admin-pair { display: flex; }
-    .hero-admin-crop-btn {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border-light);
-      border-left: none;
-      color: var(--accent);
-      font-size: 0.85rem;
-      padding: 0.2rem 0.45rem;
-      cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
-      transition: background 0.2s, color 0.2s, border-color 0.2s;
-    }
-    .hero-admin-crop-btn:hover { background: var(--accent); color: var(--bg-base); border-color: var(--accent); }
-
-    /* Crop mode: outline on active image */
-    .admin-crop-mode { outline: 2px solid var(--accent) !important; outline-offset: -2px; cursor: grab !important; user-select: none !important; }
-    .admin-crop-mode:active { cursor: grabbing !important; }
-
-    /* ── Crop control panel (fixed bottom) ── */
-    #cropPanel {
-      display: none;
-      position: fixed;
-      bottom: 0; left: 50%; transform: translateX(-50%);
-      z-index: 9200;
-      background: rgba(10,15,11,0.97);
-      border: 1px solid rgba(196,154,60,0.35);
-      border-bottom: none;
-      backdrop-filter: blur(14px);
-      padding: 0.7rem 1.25rem;
-      align-items: center;
-      gap: 1.25rem;
-      flex-wrap: wrap;
-      min-width: min(680px, 98vw);
-      justify-content: center;
-      font-family: 'DM Sans', sans-serif;
-    }
-    #cropPanel.active { display: flex; }
-    #cropPanelTitle {
-      font-size: 0.6rem; letter-spacing: 0.13em; text-transform: uppercase;
-      color: var(--accent); white-space: nowrap;
-    }
-    .cp-group { display: flex; align-items: center; gap: 0.35rem; }
-    .cp-label { font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-right: 0.1rem; }
-    .cp-btn {
-      background: var(--bg-elevated); border: 1px solid var(--border-light);
-      color: var(--text-secondary); font-size: 0.85rem;
-      width: 2rem; height: 2rem; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
-      user-select: none; font-family: 'DM Sans', sans-serif; flex-shrink: 0;
-    }
-    .cp-btn:hover, .cp-btn:active { background: var(--accent); color: var(--bg-base); border-color: var(--accent); }
-    .cp-btn-wide { width: auto; padding: 0 0.8rem; font-size: 0.68rem; letter-spacing: 0.07em; text-transform: uppercase; }
-    .cp-btn-save { background: var(--accent); color: var(--bg-base); border-color: var(--accent); font-weight: 500; }
-    .cp-btn-save:hover { opacity: 0.85; }
-    #cropZoomVal { font-size: 0.75rem; color: var(--accent); min-width: 3rem; text-align: center; }
 
     /* Lightbox zoom cursor on content images */
     body:not(.admin-mode) .lb-trigger { cursor: zoom-in; }
@@ -2231,10 +2127,10 @@
   <!-- HERO -->
   <section class="hero section-full" style="padding:0; max-width:none;">
     <div class="hero-slides" id="heroSlides">
-      <div class="hero-slide active" style="background-image: url('brand_assets/b87ad3b3-7d27-4201-8c4c-ca8a27691c14.jpg')" data-admin-img="hero-slide-0"></div>
-      <div class="hero-slide" style="background-image: url('brand_assets/60492f3a-54ea-4c1e-9bcd-11c1b5d46e6b.jpg')" data-admin-img="hero-slide-1"></div>
-      <div class="hero-slide" style="background-image: url('brand_assets/d9beb2b7-0475-4604-b166-143b8f3ff819.jpg')" data-admin-img="hero-slide-2"></div>
-      <div class="hero-slide" style="background-image: url('brand_assets/2a3dfd8f-78ef-453b-885b-a1236ecc92ea.jpg')" data-admin-img="hero-slide-3"></div>
+      <div class="hero-slide active" style="background-image: url('brand_assets/Erste Slideshow Bild 1_Seitenansicht.jpeg')"></div>
+      <div class="hero-slide" style="background-image: url('brand_assets/Erste Slideshow Bild 2_Sicht von der Straße.jpeg')"></div>
+      <div class="hero-slide" style="background-image: url('brand_assets/Erste Slideshow Bild 3_Rückseite mit Garten.jpeg')"></div>
+      <div class="hero-slide" style="background-image: url('brand_assets/Erste Slideshow Bild 4_Sicht vom Hügel.jpg')"></div>
     </div>
     <div class="hero-overlay"></div>
     <div class="hero-overlay-top"></div>
@@ -2254,14 +2150,6 @@
           </a>
         </div>
       </div>
-    </div>
-    <!-- Admin controls for hero slides — only visible in admin mode -->
-    <div id="heroAdminControls">
-      <span style="font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); margin-right:0.75rem;">Slideshow Bilder:</span>
-      <span class="hero-admin-pair"><button class="hero-admin-btn" data-slide="0">Bild 1</button><button class="hero-admin-crop-btn" data-slide="0" title="Ausschnitt wählen">✥</button></span>
-      <span class="hero-admin-pair"><button class="hero-admin-btn" data-slide="1">Bild 2</button><button class="hero-admin-crop-btn" data-slide="1" title="Ausschnitt wählen">✥</button></span>
-      <span class="hero-admin-pair"><button class="hero-admin-btn" data-slide="2">Bild 3</button><button class="hero-admin-crop-btn" data-slide="2" title="Ausschnitt wählen">✥</button></span>
-      <span class="hero-admin-pair"><button class="hero-admin-btn" data-slide="3">Bild 4</button><button class="hero-admin-crop-btn" data-slide="3" title="Ausschnitt wählen">✥</button></span>
     </div>
     <div class="hero-scroll-hint">
       <div class="scroll-line"></div>
@@ -2296,8 +2184,8 @@
   <section id="das-chalet">
     <div class="intro-grid">
       <div class="intro-image-stack reveal">
-        <img class="intro-img-main lb-trigger" src="brand_assets/a952ec4b-1602-4ed8-be75-d49e3a12499e.jpg" alt="Chalet Fluh Sommerblick" data-admin-img="intro-main-img" />
-        <img class="intro-img-accent lb-trigger" src="brand_assets/300_4402.jpeg" alt="Interieur Chalet Fluh" data-admin-img="intro-accent-img" />
+        <img class="intro-img-main lb-trigger" src="brand_assets/Zweiter Bilderabschnitt Bild 1_Rückseite.jpeg" alt="Chalet Fluh Rückseite" />
+        <img class="intro-img-accent lb-trigger" src="brand_assets/Zweiter Bildabschnitt Bild 2_Küche.jpeg" alt="Chalet Fluh Küche" />
         <div class="intro-badge">
           <div class="intro-badge-year">2015</div>
           <div class="intro-badge-label">Erbaut</div>
@@ -2462,18 +2350,18 @@
     <div class="slideshow-wrap reveal">
       <div class="slideshow-main" id="gallerySlideshow">
         <div class="ss-track" id="ssTrack">
-          <div class="ss-slide"><img src="brand_assets/300_4406.jpeg" alt="Schlafzimmer" data-admin-img="gallery-0" class="lb-trigger" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_7956.jpeg" alt="Schlafzimmer OG" data-admin-img="gallery-1" class="lb-trigger" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_7955.jpeg" alt="Schlafzimmer" data-admin-img="gallery-2" class="lb-trigger" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_2471.jpeg" alt="Mehrbettzimmer" data-admin-img="gallery-3" class="lb-trigger" /></div>
-          <div class="ss-slide"><img src="brand_assets/300_4404.jpeg" alt="Obergeschoss · Sauna &amp; Lounge" data-admin-img="gallery-4" class="lb-trigger" /></div>
-          <div class="ss-slide"><img src="brand_assets/300_4310.jpeg" alt="Vollausgestattete Profiküche" data-admin-img="gallery-5" class="lb-trigger" /></div>
-          <div class="ss-slide"><img src="brand_assets/300_4319.jpeg" alt="Sofaecke mit Kamin &amp; TV" data-admin-img="gallery-6" class="lb-trigger" /></div>
-          <div class="ss-slide"><img src="brand_assets/300_4345.jpeg" alt="Schlafzimmer mit Bad im Erdgeschoss" data-admin-img="gallery-7" class="lb-trigger" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_4090.jpeg" alt="Terrasse" data-admin-img="gallery-8" class="lb-trigger" /></div>
-          <div class="ss-slide"><img src="brand_assets/IMG_2016.jpeg" alt="Außenbereich" data-admin-img="gallery-9" class="lb-trigger" /></div>
-          <div class="ss-slide"><img src="brand_assets/grundriss1.jpg" alt="Grundriss EG" data-admin-img="gallery-10" class="lb-trigger" /></div>
-          <div class="ss-slide"><img src="brand_assets/Grundriss2.jpg" alt="Grundriss OG" data-admin-img="gallery-11" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/Zweite Slideshow Bild 1_Mehrbettzimmer.jpeg" alt="Mehrbettzimmer" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/Zweite Slideshow Bild 2_Schlafraum OG.jpeg" alt="Schlafraum OG" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/zweite Slideshow Bild 3_Schlafraum OG.jpeg" alt="Schlafraum OG" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/Zweite Slideshow Bild 4_Schlafraum OG.jpeg" alt="Schlafraum OG" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/Zweite Slideshow Bild 5_Obergeschoss mit Sauna.jpeg" alt="Obergeschoss mit Sauna" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/Zweite Slideshow Bild 6_Profiküche.jpeg" alt="Profiküche" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/Zweite Slideshow Bild 7_Kaminecke.jpeg" alt="Kaminecke" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/Zweite Slideshow Bild 8_Schlafraum UG mit eigenem Bad.jpeg" alt="Schlafraum UG mit eigenem Bad" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/Zweite Slideshow Bild 9_Terasse mit Grill.jpeg" alt="Terrasse mit Grill" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/Zweite Slideshow Bild 10_Terasse.jpeg" alt="Terrasse" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/Zweite Slideshow Bild 11_Grundriss UG.jpg" alt="Grundriss UG" class="lb-trigger" /></div>
+          <div class="ss-slide"><img src="brand_assets/Zweite Sideshow Bild 12_Grundriss OG.jpg" alt="Grundriss OG" class="lb-trigger" /></div>
         </div>
         <!-- Arrows -->
         <button class="ss-arrow ss-prev" id="ssPrev" aria-label="Vorheriges Bild">
@@ -2493,34 +2381,21 @@
 
       <!-- Thumbnail strip -->
       <div class="ss-thumbs" id="ssThumbs">
-        <div class="ss-thumb ss-thumb-active" onclick="ssGoTo(0)"><img src="brand_assets/300_4406.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(1)"><img src="brand_assets/IMG_7956.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(2)"><img src="brand_assets/IMG_7955.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(3)"><img src="brand_assets/IMG_2471.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(4)"><img src="brand_assets/300_4404.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(5)"><img src="brand_assets/300_4310.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(6)"><img src="brand_assets/300_4319.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(7)"><img src="brand_assets/300_4345.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(8)"><img src="brand_assets/IMG_4090.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(9)"><img src="brand_assets/IMG_2016.jpeg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(10)"><img src="brand_assets/grundriss1.jpg" alt="" /></div>
-        <div class="ss-thumb" onclick="ssGoTo(11)"><img src="brand_assets/Grundriss2.jpg" alt="" /></div>
+        <div class="ss-thumb ss-thumb-active" onclick="ssGoTo(0)"><img src="brand_assets/Zweite Slideshow Bild 1_Mehrbettzimmer.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(1)"><img src="brand_assets/Zweite Slideshow Bild 2_Schlafraum OG.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(2)"><img src="brand_assets/zweite Slideshow Bild 3_Schlafraum OG.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(3)"><img src="brand_assets/Zweite Slideshow Bild 4_Schlafraum OG.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(4)"><img src="brand_assets/Zweite Slideshow Bild 5_Obergeschoss mit Sauna.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(5)"><img src="brand_assets/Zweite Slideshow Bild 6_Profiküche.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(6)"><img src="brand_assets/Zweite Slideshow Bild 7_Kaminecke.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(7)"><img src="brand_assets/Zweite Slideshow Bild 8_Schlafraum UG mit eigenem Bad.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(8)"><img src="brand_assets/Zweite Slideshow Bild 9_Terasse mit Grill.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(9)"><img src="brand_assets/Zweite Slideshow Bild 10_Terasse.jpeg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(10)"><img src="brand_assets/Zweite Slideshow Bild 11_Grundriss UG.jpg" alt="" /></div>
+        <div class="ss-thumb" onclick="ssGoTo(11)"><img src="brand_assets/Zweite Sideshow Bild 12_Grundriss OG.jpg" alt="" /></div>
       </div>
       <!-- Gallery admin controls — only visible in admin mode -->
       <div id="galleryAdminControls">
-        <span style="font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); margin-right:0.5rem; flex-shrink:0;">Bilder ändern:</span>
-        <button class="gallery-admin-btn" data-gslide="0">Bild 1</button>
-        <button class="gallery-admin-btn" data-gslide="1">Bild 2</button>
-        <button class="gallery-admin-btn" data-gslide="2">Bild 3</button>
-        <button class="gallery-admin-btn" data-gslide="3">Bild 4</button>
-        <button class="gallery-admin-btn" data-gslide="4">Bild 5</button>
-        <button class="gallery-admin-btn" data-gslide="5">Bild 6</button>
-        <button class="gallery-admin-btn" data-gslide="6">Bild 7</button>
-        <button class="gallery-admin-btn" data-gslide="7">Bild 8</button>
-        <button class="gallery-admin-btn" data-gslide="8">Bild 9</button>
-        <button class="gallery-admin-btn" data-gslide="9">Bild 10</button>
-        <button class="gallery-admin-btn" data-gslide="10">Bild 11</button>
-        <button class="gallery-admin-btn" data-gslide="11">Bild 12</button>
         <button class="gallery-admin-btn" id="ssPauseBtn">⏸ Pause</button>
       </div>
     </div>
@@ -2595,10 +2470,10 @@
       </div>
       <div class="location-images">
         <div class="location-img">
-          <img src="brand_assets/IMG_7965.jpeg" alt="Blick vom Hochgrat" loading="lazy" data-admin-img="lage-img-1" class="lb-trigger" />
+          <img src="brand_assets/Vierter Bildabschnitt Bild 1_Chalet im Sommer.jpeg" alt="Chalet im Sommer" loading="lazy" class="lb-trigger" />
         </div>
         <div class="location-img">
-          <img src="brand_assets/IMG_3866.jpeg" alt="Imberg-Skigebiet" loading="lazy" data-admin-img="lage-img-2" class="lb-trigger" />
+          <img src="brand_assets/Vierter Bildabschnitt Bild 2_Chalet im Winter.jpg" alt="Chalet im Winter" loading="lazy" class="lb-trigger" />
         </div>
       </div>
     </div>
@@ -3143,10 +3018,10 @@
 
     // ─── GALLERY SLIDESHOW ───────────────────────────────────────────
     const ssCaptions = [
-      'Schlafzimmer mit Holzbalken','Schlafzimmer OG','Schlafzimmer',
-      'Mehrbettzimmer','Obergeschoss · Sauna & Lounge','Vollausgestattete Profiküche','Sofaecke mit Kamin & TV',
-      'Schlafzimmer mit Bad im Erdgeschoss','Terrasse','Außenbereich',
-      'Grundriss EG','Grundriss OG'
+      'Mehrbettzimmer','Schlafraum OG','Schlafraum OG',
+      'Schlafraum OG','Obergeschoss mit Sauna','Profiküche','Kaminecke',
+      'Schlafraum UG mit eigenem Bad','Terrasse mit Grill','Terrasse',
+      'Grundriss UG','Grundriss OG'
     ];
     let ssCurrent = 0;
     let ssTotal = 12;
@@ -3245,18 +3120,18 @@
     document.querySelectorAll('.intro-img-main, .intro-img-accent').forEach(img => {
       img.addEventListener('click', () => { if (!window.adminMode) openLightbox(img.src, img.alt); });
     });
-    document.querySelectorAll('[data-admin-img^="lage-img"]').forEach(img => {
+    document.querySelectorAll('.location-img img').forEach(img => {
       img.addEventListener('click', () => { if (!window.adminMode) openLightbox(img.src, ''); });
     });
 
     // ─── AREA SLIDESHOW (Lage) ───────────────────────────────────────
     const AREA_SLIDES = [
-      { src: 'brand_assets/IMG_9098.jpeg',                             caption: 'Hochgrat',                  sub: '1.832 m · Panoramagipfel Naturpark Nagelfluhkette' },
-      { src: 'brand_assets/IMG_9095.jpeg',                             caption: 'Imberg-Skigebiet',           sub: 'Direkt vor der Tür · Ski, Rodeln & Winterwandern' },
-      { src: 'brand_assets/5329b968-2c1f-4f58-8667-69c8f422371c.jpg', caption: 'Buchenegger Wasserfälle',    sub: 'Wildromantische Wasserfälle · 30 min Fußmarsch' },
-      { src: 'brand_assets/b87ad3b3-7d27-4201-8c4c-ca8a27691c14.jpg', caption: 'Naturpark Nagelfluhkette',   sub: '400 km² · Deutsch-Österreichisches Naturschutzgebiet' },
-      { src: 'brand_assets/IMG_7965.jpeg',                             caption: 'Steibis & Schindelberg',     sub: 'Alleinlage des Chalets · Ruhe & unberührte Natur' },
-      { src: 'brand_assets/2019d1a5-7a51-4e71-8eba-841762cede2a.jpg', caption: 'Allgäuer Viehscheid',        sub: 'Traditionelles Almabtriebsfest · Allgäu im September' },
+      { src: 'brand_assets/Fünfter Bildabschnitt Bild 1_Hochgrat .jpeg',               caption: 'Hochgrat',                  sub: '1.832 m · Panoramagipfel Naturpark Nagelfluhkette' },
+      { src: 'brand_assets/Fünfter Bildabschnitt Bild 2_Imberg-Skigebiet.jpeg',        caption: 'Imberg-Skigebiet',           sub: 'Direkt vor der Tür · Ski, Rodeln & Winterwandern' },
+      { src: 'brand_assets/Fünfter Bildabschnitt Bild 3_Buchenegger Wasserfälle.jpeg', caption: 'Buchenegger Wasserfälle',    sub: 'Wildromantische Wasserfälle · 30 min Fußmarsch' },
+      { src: 'brand_assets/Fünfter Bildabschnitt Bild 4_Naturpark Nagelfuhkette.jpg',  caption: 'Naturpark Nagelfluhkette',   sub: '400 km² · Deutsch-Österreichisches Naturschutzgebiet' },
+      { src: 'brand_assets/Fünfter Bildabschnitt Bild 5_Steibis & Schindelberg.jpeg',  caption: 'Steibis & Schindelberg',     sub: 'Alleinlage des Chalets · Ruhe & unberührte Natur' },
+      { src: 'brand_assets/Fünfter Bildabschnitt Bild 6_Allgäuer Viehscheid.jpg',      caption: 'Allgäuer Viehscheid',        sub: 'Traditionelles Almabtriebsfest · Allgäu im September' },
     ];
     let areaCurrent = 0;
 
@@ -3265,7 +3140,6 @@
       const s = AREA_SLIDES[areaCurrent];
       const _areaMainImg = document.getElementById('areaMainImg');
       _areaMainImg.src = s.src;
-      _areaMainImg.setAttribute('data-admin-img', `area-${areaCurrent}`);
       _areaMainImg.style.objectPosition = (window.adminOverrides && window.adminOverrides[`area-${areaCurrent}-pos`]) || '50% 50%';
       const _areaScale = parseFloat(window.adminOverrides && window.adminOverrides[`area-${areaCurrent}-scale`]);
       _areaMainImg.style.transform = (_areaScale && !isNaN(_areaScale)) ? `scale(${_areaScale.toFixed(3)})` : '';
@@ -3283,7 +3157,7 @@
     AREA_SLIDES.forEach((s, i) => {
       const div = document.createElement('div');
       div.className = 'area-ss-thumb-item' + (i === 0 ? ' active' : '');
-      div.innerHTML = `<img src="${s.src}" alt="${s.caption}" loading="lazy" data-admin-img="area-${i}" /><div class="area-ss-thumb-label">${s.caption}</div>`;
+      div.innerHTML = `<img src="${s.src}" alt="${s.caption}" loading="lazy" /><div class="area-ss-thumb-label">${s.caption}</div>`;
       div.addEventListener('click', () => areaGoTo(i));
       areaThumbcol.appendChild(div);
     });
@@ -3571,40 +3445,8 @@
     </div>
   </div>
 
-  <!-- Hidden file input for image replacement -->
-  <input type="file" id="adminImgInput" accept="image/*" style="display:none" />
-
-  <!-- Floating image hover overlay -->
-  <div id="adminImgOverlay">
-    <span class="overlay-btn" id="overlayChangeBtn">📷 Bild austauschen</span>
-    <span class="overlay-btn" id="overlayCropBtn">✥ Ausschnitt wählen</span>
-  </div>
-
   <!-- Save toast notification -->
   <div id="adminSavedToast">✓ Gespeichert</div>
-
-  <!-- Crop control panel — visible when in crop mode -->
-  <div id="cropPanel">
-    <span id="cropPanelTitle">✥ <span id="cropPanelName">Bild</span></span>
-    <div class="cp-group">
-      <span class="cp-label">Position</span>
-      <button class="cp-btn" data-crop="up"    title="Hoch">↑</button>
-      <button class="cp-btn" data-crop="down"  title="Runter">↓</button>
-      <button class="cp-btn" data-crop="left"  title="Links">←</button>
-      <button class="cp-btn" data-crop="right" title="Rechts">→</button>
-      <button class="cp-btn" data-crop="center" title="Zentrieren" style="font-size:.65rem;">⊙</button>
-    </div>
-    <div class="cp-group">
-      <span class="cp-label">Zoom</span>
-      <button class="cp-btn" data-crop="zoomout" title="Kleiner">−</button>
-      <span id="cropZoomVal">100%</span>
-      <button class="cp-btn" data-crop="zoomin"  title="Größer">+</button>
-    </div>
-    <div class="cp-group">
-      <button class="cp-btn cp-btn-wide" data-crop="reset">↺ Reset</button>
-      <button class="cp-btn cp-btn-wide cp-btn-save" data-crop="save">✓ Speichern</button>
-    </div>
-  </div>
 
   <script>
   // ─── ADMIN PANEL ─────────────────────────────────────────────────────────────
@@ -3621,8 +3463,6 @@
   window.adminMode = false;
   let adminOverrides = {}; // { key: value } – persisted to localStorage
   window.adminOverrides = adminOverrides;
-  let adminPendingImgKey = null;
-  let isUploading = false;
   let lastSavedTs = 0;
   let hasBeenInAdminThisSession = false;
 
@@ -3637,9 +3477,7 @@
   const $saveBtn       = document.getElementById('adminSaveBtn');
   const $resetAllBtn   = document.getElementById('adminResetAllBtn');
   const $exitBtn       = document.getElementById('adminExitBtn');
-  const $imgInput      = document.getElementById('adminImgInput');
   const $toast         = document.getElementById('adminSavedToast');
-  const $imgOverlay    = document.getElementById('adminImgOverlay');
 
   // ─── Load saved overrides from localStorage ───────────────────────────────
   function loadOverrides() {
@@ -3654,25 +3492,11 @@
   }
 
   // ─── Server sync helpers ───────────────────────────────────────────────────
-  async function uploadImageToServer(key, dataUrl) {
-    try {
-      const r = await fetch('/api/upload-image', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key, dataUrl, password: runtimePassword }),
-      });
-      if (!r.ok) return null;
-      const { url } = await r.json();
-      return url || null;
-    } catch { return null; }
-  }
   async function syncOverridesToServer(overrides) {
-    // Send everything except companion '-url' keys (internal only).
-    // Base64 images are intentionally included — server stores them so every device
-    // sees the new image immediately without depending on GitHub CDN propagation.
+    // Strip base64 — images are now hardcoded, only text and calendar overrides go to server
     const clean = {};
     for (const [k, v] of Object.entries(overrides)) {
-      if (k.endsWith('-url')) continue;
+      if (typeof v === 'string' && v.startsWith('data:')) continue;
       clean[k] = v;
     }
     try {
@@ -3687,49 +3511,11 @@
     } catch { return false; }
   }
   // Bust GitHub CDN cache by appending a timestamp to raw.githubusercontent.com URLs
-  function resolveImgUrl(url) {
-    if (url && url.includes('raw.githubusercontent.com')) return url + '?t=' + Date.now();
-    return url;
-  }
   function applyOverrides() {
     // Text overrides
     document.querySelectorAll('[data-admin-text]').forEach(el => {
       const key = el.getAttribute('data-admin-text');
       if (adminOverrides[key] !== undefined) el.innerHTML = adminOverrides[key];
-    });
-    // Image overrides
-    document.querySelectorAll('[data-admin-img]').forEach(el => {
-      const key = el.getAttribute('data-admin-img');
-      if (adminOverrides[key] !== undefined) {
-        const url = resolveImgUrl(adminOverrides[key]);
-        if (el.tagName === 'IMG') { el.src = url; }
-        else { el.style.backgroundImage = `url(${url})`; }
-        // Sync gallery thumbnails
-        if (key.startsWith('gallery-')) {
-          const idx = parseInt(key.split('-')[1]);
-          const thumbs = document.querySelectorAll('#ssThumbs .ss-thumb img');
-          if (thumbs[idx]) thumbs[idx].src = url;
-        }
-        // Sync area slideshow
-        if (key.startsWith('area-')) {
-          const idx = parseInt(key.split('-')[1]);
-          if (AREA_SLIDES[idx]) {
-            AREA_SLIDES[idx].src = url;
-            if (areaCurrent === idx) document.getElementById('areaMainImg').src = url;
-          }
-        }
-      }
-    });
-    // Position & scale overrides for all admin images
-    document.querySelectorAll('[data-admin-img]').forEach(el => {
-      const key = el.getAttribute('data-admin-img');
-      const pos = adminOverrides[key + '-pos'];
-      if (pos) {
-        if (el.tagName === 'IMG') el.style.objectPosition = pos;
-        else el.style.backgroundPosition = pos;
-      }
-      const scale = parseFloat(adminOverrides[key + '-scale']);
-      if (scale && !isNaN(scale)) el.style.transform = `scale(${scale.toFixed(3)})`;
     });
     // Gallery caption overrides
     for (let i = 0; i < ssCaptions.length; i++) {
@@ -3762,21 +3548,6 @@
   window.syncOverridesToServer = syncOverridesToServer;
   window.showToast = showToast;
 
-  // ─── Image overlay (floating, no DOM wrapping) ───────────────────────────
-  let adminOverlayTarget = null;
-  function positionOverlayOnImg(img) {
-    const r = img.getBoundingClientRect();
-    $imgOverlay.style.left   = r.left + 'px';
-    $imgOverlay.style.top    = r.top  + 'px';
-    $imgOverlay.style.width  = r.width + 'px';
-    $imgOverlay.style.height = r.height + 'px';
-    $imgOverlay.classList.add('visible');
-    adminOverlayTarget = img;
-  }
-  function hideOverlay() {
-    $imgOverlay.classList.remove('visible');
-    adminOverlayTarget = null;
-  }
 
   // ─── Caption edit handlers ────────────────────────────────────────────────
   function onGalleryCaptionInput(e) {
@@ -3815,12 +3586,6 @@
     const areaSubEl = document.getElementById('areaCapSub');
     if (areaCaptionEl) { areaCaptionEl.contentEditable = 'true'; areaCaptionEl.addEventListener('input', onAreaCaptionInput); }
     if (areaSubEl) { areaSubEl.contentEditable = 'true'; areaSubEl.addEventListener('input', onAreaSubInput); }
-    // Attach hover+click listeners to images (no wrapping)
-    document.querySelectorAll('[data-admin-img]').forEach(img => {
-      img.addEventListener('mouseenter', onImgHover);
-      img.addEventListener('mouseleave', onImgLeave);
-      img.addEventListener('click', onImgClick);
-    });
     if (typeof renderCalendar === 'function') renderCalendar();
   }
   function exitAdminMode() {
@@ -3844,13 +3609,6 @@
     const areaSubEl = document.getElementById('areaCapSub');
     if (areaCaptionEl) { areaCaptionEl.contentEditable = 'false'; areaCaptionEl.removeEventListener('input', onAreaCaptionInput); }
     if (areaSubEl) { areaSubEl.contentEditable = 'false'; areaSubEl.removeEventListener('input', onAreaSubInput); }
-    document.querySelectorAll('[data-admin-img]').forEach(img => {
-      img.removeEventListener('mouseenter', onImgHover);
-      img.removeEventListener('mouseleave', onImgLeave);
-      img.removeEventListener('click', onImgClick);
-    });
-    if (cropTarget) endCropSession();
-    hideOverlay();
     if (typeof renderCalendar === 'function') renderCalendar();
   }
 
@@ -3859,319 +3617,6 @@
     const key = e.target.getAttribute('data-admin-text');
     adminOverrides[key] = e.target.innerHTML;
   }
-
-  // ─── Image replacement ────────────────────────────────────────────────────
-  function onImgHover(e) {
-    if (cropTarget) return; // never show overlay while in crop mode
-    positionOverlayOnImg(e.currentTarget);
-  }
-  function onImgLeave(e) {
-    if (cropTarget) return;
-    const related = e.relatedTarget;
-    if (related && related.closest('#adminImgOverlay')) return;
-    hideOverlay();
-  }
-  function onImgClick(e) { /* handled via overlay buttons */ }
-  function onOverlayClick() { /* not used */ }
-
-  // ─── Overlay buttons ─────────────────────────────────────────────────────
-  function onOverlayChangeBtnClick() {
-    if (!adminOverlayTarget) return;
-    adminPendingImgKey = adminOverlayTarget.getAttribute('data-admin-img');
-    hideOverlay();
-    $imgInput.click();
-  }
-  function onOverlayCropBtnClick() {
-    if (!adminOverlayTarget) return;
-    const target = adminOverlayTarget;
-    hideOverlay();
-    startCropSession(target);
-  }
-  document.getElementById('overlayChangeBtn').addEventListener('click', onOverlayChangeBtnClick);
-  document.getElementById('overlayCropBtn').addEventListener('click', onOverlayCropBtnClick);
-  // Hide overlay when cursor leaves a button (but not if going back to image)
-  document.querySelectorAll('.overlay-btn').forEach(btn => {
-    btn.addEventListener('mouseleave', e => {
-      if (cropTarget) return;
-      const related = e.relatedTarget;
-      if (related && adminOverlayTarget && (related === adminOverlayTarget || adminOverlayTarget.contains(related))) return;
-      if (related && related.closest('#adminImgOverlay')) return;
-      hideOverlay();
-    });
-  });
-
-  // ─── Crop / reposition / zoom session ────────────────────────────────────
-  let cropTarget = null, cropIsDragging = false;
-  let cropStartX = 0, cropStartY = 0, cropStartPosX = 50, cropStartPosY = 50;
-  let cropPosX = 50, cropPosY = 50, cropScale = 1;
-  let cropHoldTimer = null;
-  const $cropPanel = document.getElementById('cropPanel');
-
-  function _parsePosStr(el) {
-    const raw = el.tagName === 'IMG' ? el.style.objectPosition : el.style.backgroundPosition;
-    if (!raw || raw === 'initial') return { x: 50, y: 50 };
-    const parts = raw.replace(/%/g, '').trim().split(/\s+/);
-    return { x: parseFloat(parts[0]) || 50, y: parseFloat(parts[1] !== undefined ? parts[1] : parts[0]) || 50 };
-  }
-  function _applyPosXY(nx, ny) {
-    cropPosX = Math.max(0, Math.min(100, nx));
-    cropPosY = Math.max(0, Math.min(100, ny));
-    const v = `${cropPosX.toFixed(1)}% ${cropPosY.toFixed(1)}%`;
-    if (!cropTarget) return;
-    if (cropTarget.tagName === 'IMG') cropTarget.style.objectPosition = v;
-    else cropTarget.style.backgroundPosition = v;
-  }
-  function _applyScale(s) {
-    cropScale = Math.max(0.3, Math.min(4.0, s));
-    if (cropTarget) cropTarget.style.transform = `scale(${cropScale.toFixed(3)})`;
-    const zv = document.getElementById('cropZoomVal');
-    if (zv) zv.textContent = Math.round(cropScale * 100) + '%';
-  }
-
-  function startCropSession(el) {
-    cropTarget = el;
-    const p = _parsePosStr(el);
-    cropPosX = p.x; cropPosY = p.y;
-    const key = el.getAttribute('data-admin-img');
-    const savedScale = key ? (parseFloat(adminOverrides[key + '-scale']) || 1) : 1;
-    cropScale = savedScale;
-    el.style.transform = `scale(${cropScale.toFixed(3)})`;
-    el.classList.add('admin-crop-mode');
-    // Show panel
-    document.getElementById('cropPanelName').textContent = el.alt || key || 'Bild';
-    document.getElementById('cropZoomVal').textContent = Math.round(cropScale * 100) + '%';
-    $cropPanel.classList.add('active');
-    // Drag + scroll on image
-    el.addEventListener('mousedown', _onCropDown, { capture: true });
-    el.addEventListener('wheel',     _onCropWheel, { passive: false, capture: true });
-  }
-
-  function endCropSession() {
-    if (!cropTarget) return;
-    cropTarget.classList.remove('admin-crop-mode');
-    cropTarget.removeEventListener('mousedown', _onCropDown, { capture: true });
-    cropTarget.removeEventListener('wheel',     _onCropWheel, { capture: true });
-    document.removeEventListener('mousemove', _onCropMove);
-    document.removeEventListener('mouseup',   _onCropUp);
-    clearInterval(cropHoldTimer);
-    $cropPanel.classList.remove('active');
-    // Save
-    const key = cropTarget.getAttribute('data-admin-img');
-    if (key) {
-      adminOverrides[key + '-pos']   = `${cropPosX.toFixed(1)}% ${cropPosY.toFixed(1)}%`;
-      adminOverrides[key + '-scale'] = cropScale.toFixed(3);
-      saveOverrides();
-      (async () => {
-        let synced = await syncOverridesToServer(adminOverrides);
-        if (!synced) synced = await syncOverridesToServer(adminOverrides); // one retry
-        showToast(synced ? '✓ Ausschnitt & Zoom gespeichert' : '⚠ Speichern fehlgeschlagen – GITHUB_TOKEN fehlt');
-      })();
-    }
-    cropTarget = null;
-    cropIsDragging = false;
-    // Resume hero slideshow if we were cropping a hero slide
-    if (key && key.startsWith('hero-slide') && window.heroResumeSlideshow) {
-      window.heroResumeSlideshow();
-    }
-  }
-
-  // Drag (bonus on top of buttons)
-  function _onCropDown(e) {
-    if (e.target.closest('#cropPanel')) return;
-    cropIsDragging = true;
-    cropStartX = e.clientX; cropStartY = e.clientY;
-    cropStartPosX = cropPosX; cropStartPosY = cropPosY;
-    document.addEventListener('mousemove', _onCropMove);
-    document.addEventListener('mouseup',   _onCropUp);
-    e.preventDefault(); e.stopPropagation();
-  }
-  function _onCropMove(e) {
-    if (!cropIsDragging || !cropTarget) return;
-    const sens = 1 / cropScale;
-    const dx = (e.clientX - cropStartX) / cropTarget.clientWidth  * 100 * sens;
-    const dy = (e.clientY - cropStartY) / cropTarget.clientHeight * 100 * sens;
-    _applyPosXY(cropStartPosX - dx, cropStartPosY - dy);
-  }
-  function _onCropUp() {
-    cropIsDragging = false;
-    document.removeEventListener('mousemove', _onCropMove);
-    document.removeEventListener('mouseup',   _onCropUp);
-  }
-  // Scroll wheel zoom (bonus)
-  function _onCropWheel(e) {
-    e.preventDefault(); e.stopPropagation();
-    _applyScale(cropScale + (e.deltaY < 0 ? 0.1 : -0.1));
-  }
-
-  // Panel buttons — step actions + hold-to-repeat
-  const CROP_STEP = 5; // percent per click
-  function _doCropAction(action) {
-    if (!cropTarget) return;
-    switch (action) {
-      case 'up':      _applyPosXY(cropPosX, cropPosY - CROP_STEP); break;
-      case 'down':    _applyPosXY(cropPosX, cropPosY + CROP_STEP); break;
-      case 'left':    _applyPosXY(cropPosX - CROP_STEP, cropPosY); break;
-      case 'right':   _applyPosXY(cropPosX + CROP_STEP, cropPosY); break;
-      case 'center':  _applyPosXY(50, 50); break;
-      case 'zoomin':  _applyScale(cropScale + 0.1); break;
-      case 'zoomout': _applyScale(cropScale - 0.1); break;
-      case 'reset':
-        _applyPosXY(50, 50);
-        _applyScale(1);
-        break;
-      case 'save':
-        endCropSession();
-        break;
-    }
-  }
-  $cropPanel.querySelectorAll('[data-crop]').forEach(btn => {
-    const action = btn.getAttribute('data-crop');
-    btn.addEventListener('click', () => _doCropAction(action));
-    // Hold-to-repeat for directional and zoom buttons
-    if (['up','down','left','right','zoomin','zoomout'].includes(action)) {
-      btn.addEventListener('mousedown', () => {
-        cropHoldTimer = setInterval(() => _doCropAction(action), 120);
-      });
-      btn.addEventListener('mouseup',    () => clearInterval(cropHoldTimer));
-      btn.addEventListener('mouseleave', () => clearInterval(cropHoldTimer));
-    }
-  });
-  function compressImage(dataUrl, maxW, maxH, quality, cb) {
-    const img = new Image();
-    img.onload = () => {
-      let w = img.width, h = img.height;
-      if (w > maxW || h > maxH) {
-        const ratio = Math.min(maxW / w, maxH / h);
-        w = Math.round(w * ratio);
-        h = Math.round(h * ratio);
-      }
-      const canvas = document.createElement('canvas');
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      cb(canvas.toDataURL('image/jpeg', quality));
-    };
-    img.src = dataUrl;
-  }
-
-  function applyImgOverride(key, dataUrl) {
-    document.querySelectorAll(`[data-admin-img="${key}"]`).forEach(el => {
-      if (el.tagName === 'IMG') { el.src = dataUrl; }
-      else { el.style.backgroundImage = `url(${dataUrl})`; }
-    });
-    if (key.startsWith('gallery-')) {
-      const idx = parseInt(key.split('-')[1]);
-      const thumbs = document.querySelectorAll('#ssThumbs .ss-thumb img');
-      if (thumbs[idx]) thumbs[idx].src = dataUrl;
-    }
-    if (key.startsWith('area-')) {
-      const idx = parseInt(key.split('-')[1]);
-      if (AREA_SLIDES[idx]) {
-        AREA_SLIDES[idx].src = dataUrl;
-        if (areaCurrent === idx) document.getElementById('areaMainImg').src = dataUrl;
-      }
-    }
-  }
-
-  $imgInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (!file || !adminPendingImgKey) return;
-    const key = adminPendingImgKey;
-    isUploading = true; // block poll immediately on file selection
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      // Compress: hero slides get a larger canvas, other images smaller
-      const isHero = key.startsWith('hero-slide');
-      const maxW = isHero ? 1600 : 1200;
-      const maxH = isHero ? 1000 : 900;
-      compressImage(ev.target.result, maxW, maxH, 0.82, async (dataUrl) => {
-        // Show immediately from base64
-        applyImgOverride(key, dataUrl);
-        adminOverrides[key] = dataUrl;
-        showToast('⏳ Bild wird hochgeladen…');
-
-        // Upload to GitHub for cross-device sync
-        const blobUrl = await uploadImageToServer(key, dataUrl);
-        if (blobUrl) {
-          // Keep base64 in adminOverrides[key] so localStorage and the DOM always show
-          // the new image immediately (no snap-back, no CDN delay on reload).
-          // Store the GitHub raw URL in a companion key used only for server/cross-device sync.
-          adminOverrides[key + '-url'] = blobUrl;
-          // adminOverrides[key] stays as dataUrl (base64) — already set above
-          try { saveOverrides(); } catch(_) {}
-          // Immediately sync manifest so all devices see the change
-          let synced = await syncOverridesToServer(adminOverrides);
-          if (!synced) synced = await syncOverridesToServer(adminOverrides); // one retry
-          if (synced) lastSavedTs = Date.now();
-          showToast(synced ? '✓ Bild gespeichert – überall sichtbar in ~1 Min' : '✓ Bild hochgeladen (Text/Kalender: GITHUB_TOKEN fehlt)');
-        } else {
-          // Fallback: keep base64 in localStorage only
-          try {
-            saveOverrides();
-            showToast('✓ Bild gespeichert (nur lokal)');
-          } catch(err) {
-            if (err.name === 'QuotaExceededError') {
-              // Free space by removing OTHER base64 images (keep the newest = current key)
-              const base64Keys = Object.keys(adminOverrides).filter(k => k !== key && typeof adminOverrides[k] === 'string' && adminOverrides[k].startsWith('data:image'));
-              base64Keys.forEach(k => delete adminOverrides[k]);
-              try { saveOverrides(); } catch(_) {}
-              showToast('⚠ Lokal gespeichert – bitte Blob-Speicher prüfen');
-            } else {
-              showToast('✗ Fehler beim Speichern');
-            }
-          }
-        }
-        isUploading = false;
-        adminPendingImgKey = null;
-        $imgInput.value = '';
-      });
-    };
-    reader.readAsDataURL(file);
-  });
-
-  // ─── Hero slide admin buttons ─────────────────────────────────────────────
-  function updateHeroAdminBtns() {
-    document.querySelectorAll('.hero-admin-btn').forEach(btn => {
-      const idx = parseInt(btn.getAttribute('data-slide'));
-      const slides = document.querySelectorAll('.hero-slide');
-      btn.classList.toggle('active-slide', slides[idx] && slides[idx].classList.contains('active'));
-    });
-  }
-  document.querySelectorAll('.hero-admin-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const idx = parseInt(btn.getAttribute('data-slide'));
-      adminPendingImgKey = `hero-slide-${idx}`;
-      $imgInput.click();
-    });
-  });
-  // Hero crop buttons
-  document.querySelectorAll('.hero-admin-crop-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const idx = parseInt(btn.getAttribute('data-slide'));
-      if (window.heroGoToSlide) window.heroGoToSlide(idx);
-      if (window.heroPauseSlideshow) window.heroPauseSlideshow();
-      const heroSlide = document.querySelector(`.hero-slide[data-admin-img="hero-slide-${idx}"]`);
-      if (heroSlide) startCropSession(heroSlide);
-    });
-  });
-  // Keep buttons in sync with the auto-advancing slideshow
-  const _origHeroInterval = setInterval(() => { if (window.adminMode) updateHeroAdminBtns(); }, 500);
-
-  // ─── Gallery slide admin buttons ──────────────────────────────────────────
-  function updateGalleryAdminBtns() {
-    document.querySelectorAll('.gallery-admin-btn').forEach(btn => {
-      const idx = parseInt(btn.getAttribute('data-gslide'));
-      btn.classList.toggle('active-slide', idx === ssCurrent);
-    });
-  }
-  document.querySelectorAll('.gallery-admin-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const idx = parseInt(btn.getAttribute('data-gslide'));
-      ssGoTo(idx);
-      adminPendingImgKey = `gallery-${idx}`;
-      $imgInput.click();
-    });
-  });
-  setInterval(() => { if (window.adminMode) updateGalleryAdminBtns(); }, 300);
 
   // Pause button toggle
   document.getElementById('ssPauseBtn').addEventListener('click', () => {
@@ -4391,7 +3836,7 @@
   // Async: fetch server overrides for cross-device sync (non-blocking)
   async function fetchAndApplyServerOverrides() {
     // Never overwrite during or after an admin session, or during upload
-    if (adminMode || isUploading || hasBeenInAdminThisSession) return;
+    if (adminMode || hasBeenInAdminThisSession) return;
     if (Date.now() - lastSavedTs < 5 * 60 * 1000) return;
     try {
       const r = await fetch('/api/overrides?t=' + Date.now());
@@ -4399,7 +3844,7 @@
       const serverOverrides = await r.json();
       if (!serverOverrides || !Object.keys(serverOverrides).length) return;
       // Check again after async — admin may have logged in while fetch was in-flight
-      if (adminMode || isUploading || hasBeenInAdminThisSession) return;
+      if (adminMode || hasBeenInAdminThisSession) return;
       Object.assign(adminOverrides, serverOverrides);
       window.adminOverrides = adminOverrides;
       applyOverrides();
