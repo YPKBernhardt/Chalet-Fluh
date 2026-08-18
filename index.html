@@ -1647,6 +1647,112 @@
       50% { opacity: 1; transform: scaleY(1.2); }
     }
 
+    /* FAQ */
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+
+    .faq-item:nth-child(even) {
+      border-right: none;
+    }
+
+    .faq-q {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 1.8rem 2rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      color: var(--text-primary);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      line-height: 1.35;
+      transition: color 0.2s ease;
+    }
+
+    .faq-q:hover { color: var(--accent-light); }
+    .faq-q[aria-expanded="true"] { color: var(--accent); }
+
+    .faq-icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      position: relative;
+    }
+
+    .faq-icon::before,
+    .faq-icon::after {
+      content: '';
+      position: absolute;
+      background: var(--accent-muted);
+      border-radius: 1px;
+      transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.25s ease, background 0.2s;
+    }
+
+    .faq-icon::before { width: 100%; height: 1px; top: 50%; left: 0; transform: translateY(-50%); }
+    .faq-icon::after  { width: 1px; height: 100%; top: 0; left: 50%; transform: translateX(-50%); }
+
+    .faq-q[aria-expanded="true"] .faq-icon::before { background: var(--accent); }
+    .faq-q[aria-expanded="true"] .faq-icon::after  { background: var(--accent); transform: translateX(-50%) rotate(90deg) scaleY(0); opacity: 0; }
+
+    .faq-a {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.45s cubic-bezier(0.22,1,0.36,1);
+      padding: 0 2rem;
+    }
+
+    .faq-a-inner {
+      overflow: hidden;
+    }
+
+    .faq-a-inner p {
+      font-size: 0.92rem;
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--text-secondary);
+      padding-bottom: 1.8rem;
+    }
+
+    .faq-a-inner p + p {
+      padding-top: 0;
+      margin-top: -0.5rem;
+    }
+
+    .faq-a-inner em {
+      font-style: italic;
+      color: var(--accent-light);
+      font-weight: 300;
+    }
+
+    .faq-item.faq-open .faq-a {
+      grid-template-rows: 1fr;
+    }
+
+    /* FAQ responsive */
+    @media (max-width: 768px) {
+      .faq-grid {
+        grid-template-columns: 1fr;
+      }
+      .faq-item { border-right: none; }
+      .faq-q { padding: 1.4rem 1.5rem; font-size: 1rem; }
+      .faq-a { padding: 0 1.5rem; }
+    }
+
     .reveal {
       opacity: 0;
       transform: translateY(28px);
@@ -2103,6 +2209,7 @@
       <li><a href="#lage">Lage & Karte</a></li>
       <li><a href="#preise">Preise</a></li>
       <li><a href="#verfuegbarkeit">Verfügbarkeit</a></li>
+      <li><a href="#faq">FAQ</a></li>
       <li><a href="#gaestestimmen">Gästestimmen</a></li>
       <li><a href="#kontakt">Kontakt</a></li>
     </ul>
@@ -2120,6 +2227,7 @@
     <a href="#lage" onclick="closeMobileNav()">Lage & Karte</a>
     <a href="#preise" onclick="closeMobileNav()">Preise</a>
     <a href="#verfuegbarkeit" onclick="closeMobileNav()">Verfügbarkeit</a>
+    <a href="#faq" onclick="closeMobileNav()">FAQ</a>
     <a href="#gaestestimmen" onclick="closeMobileNav()">Gästestimmen</a>
     <a href="#kontakt" onclick="closeMobileNav()">Kontakt</a>
   </div>
@@ -2691,6 +2799,144 @@
       <p id="calAdminHint" style="display:none; margin-top:1rem; font-size:0.78rem; color:var(--accent); letter-spacing:0.04em;">Admin-Modus: Klicken Sie auf einen Tag um ihn als belegt/frei zu markieren.</p>
     </section>
   </div>
+
+  <!-- FAQ -->
+  <section id="faq" style="max-width:1400px; margin:0 auto; padding:7rem 4rem;">
+    <div class="reveal" style="max-width:600px; margin-bottom:4rem;">
+      <p class="section-eyebrow">FAQ</p>
+      <h2 class="section-title">Häufige <em>Fragen</em></h2>
+    </div>
+
+    <div class="faq-grid">
+
+      <div class="faq-item reveal">
+        <button class="faq-q" aria-expanded="false">
+          <span>Für wie viele Personen ist das Chalet Fluh geeignet?</span>
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">
+          <p>Das Chalet Fluh bietet bequem Platz für <em>bis zu 10 Personen plus zwei Kleinkinder</em> und eignet sich besonders für Familien und einen Urlaub mit mehreren Generationen. Das Master Bedroom im Erdgeschoss ist komplett barrierefrei erreichbar und bietet damit auch älteren Gästen oder Menschen mit eingeschränkter Mobilität hohen Komfort. Für Kleinkinder stehen Kinderstühle und Babybetten kostenfrei zur Verfügung.</p>
+        </div></div>
+      </div>
+
+      <div class="faq-item reveal reveal-delay-1">
+        <button class="faq-q" aria-expanded="false">
+          <span>Ist das Chalet Fluh für Familien mit Kindern geeignet?</span>
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">
+          <p>Das Chalet Fluh ist ideal für Familien mit Kindern und <em>Urlaube mit mehreren Generationen</em>. Der große, komplett eingezäunte Garten bietet viel Platz zum Spielen und Toben, während sich die Erwachsenen auf mehreren Terrassen in hochwertigen Teakmöbeln entspannen können.</p>
+          <p>Ob beim gemeinsamen Kochen am Plancha-Grill oder bei einem Sundowner auf der privaten Terrasse direkt vor dem Master Bedroom – das Chalet bietet verschiedene Rückzugsorte, an denen jeder seinen Lieblingsplatz findet. Eine Tischtennisplatte sorgt für gemeinsame Aktivitäten, und auch für kleine Kinder ist mit passender Ausstattung bestens gesorgt.</p>
+        </div></div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-q" aria-expanded="false">
+          <span>Welche Ausstattung bietet das Chalet Fluh?</span>
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">
+          <p>Das Chalet Fluh bietet eine außergewöhnlich hochwertige Ausstattung. Die Innenausstattung wurde ausschließlich von regionalen Handwerkern mit viel Altholz und Naturstein gefertigt und verbindet modernen Komfort mit authentischem Allgäuer Charakter.</p>
+          <p>Die großzügige Küche ist unter anderem mit Induktionsfeld, Backofen mit integrierter Mikrowelle, Dampfgarer und Küchenmaschine ausgestattet. Ein durchdachtes Lichtkonzept mit hochwertigen Nimbus LED-Leuchten rundet die besondere Atmosphäre im gesamten Chalet ab. Auch viele Dinge des täglichen Bedarfs sind bereits vorhanden – damit der Urlaub vom ersten Moment an entspannt beginnen kann.</p>
+        </div></div>
+      </div>
+
+      <div class="faq-item reveal reveal-delay-1">
+        <button class="faq-q" aria-expanded="false">
+          <span>Sind Hunde im Chalet Fluh erlaubt?</span>
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">
+          <p>Ja, Hunde sind im Chalet Fluh herzlich willkommen. Auf dem großen, komplett eingezäunten Grundstück können sie sich frei bewegen. Besonders praktisch nach Spaziergängen und Wanderungen: Im Waschraum direkt am Eingang steht eine separate Hundedusche zur Verfügung.</p>
+        </div></div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-q" aria-expanded="false">
+          <span>Was genau bedeutet die Alleinlage des Chalet Fluh?</span>
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">
+          <p>Das Chalet Fluh liegt in ruhiger Alleinlage mitten im Naturpark Nagelfluhkette. Es gibt keine direkten Nachbarn in Sichtweite – ideal für Gäste, die Ruhe, Privatsphäre und Natur genießen möchten.</p>
+        </div></div>
+      </div>
+
+      <div class="faq-item reveal reveal-delay-1">
+        <button class="faq-q" aria-expanded="false">
+          <span>Wo liegt das Chalet Fluh und wie ist es erreichbar?</span>
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">
+          <p>Das Chalet Fluh liegt zwischen den Oberstaufener Ortsteilen Steibis und Schindelberg und ist ganzjährig bequem über eine gut ausgebaute, öffentliche Straße erreichbar – ohne lange Schotter- oder Privatwege.</p>
+          <p>Steibis mit Dorfmarkt und Kiosk ist in etwa 2 Minuten erreichbar. Das Zentrum des Kurorts Oberstaufen mit Supermärkten, Restaurants, Cafés, Geschäften und Bahnhof liegt nur rund 10 Minuten entfernt. So verbindet das Chalet eine naturnahe Lage mit einer sehr guten Erreichbarkeit und Infrastruktur.</p>
+        </div></div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-q" aria-expanded="false">
+          <span>Hat das Chalet Fluh eine eigene Sauna?</span>
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">
+          <p>Ja, das Chalet Fluh verfügt über eine private Sauna im zentralen Bereich des Obergeschosses mit Platz für bis zu vier Personen. Direkt daneben befindet sich eine Dusche mit Schwallbrause – perfekt für erfahrene Saunagänger und die passende Abkühlung nach dem Saunagang. Ideal, um nach einem Wander-, Ski- oder Ausflugstag im Allgäu zu entspannen.</p>
+        </div></div>
+      </div>
+
+      <div class="faq-item reveal reveal-delay-1">
+        <button class="faq-q" aria-expanded="false">
+          <span>Gibt es einen Fitnessraum im Chalet Fluh?</span>
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">
+          <p>Ja, im Obergeschoss befindet sich ein eigener Fitnessraum. Zur Ausstattung gehören eine Kombinations-Hantelbank inklusive Langhantelstange, eine hochwertige Rudermaschine, ein Crosstrainer, ein Bergstepper, eine Klimmzugstange, ein kleines Trampolin und eine Vibrationsplatte. Fernseher und Stereoanlage ergänzen die Ausstattung.</p>
+        </div></div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-q" aria-expanded="false">
+          <span>Was kann man rund um das Chalet Fluh unternehmen?</span>
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">
+          <p>Rund um das Chalet Fluh starten zahlreiche Wanderwege direkt vor der Tür, darunter Touren zum Drei-Länder-Blick und in den Naturpark Nagelfluhkette. Für Radfahrer bieten sich abwechslungsreiche Mountainbike- und Rennradtouren durchs Allgäu und in den Bregenzerwald an.</p>
+          <p>Im Winter erreichen Sie Skigebiete wie Steibis, Hochgrat, Hündle und Hochhäderich in wenigen Minuten. Langlaufloipen und Winterwanderwege ergänzen das Angebot.</p>
+          <p>Ausflugsziele in der Nähe sind unter anderem der Alpsee, die Buchenegger Wasserfälle, die Sommerrodelbahn am Alpsee und der Kurort Oberstaufen mit Restaurants, Cafés, Geschäften und dem Erlebnisbad Aquaria.</p>
+        </div></div>
+      </div>
+
+      <div class="faq-item reveal reveal-delay-1">
+        <button class="faq-q" aria-expanded="false">
+          <span>Gibt es Parkplätze direkt am Chalet Fluh?</span>
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">
+          <p>Ja, am Chalet Fluh gibt es einen Stellplatz im Carport sowie weitere Parkmöglichkeiten direkt am Haus – ohne lange Wege. Zusätzlich steht ein Starkstromanschluss zur Verfügung, über den sich ein Elektroauto laden lässt.</p>
+        </div></div>
+      </div>
+
+      <div class="faq-item reveal">
+        <button class="faq-q" aria-expanded="false">
+          <span>Was macht das Chalet Fluh besonders?</span>
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">
+          <p>Das Chalet Fluh vereint eine außergewöhnliche Alleinlage mitten im Naturpark Nagelfluhkette mit einer Ausstattung, die weit über den üblichen Standard hinausgeht. Hochwertige Materialien, regionale Handwerkskunst und viel Liebe zum Detail schaffen ein stimmiges Ambiente.</p>
+          <p>Dazu kommen der große eingezäunte Garten, viel Privatsphäre und die unmittelbare Nähe zu Wanderwegen, Skigebieten und dem Kurort Oberstaufen. So entsteht ein Ort, der <em>Naturerlebnis, Privatsphäre und gehobenen Komfort</em> auf einzigartige Weise miteinander verbindet.</p>
+        </div></div>
+      </div>
+
+      <div class="faq-item reveal reveal-delay-1">
+        <button class="faq-q" aria-expanded="false">
+          <span>Ist das Chalet Fluh exklusiv für die Gäste nutzbar?</span>
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">
+          <p>Ja. Das Chalet und die dazugehörigen Außenbereiche stehen den Gästen exklusiv zur Verfügung. Im Gebäude befindet sich zusätzlich eine kleine, separate Einliegerwohnung mit eigenem Eingang. Die Wohn- und Zugangsbereiche sind vollständig voneinander getrennt, sodass die Ruhe und Privatsphäre der Gäste gewahrt bleiben.</p>
+        </div></div>
+      </div>
+
+    </div>
+  </section>
 
   <!-- GOOGLE REVIEWS -->
   <div class="reviews-section" id="gaestestimmen">
@@ -3307,6 +3553,24 @@
     setTimeout(() => {
       revealEls.forEach(el => el.classList.add('visible'));
     }, 800);
+
+    // ─── FAQ accordion ───────────────────────────────────────────────────────────
+    document.querySelectorAll('.faq-q').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isOpen = item.classList.contains('faq-open');
+        // Close all
+        document.querySelectorAll('.faq-item.faq-open').forEach(el => {
+          el.classList.remove('faq-open');
+          el.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+        });
+        // Open clicked if it was closed
+        if (!isOpen) {
+          item.classList.add('faq-open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
 
     // ─── Legal toggles (Impressum / Datenschutz) ─────────────────────────────────
     [['toggleImpressum','panelImpressum'],['toggleDatenschutz','panelDatenschutz']].forEach(([btnId, panelId]) => {
