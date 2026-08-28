@@ -108,10 +108,11 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Cormorant+Infant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
+      --font-display: "Cormorant Infant", "Cormorant Garamond", serif;
       --bg-base: #0a0f0b;
       --bg-surface: #111710;
       --bg-elevated: #182019;
@@ -150,7 +151,14 @@
     }
 
     /* Typography */
-    .font-display { font-family: 'Cormorant Garamond', serif; }
+    .font-display, .hero-title, .hero-title em, .hero-eyebrow, .section-title, .section-title em,
+    .nav-logo, .nav-logo span, .pricing-col-title, .pricing-price, .pricing-extras-title,
+    .gallery-card-title, .testimonial-name, .faq-question, .faq-answer h4,
+    .cta-box-title, .footer-logo, .footer-logo span {
+      font-family: var(--font-display);
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
 
     /* Scrollbar */
     ::-webkit-scrollbar { width: 4px; }
@@ -190,7 +198,6 @@
       border-bottom: 1px solid var(--border);
     }
     .nav-logo {
-      font-family: 'Cormorant Garamond', serif;
       font-size: 1.5rem;
       font-weight: 500;
       letter-spacing: 0.02em;
@@ -299,9 +306,8 @@
       animation: fadeUp 0.8s ease 0.3s forwards;
     }
     .hero-title {
-      font-family: 'Cormorant Garamond', serif;
       font-size: clamp(3.5rem, 8vw, 7.5rem);
-      font-weight: 300;
+      font-weight: 400;
       line-height: 0.95;
       letter-spacing: -0.02em;
       color: var(--text-primary);
@@ -311,6 +317,7 @@
     }
     .hero-title em {
       font-style: italic;
+      font-weight: 500;
       color: var(--accent-light);
     }
     .hero-subtitle {
